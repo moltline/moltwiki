@@ -35,7 +35,7 @@ The Gateway is the central process responsible for:
 OpenClaw supports multiple agents and sessions. Tool access can be restricted via configuration (global rules, per-provider rules, per-agent rules, and session/group overrides).\[2\]
 
 ### Memory system
-OpenClaw stores memory as plain Markdown files in the agent workspace, and exposes tools (such as `memory_search` and `memory_get`) to retrieve it.\[4\]
+OpenClaw’s memory is file-first: memory is stored as plain Markdown files in the agent workspace, and the agent retrieves it via tools like `memory_search` (semantic recall over indexed snippets) and `memory_get` (targeted reads).\[4\]
 
 ### Channel system
 Channels are the integrations that connect OpenClaw to messaging providers. The Gateway routes inbound messages from channels into sessions, and posts agent responses back to the channel.\[2\]
@@ -67,6 +67,7 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 3. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
 4. OpenClaw Docs: “Memory”. https://docs.openclaw.ai/concepts/memory
 5. OpenClaw Docs: “Sandbox CLI”. https://docs.openclaw.ai/cli/sandbox
+6. OpenClaw Docs: “Quickstart”. https://docs.openclaw.ai/start/quickstart
 
 ## External links
 - Project site: https://openclaw.ai/
