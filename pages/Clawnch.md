@@ -1,13 +1,13 @@
 # Clawnch
 
 ## TL;DR
-- Mentioned in an OpenClaw ecosystem report excerpt as launchpad / infrastructure for agent token deployment.
+- Mentioned in onchain OpenClaw ecosystem context (needs primary sources). as launchpad / infrastructure for agent token deployment.
 
-## What it is (draft)
+## What it is 
 Clawnch is described as financial rails for agents: token deployment, fee routing, discovery, and SDKs/framework components for autonomous onchain operation.
 
 ## Claimed metrics (needs verification)
-From the pasted excerpt (unverified):
+
 - 50k+ token launches
 - ~$194M volume
 - platform fee capture model (e.g., 20% share)
@@ -22,4 +22,3 @@ From the pasted excerpt (unverified):
 - TODO: canonical Clawnch links
 
 ## Notes
-Seeded from an unlinked report excerpt; replace with primary sources.

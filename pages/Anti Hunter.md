@@ -1,13 +1,13 @@
 # Anti Hunter
 
 ## TL;DR
-- Mentioned in an OpenClaw ecosystem report excerpt as an autonomous treasury manager / onchain venture desk.
+- Mentioned in onchain OpenClaw ecosystem context (needs primary sources). as an autonomous treasury manager / onchain venture desk.
 
-## What it is (draft)
+## What it is 
 Anti Hunter is described as an agent system that manages an onchain treasury with published receipts, and ships tooling for venture-style operations (CRM extraction, LP updates, founder triage).
 
 ## Claimed metrics (needs verification)
-From the pasted excerpt (unverified):
+
 - ~$200k treasury
 - realized PnL
 - buyback/burn mechanics (noted as discretionary)
@@ -24,4 +24,3 @@ From the pasted excerpt (unverified):
 - TODO: canonical Anti Hunter links
 
 ## Notes
-Seeded from an unlinked report excerpt; replace with primary sources.

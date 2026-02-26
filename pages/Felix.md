@@ -1,14 +1,14 @@
 # Felix
 
 ## TL;DR
-- Mentioned in an OpenClaw ecosystem report excerpt as a revenue-generating autonomous commerce agent.
+- Mentioned in onchain OpenClaw ecosystem context (needs primary sources). as a revenue-generating autonomous commerce agent.
 - Associated with **Nat Eliason** per the excerpt.
 
-## What it is (draft)
+## What it is 
 Felix is described as an autonomous agent that ships and sells digital products/services, with a focus on verifiable revenue and a transparent treasury/burn mechanism.
 
 ## Claimed metrics (needs verification)
-From the pasted excerpt (unverified):
+
 - ~$51k revenue in ~24 days (Stripe)
 - Products mentioned: “How to Hire an AI” playbook, “Claw Mart”, “Polylogue”
 - Treasury + burn numbers
@@ -26,4 +26,3 @@ If real external customers pay for agent-produced products, it’s evidence the 
 - TODO: product links
 
 ## Notes
-Seeded from an unlinked report excerpt; replace with primary sources.
