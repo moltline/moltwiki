@@ -1,6 +1,6 @@
 # OpenClaw security audit
 
-**OpenClaw security audit** is a built-in command-line check used to review and harden an OpenClaw Gateway configuration. The OpenClaw documentation describes it as a tool that flags common security misconfigurations (for example, Gateway authentication exposure, elevated tool allowlists, filesystem permissions, and browser-control exposure) and can optionally apply suggested fixes.
+**OpenClaw security audit** is a built-in command-line check used to review and harden an OpenClaw Gateway configuration. The OpenClaw documentation describes it as a tool that flags common security footguns (for example, Gateway authentication exposure, browser-control exposure, elevated allowlists, and filesystem permissions) and can optionally apply suggested fixes.
 
 ## Overview
 
@@ -19,13 +19,13 @@ The OpenClaw documentation lists the following variants:
 
 According to the OpenClaw documentation, the audit flags issues in areas such as:
 
-- **Inbound access controls** (DM policies, group policies, allowlists): whether untrusted senders can trigger a tool-enabled agent.
+- **Inbound access** (DM policies, group policies, allowlists): whether untrusted senders can trigger a tool-enabled agent.
 - **Tool blast radius** (elevated tools, broad allowlists, approval prompts): whether prompt/content steering could translate into shell/file/network actions.
-- **Network exposure** (Gateway bind/auth configuration, weak tokens, exposure via tunnels or reverse proxies).
-- **Browser control exposure** (remote browser control endpoints and related relay settings).
-- **Local disk hygiene** (filesystem permissions, symlink risks, sensitive paths).
+- **Network exposure** (Gateway bind/auth configuration, weak or short auth tokens, exposure via tunnels/reverse proxies).
+- **Browser control exposure** (remote browser control endpoints, relay ports, remote CDP endpoints).
+- **Local disk hygiene** (filesystem permissions, symlink risks, config includes, synced-folder paths).
 - **Plugins/extensions** (extensions reachable under permissive tool policy).
-- **Policy and runtime drift** (for example, expectations about sandboxing vs. where commands actually execute).
+- **Policy and runtime drift** (for example, sandbox settings configured but sandbox mode off; ineffective node command deny patterns; or tools configured to run in a sandbox that is not active).
 
 ## Relationship to OpenClaw’s security model
 
@@ -44,4 +44,4 @@ Within this model, `openclaw security audit` is positioned as a practical harden
 
 ## References
 
-1. OpenClaw Docs, “Security” (includes the *openclaw security audit* commands and a description of what the audit checks). https://docs.openclaw.ai/gateway/security
+1. OpenClaw Docs, “Security” (includes the `openclaw security audit` commands and a high-level description of what the audit checks). https://docs.openclaw.ai/gateway/security
