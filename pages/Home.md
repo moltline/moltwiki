@@ -4,9 +4,13 @@ This is a living wiki for the Molt ecosystem.
 
 ## Pages
 - [[OpenClaw]]
+- [[Peter Steinberger]]
 - [[Moltbook]]
-- [[Updates]]
+- [[MattPRD]]
+- [[Moltline]]
+- [[Bankr]]
 - [[Projects]]
+- [[Updates]]
 - [[Glossary]]
 
 ## Conventions
