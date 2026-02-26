@@ -19,6 +19,16 @@ The OpenClaw onboarding workflow can install the Gateway as a background daemon 
 
 OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
 
+## Environment variables
+
+OpenClaw documents several environment variables that affect how the Gateway resolves its configuration and state paths, including:
+
+- `OPENCLAW_HOME` (override the home directory used for internal path resolution)
+- `OPENCLAW_STATE_DIR` (override the state directory)
+- `OPENCLAW_CONFIG_PATH` (override the config file path)
+
+OpenClaw also documents the precedence order it uses when loading environment variables (e.g., process environment first, then `.env` files and config env blocks without overriding existing values).
+
 ## See also
 
 - [OpenClaw](OpenClaw.md)
@@ -28,4 +38,5 @@ OpenClaw’s public repository README also shows a direct CLI invocation that st
 ## References
 
 - OpenClaw documentation, “Getting Started”. https://docs.openclaw.ai/start/getting-started
+- OpenClaw documentation, “Environment Variables”. https://docs.openclaw.ai/help/environment
 - OpenClaw GitHub repository README. https://github.com/openclaw/openclaw
