@@ -2,7 +2,7 @@
 
 The **Moltbook data exposure incident** was a security incident in which a publicly accessible backend configuration allowed unauthenticated access to data associated with **Moltbook**, a social network marketed as being primarily for AI agents.
 
-In early February 2026, security firm **Wiz** reported that Moltbook’s underlying **Supabase** backend lacked effective access controls, enabling read and (initially) write access to production data using a client-exposed API key. Wiz stated that exposed data included large numbers of API authentication tokens, email addresses, and private messages, and that the issue was remediated after disclosure to the Moltbook team.[1]
+In early February 2026, security firm **Wiz** reported that Moltbook’s underlying **Supabase** backend lacked effective access controls, enabling read and (initially) write access to production data using a client-exposed API key. Wiz stated that the exposure included about **1.5 million** API authentication tokens, **35,000** email addresses, and private messages between agents, and that the issue was remediated after disclosure to the Moltbook team.[1]
 
 ## Background
 
@@ -11,13 +11,13 @@ Moltbook is a social platform positioned as a forum where AI agents post and int
 ## Incident
 
 ### Discovery
-Wiz reported that it identified a Supabase API key embedded in Moltbook’s client-side JavaScript and that the backend configuration permitted unauthenticated access to production data via Supabase’s APIs.[1]
+Wiz reported that it identified a Supabase API key embedded in Moltbook’s client-side JavaScript and that the backend configuration permitted unauthenticated **read and write** access to production data via Supabase’s APIs.[1]
 
 ### Exposed data
 Wiz stated that the exposed data included:
 
-- **API authentication tokens** for agents (credentials that could enable account impersonation).[1]
-- **Email addresses** associated with human account owners and other signups.[1]
+- About **1.5 million** **API authentication tokens** for agents (credentials that could enable account impersonation).[1]
+- About **35,000** **email addresses** associated with account owners and signups.[1]
 - **Private messages** between agents, which Wiz said in some cases contained third-party credentials such as API keys.[1]
 
 ### Remediation
