@@ -1,6 +1,6 @@
 # OpenClaw
 
-OpenClaw is an open-source, self-hosted gateway for personal AI agents. It connects messaging apps (including WhatsApp, Telegram, Discord, and iMessage) to tool-using agents, with sessions, routing, and automation/scheduling, and optional device (“node”) control.\[2\]
+OpenClaw is an open-source, self-hosted gateway for personal AI agents. It connects messaging apps (including WhatsApp, Telegram, Discord, and iMessage) to tool-using agents, with sessions, routing, and automation/scheduling, and optional device (“node”) control.\[3\]
 
 OpenClaw was created by [Peter Steinberger](./Peter%20Steinberger.md). In February 2026, Steinberger wrote that he is joining OpenAI and that OpenClaw will move to a foundation while remaining open and independent.\[1\]
 
@@ -13,7 +13,7 @@ OpenClaw positions itself as a multi-channel “OS gateway” for personal agent
 - Runs a single **Gateway** process that maintains channel connections and routes inbound messages to the right agent/session.\[2\]
 - Includes a web **Control UI** (served by the Gateway) and a CLI for interacting with the system.\[2\]
 - Supports automation primitives (including scheduled jobs) via the Gateway.\[2\]
-- Documents environment variables for customizing config and state locations (e.g., `OPENCLAW_HOME`, `OPENCLAW_STATE_DIR`, `OPENCLAW_CONFIG_PATH`).\[4\]
+- Documents environment variables for customizing config and state locations (e.g., `OPENCLAW_HOME`, `OPENCLAW_STATE_DIR`, `OPENCLAW_CONFIG_PATH`).\[6\]
 
 ### Who it’s for
 Developers and power users who want a personal agent they can DM from anywhere while keeping the runtime and data under their control.\[2\]
@@ -35,6 +35,15 @@ OpenClaw’s control-plane clients (macOS app, CLI, web UI, automations) connect
 
 Nodes (macOS/iOS/Android/headless) also connect over WebSocket, but identify as `role: node` and declare capabilities/commands (e.g., `canvas.*`, `camera.*`, `screen.record`, `location.get`).\[2\]
 
+### Agent runtime
+OpenClaw supports multiple agents and sessions. Tool access can be restricted via configuration (global rules, per-provider rules, per-agent rules, and session/group overrides).\[2\]
+
+### Memory system
+OpenClaw includes a memory subsystem intended to support “recall” across time (e.g., a memory store plus optional indexing/search).\[2\]
+
+### Channel system
+Channels are the integrations that connect OpenClaw to messaging providers. The Gateway routes inbound messages from channels into sessions, and posts agent responses back to the channel.\[2\]
+
 ### Session management
 The docs describe direct-message session scoping via `session.dmScope` (default `main` for continuity), with options like `per-peer`, `per-channel-peer`, and `per-account-channel-peer` to isolate DM context in multi-user setups.\[5\]
 
@@ -50,10 +59,10 @@ OpenClaw supports extensions/plugins (including additional channels) that can be
 ## Configuration
 OpenClaw’s documentation describes a JSON config (default path `~/.openclaw/openclaw.json`) and provides examples for restricting who can message the agent (e.g., allowlists, group mention requirements).\[2\]
 
-The documentation also describes environment variables for customizing where OpenClaw reads config and stores state, including `OPENCLAW_CONFIG_PATH` and `OPENCLAW_STATE_DIR`.\[4\]
+The documentation also describes environment variables for customizing where OpenClaw reads config and stores state, including `OPENCLAW_CONFIG_PATH` and `OPENCLAW_STATE_DIR`.\[6\]
 
 ## CLI
-OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via the Gateway, or locally with `--local`).\[3\]
+OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via the Gateway, or locally with `--local`).\[4\]
 
 ## History
 - **2026-02-26:** Steinberger published a post about joining OpenAI and moving OpenClaw to a foundation.\[1\]
