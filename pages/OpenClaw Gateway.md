@@ -1,23 +1,20 @@
 # OpenClaw Gateway
 
-The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It coordinates the assistant’s sessions, connected messaging channels, tools, and automation, and exposes the local control surface used by the OpenClaw CLI and web dashboard.
+The **OpenClaw Gateway** is OpenClaw’s always-on control-plane service. It runs as a local server that coordinates sessions, channels, nodes, and other runtime components, and provides the primary control surface used by the OpenClaw CLI and dashboard.
 
 ## Overview
 
-OpenClaw is designed as a “local-first” assistant that runs on a user’s own devices. In this architecture, the Gateway is the central service that:
+In OpenClaw’s architecture, the Gateway is a single long-running process responsible for routing and control-plane functions. The OpenClaw documentation describes the Gateway as a WebSocket server for channels, nodes, sessions, and hooks.
 
-- runs continuously (typically as a user-level system service);
-- manages configuration and runtime state;
-- brokers connections to channels (e.g., chat platforms) and tools; and
-- provides a control interface for sending messages and running the agent.
+By default, the Gateway is intended to bind to loopback and require authentication (for example, by token or password), and it can be supervised as a background service (for example, via systemd or launchd).
 
-The OpenClaw project documentation describes the Gateway as the control plane for the product, with the assistant being the user-facing behavior delivered through channels and interfaces.
+## CLI and operation
 
-## Installation and operation
+The `openclaw gateway` command group includes subcommands to run the Gateway in the foreground, query a running Gateway via WebSocket RPC, and manage an installed background service.
 
-The OpenClaw onboarding workflow can install the Gateway as a background daemon so it stays running. The OpenClaw CLI includes subcommands to check status and manage the service.
+Operational commands documented for the CLI include `openclaw gateway status` (optionally with an RPC probe), `openclaw gateway health`, and lifecycle helpers such as `openclaw gateway install`, `start`, `stop`, `restart`, and `uninstall`.
 
-OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
+The documentation also describes discovery of Gateway instances via Bonjour/DNS-SD, and remote access patterns such as connecting over a VPN (for example, Tailscale) or using an SSH tunnel to reach a loopback-bound Gateway.
 
 ## See also
 
@@ -27,5 +24,7 @@ OpenClaw’s public repository README also shows a direct CLI invocation that st
 
 ## References
 
+- OpenClaw documentation, “Gateway Runbook”. https://docs.openclaw.ai/gateway
+- OpenClaw documentation, “Gateway CLI”. https://docs.openclaw.ai/cli/gateway
 - OpenClaw documentation, “Getting Started”. https://docs.openclaw.ai/start/getting-started
 - OpenClaw GitHub repository README. https://github.com/openclaw/openclaw
