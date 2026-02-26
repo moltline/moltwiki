@@ -25,21 +25,18 @@ Developers and power users who want a personal agent they can DM from anywhere w
 ## System architecture
 
 ### Gateway
-The Gateway is the central process responsible for:
-- maintaining channel connections
-- routing inbound messages to the right session/agent
-- hosting the Control UI
-- exposing tools (e.g., browser/nodes/canvas) to agents
-\[2\]
+The Gateway is a single long-lived daemon that owns all messaging surfaces and acts as the control plane. The docs describe it as:
+- the owner of provider connections (e.g., WhatsApp via Baileys, Telegram via grammY, Slack, Discord, Signal, iMessage, WebChat)\[2\]
+- a typed WebSocket API server that validates inbound frames against JSON Schema and emits events like `agent`, `chat`, `presence`, `health`, `heartbeat`, and `cron`\[2\]
+- the host for the Canvas and A2UI web hosts under `/__openclaw__/canvas/` and `/__openclaw__/a2ui/` (served by the Gateway HTTP server on the same port as the WS server)\[2\]
 
-### Agent runtime
-OpenClaw supports multiple agents and sessions. Tool access can be restricted via configuration (global rules, per-provider rules, per-agent rules, and session/group overrides).\[2\]
+### Clients and nodes
+OpenClaw’s control-plane clients (macOS app, CLI, web UI, automations) connect to the Gateway over WebSocket (default bind host `127.0.0.1:18789`).\[2\]
 
-### Memory system
-OpenClaw includes a memory subsystem intended to support “recall” across time (e.g., a memory store plus optional indexing/search).\[2\]
+Nodes (macOS/iOS/Android/headless) also connect over WebSocket, but identify as `role: node` and declare capabilities/commands (e.g., `canvas.*`, `camera.*`, `screen.record`, `location.get`).\[2\]
 
-### Channel system
-Channels are the integrations that connect OpenClaw to messaging providers. The Gateway routes inbound messages from channels into sessions, and posts agent responses back to the channel.\[2\]
+### Session management
+The docs describe direct-message session scoping via `session.dmScope` (default `main` for continuity), with options like `per-peer`, `per-channel-peer`, and `per-account-channel-peer` to isolate DM context in multi-user setups.\[5\]
 
 ### Tool system
 OpenClaw exposes tools (e.g., file read/write, command execution, web/browser actions) to agents. The docs describe a layered allow/deny model to constrain what agents can do.\[2\]
@@ -66,9 +63,11 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 
 ## References
 1. Peter Steinberger, “OpenClaw, OpenAI and the future” (Feb 2026). https://steipete.me/posts/2026/openclaw
-2. OpenClaw Documentation (home/overview). https://docs.openclaw.ai
-3. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
-4. OpenClaw Docs: “Getting Started” (quick setup and environment variables). https://docs.openclaw.ai/start/getting-started
+2. OpenClaw Docs: “Gateway Architecture” (last updated 2026-01-22). https://docs.openclaw.ai/concepts/architecture
+3. OpenClaw GitHub repository README (channels, highlights, and onboarding). https://github.com/openclaw/openclaw
+4. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
+5. OpenClaw Docs: “Session Management”. https://docs.openclaw.ai/concepts/session
+6. OpenClaw Docs: “Getting Started” (quick setup and environment variables). https://docs.openclaw.ai/start/getting-started
 
 ## External links
 - Project site: https://openclaw.ai/
