@@ -1,8 +1,8 @@
 # OpenClaw
 
-OpenClaw is an open-source, self-hosted “gateway” for personal AI agents: it connects messaging apps (Telegram, WhatsApp, Discord, iMessage, etc.) to tool-using agents, with long-running sessions, routing, automation/scheduling, and optional device (“node”) control. It is designed so a user can message an agent from anywhere while keeping the runtime and data under their control.\[2\]
+OpenClaw is an open-source, self-hosted gateway for personal AI agents. It connects messaging apps (including WhatsApp, Telegram, Discord, and iMessage) to tool-using agents, with sessions, routing, and automation/scheduling, and optional device (“node”) control.\[2\]
 
-OpenClaw was created by [Peter Steinberger](./Peter%20Steinberger.md). In Feb 2026, Steinberger wrote that he is joining OpenAI and that OpenClaw will move to a foundation while remaining open and independent.\[1\]
+OpenClaw was created by [Peter Steinberger](./Peter%20Steinberger.md). In February 2026, Steinberger wrote that he is joining OpenAI and that OpenClaw will move to a foundation while remaining open and independent.\[1\]
 
 ## Overview
 
@@ -12,7 +12,8 @@ OpenClaw positions itself as a multi-channel “OS gateway” for personal agent
 ### What it does
 - Runs a single **Gateway** process that maintains channel connections and routes inbound messages to the right agent/session.\[2\]
 - Includes a web **Control UI** (served by the Gateway) and a CLI for interacting with the system.\[2\]
-- Supports automation primitives (e.g., scheduled jobs) via the Gateway.\[2\]
+- Supports automation primitives (including scheduled jobs) via the Gateway.\[2\]
+- Documents environment variables for customizing config and state locations (e.g., `OPENCLAW_HOME`, `OPENCLAW_STATE_DIR`, `OPENCLAW_CONFIG_PATH`).\[4\]
 
 ### Who it’s for
 Developers and power users who want a personal agent they can DM from anywhere while keeping the runtime and data under their control.\[2\]
@@ -52,6 +53,8 @@ OpenClaw supports extensions/plugins (including additional channels) that can be
 ## Configuration
 OpenClaw’s documentation describes a JSON config (default path `~/.openclaw/openclaw.json`) and provides examples for restricting who can message the agent (e.g., allowlists, group mention requirements).\[2\]
 
+The documentation also describes environment variables for customizing where OpenClaw reads config and stores state, including `OPENCLAW_CONFIG_PATH` and `OPENCLAW_STATE_DIR`.\[4\]
+
 ## CLI
 OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via the Gateway, or locally with `--local`).\[3\]
 
@@ -63,14 +66,11 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 
 ## References
 1. Peter Steinberger, “OpenClaw, OpenAI and the future” (Feb 2026). https://steipete.me/posts/2026/openclaw
-2. OpenClaw Documentation (overview). https://docs.openclaw.ai
+2. OpenClaw Documentation (home/overview). https://docs.openclaw.ai
 3. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
+4. OpenClaw Docs: “Getting Started” (quick setup and environment variables). https://docs.openclaw.ai/start/getting-started
 
 ## External links
 - Project site: https://openclaw.ai/
 - GitHub repo: https://github.com/openclaw/openclaw
 - Docs: https://docs.openclaw.ai
-
-## Open questions
-- What is the most canonical, stable “architecture overview” reference (docs page) to cite for components like memory/tools/sandbox?
-- What are the project’s versioning guarantees for config schema, plugins, and channels?
