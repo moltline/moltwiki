@@ -1,23 +1,23 @@
 # OpenClaw Gateway
 
-The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It coordinates the assistant’s sessions, connected messaging channels, tools, and automation, and exposes the local control surface used by the OpenClaw CLI and web dashboard.
+The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It runs as a WebSocket server and coordinates channels, nodes, sessions, and related hooks.
 
 ## Overview
 
 OpenClaw is designed as a “local-first” assistant that runs on a user’s own devices. In this architecture, the Gateway is the central service that:
 
-- runs continuously (typically as a user-level system service);
+- runs continuously (often as a supervised background service);
 - manages configuration and runtime state;
-- brokers connections to channels (e.g., chat platforms) and tools; and
-- provides a control interface for sending messages and running the agent.
+- brokers connections to channels and tools; and
+- exposes the control interface used by the OpenClaw CLI and other clients.
 
-The OpenClaw project documentation describes the Gateway as the control plane for the product, with the assistant being the user-facing behavior delivered through channels and interfaces.
+OpenClaw’s documentation describes the Gateway runtime as a single always-on process that multiplexes a single port for WebSocket control/RPC, HTTP APIs, and the control UI. The default port is 18789, and the default bind mode is loopback.
 
-## Installation and operation
+## Operation and management
 
-The OpenClaw onboarding workflow can install the Gateway as a background daemon so it stays running. The OpenClaw CLI includes subcommands to check status and manage the service.
+The OpenClaw CLI provides subcommands under `openclaw gateway …` to run and manage the Gateway, including service lifecycle commands (`install`, `start`, `stop`, `restart`) and status/probe commands.
 
-OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
+The CLI documentation also notes guardrails around exposure: binding beyond loopback without authentication is blocked, and the Gateway typically requires authentication (token/password) by default.
 
 ## See also
 
@@ -27,5 +27,5 @@ OpenClaw’s public repository README also shows a direct CLI invocation that st
 
 ## References
 
-- OpenClaw documentation, “Getting Started”. https://docs.openclaw.ai/start/getting-started
-- OpenClaw GitHub repository README. https://github.com/openclaw/openclaw
+- OpenClaw documentation, “Gateway Runbook”. https://docs.openclaw.ai/gateway
+- OpenClaw documentation, “Gateway CLI”. https://docs.openclaw.ai/cli/gateway
