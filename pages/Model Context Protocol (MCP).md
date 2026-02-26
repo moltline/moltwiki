@@ -35,13 +35,17 @@ The MCP specification emphasizes that connecting models to arbitrary data access
 
 Anthropic announced MCP alongside open-source repositories for the specification/SDKs and reference server implementations, and noted support for local MCP servers in Claude desktop applications.
 
+In early 2026, the MCP project also described **MCP Apps**, an official extension that allows MCP tools to return interactive HTML user interfaces (for example, dashboards and forms) that render inside the host conversation UI. The extension is described as relying on UI resources (served via a `ui://` scheme) rendered in sandboxed iframes, with bidirectional JSON-RPC communication between the embedded UI and the host.
+
 ## See also
 
 - [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
 
 ## References
 
-- Anthropic. "Introducing the Model Context Protocol." (news post). https://www.anthropic.com/news/model-context-protocol
+- Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol
 - Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
 - modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
+- Model Context Protocol blog. "MCP Apps - Bringing UI Capabilities To MCP Clients" (2026-01-26). http://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/
+- Model Context Protocol documentation. "MCP Apps" (overview). https://modelcontextprotocol.io/extensions/apps/overview
 - JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
