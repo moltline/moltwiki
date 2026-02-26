@@ -52,6 +52,13 @@ OpenClaw’s documentation describes a JSON config (default path `~/.openclaw/op
 
 The documentation also describes environment variables for customizing where OpenClaw reads config and stores state, including `OPENCLAW_CONFIG_PATH` and `OPENCLAW_STATE_DIR`.\[4\]
 
+## Security and access control
+OpenClaw’s documentation describes a pairing and trust model for WebSocket clients and nodes. New device identities require pairing approval; after approval, the Gateway issues a device token for subsequent connects.\[2\]
+
+The documentation also describes an optional Gateway auth token (`OPENCLAW_GATEWAY_TOKEN`) that must be presented during the initial WebSocket handshake when enabled.\[2\]
+
+For multi-user deployments, the documentation recommends isolating direct-message session context using `session.dmScope` (for example `per-channel-peer`) to reduce the risk of cross-user context leakage.\[5\]
+
 ## CLI
 OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via the Gateway, or locally with `--local`).\[3\]
 
