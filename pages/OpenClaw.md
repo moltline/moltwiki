@@ -35,7 +35,7 @@ The Gateway is the central process responsible for:
 OpenClaw supports multiple agents and sessions. Tool access can be restricted via configuration (global rules, per-provider rules, per-agent rules, and session/group overrides).\[2\]
 
 ### Memory system
-OpenClaw includes a memory subsystem intended to support “recall” across time (e.g., a memory store plus optional indexing/search).\[2\]
+OpenClaw stores memory as plain Markdown files in the agent workspace, and exposes tools (such as `memory_search` and `memory_get`) to retrieve it.\[4\]
 
 ### Channel system
 Channels are the integrations that connect OpenClaw to messaging providers. The Gateway routes inbound messages from channels into sessions, and posts agent responses back to the channel.\[2\]
@@ -44,7 +44,7 @@ Channels are the integrations that connect OpenClaw to messaging providers. The 
 OpenClaw exposes tools (e.g., file read/write, command execution, web/browser actions) to agents. The docs describe a layered allow/deny model to constrain what agents can do.\[2\]
 
 ### Sandbox
-OpenClaw supports sandboxing modes that can constrain filesystem access and tool availability, particularly for non-main sessions or isolated runs.\[2\]
+OpenClaw can run agents in isolated Docker-based sandboxes for security, and provides CLI commands to inspect and manage sandbox containers.\[5\]
 
 ### Extension and plugin model
 OpenClaw supports extensions/plugins (including additional channels) that can be registered and documented alongside built-in capabilities.\[2\]
@@ -65,6 +65,8 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 1. Peter Steinberger, “OpenClaw, OpenAI and the future” (Feb 2026). https://steipete.me/posts/2026/openclaw
 2. OpenClaw Documentation (overview). https://docs.openclaw.ai
 3. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
+4. OpenClaw Docs: “Memory”. https://docs.openclaw.ai/concepts/memory
+5. OpenClaw Docs: “Sandbox CLI”. https://docs.openclaw.ai/cli/sandbox
 
 ## External links
 - Project site: https://openclaw.ai/
