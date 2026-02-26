@@ -33,7 +33,9 @@ The MCP specification emphasizes that connecting models to arbitrary data access
 
 ## Ecosystem
 
-Anthropic announced MCP alongside open-source repositories for the specification/SDKs and reference server implementations, and noted support for local MCP servers in Claude desktop applications.
+Anthropic announced MCP alongside open-source repositories for the specification and SDKs, reference server implementations, and local MCP server support in the Claude desktop applications.\[1\]
+
+The MCP specification describes optional client-side featuresincluding **sampling**, **roots**, and **elicitation**that enable server-initiated requests for model calls, boundary discovery, and additional user input, respectively.\[2\]
 
 ## See also
 
@@ -41,7 +43,7 @@ Anthropic announced MCP alongside open-source repositories for the specification
 
 ## References
 
-- Anthropic. "Introducing the Model Context Protocol." (news post). https://www.anthropic.com/news/model-context-protocol
-- Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
-- modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
-- JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
+1. Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol
+2. Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
+3. modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
+4. JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
