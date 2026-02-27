@@ -22,17 +22,17 @@ The MCP authorization specification references and builds on established OAuth s
 
 ## Metadata discovery
 
-MCP clients are expected to discover authorization server metadata.
+MCP clients are expected to discover authorization server metadata using **OAuth 2.0 Authorization Server Metadata** (RFC 8414).
 
 The specification defines an **authorization base URL** derived from the MCP server URL by discarding any existing path component. The OAuth metadata endpoint is then located under:
 
 - `/.well-known/oauth-authorization-server`
 
-Clients may include an `MCP-Protocol-Version` header during metadata discovery to help servers respond appropriately for a given MCP protocol version.
+During metadata discovery, MCP clients SHOULD include an `MCP-Protocol-Version: <protocol-version>` header so the server can respond appropriately for a given MCP protocol version (for example, `MCP-Protocol-Version: 2024-11-05`).
 
 ### Fallback endpoints
 
-If an MCP server does not implement OAuth Authorization Server Metadata discovery, the specification defines default endpoint paths relative to the authorization base URL:
+If an MCP server does not implement OAuth Authorization Server Metadata discovery, clients MUST fall back to default endpoint paths relative to the authorization base URL:
 
 - `/authorize` (authorization endpoint)
 - `/token` (token endpoint)
@@ -53,16 +53,17 @@ For HTTP requests to MCP servers, access tokens are used via the standard HTTP `
 
 - `Authorization: Bearer <access-token>`
 
-The specification states that access tokens must not be placed in URI query strings. Servers validate access tokens and return appropriate HTTP errors (for example, `401 Unauthorized` for missing/invalid tokens).
+The specification requires that authorization be included on **every** HTTP request from client to server, even when requests are part of the same logical session. It also states that access tokens MUST NOT be placed in URI query strings. Resource servers validate access tokens and return appropriate HTTP errors (for example, `401 Unauthorized` for missing/invalid tokens).
 
 ## Security considerations
 
 The MCP authorization specification describes security requirements and best practices, including:
 
-- Serving authorization endpoints over HTTPS.
-- Validating redirect URIs.
-- Using PKCE for clients.
-- Limiting token lifetimes and considering token rotation.
+- All authorization endpoints MUST be served over HTTPS.
+- Redirect URIs MUST be validated to prevent open redirect vulnerabilities.
+- PKCE is REQUIRED.
+- Redirect URIs are constrained to localhost URLs or HTTPS URLs.
+- Token expiration and rotation are recommended (for example, limited lifetimes and rotation where appropriate).
 
 ## References
 
