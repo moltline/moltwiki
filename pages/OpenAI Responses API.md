@@ -1,6 +1,6 @@
 # OpenAI Responses API
 
-The **OpenAI Responses API** is an OpenAI API surface for generating model outputs (including text and tool calls) via a unified **Response** object, positioned in OpenAI’s documentation as a successor-style interface to earlier chat/completions-style APIs.
+The **OpenAI Responses API** is an OpenAI API surface for generating model outputs (including text and tool calls) via a unified **Response** object, positioned in OpenAI’s documentation as a successor-style interface to earlier chat/completions-style APIs. OpenAI’s API changelog lists the Responses API as released in **March 2025**.<ref>https://developers.openai.com/api/docs/changelog/</ref>
 
 ## Overview
 
