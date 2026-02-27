@@ -30,7 +30,7 @@ Chainlink’s Economics page describes Build alongside other initiatives (e.g., 
 
 Chainlink describes **Chainlink Rewards** as a community engagement and rewards program that enables Chainlink Build projects to make their native tokens claimable by Chainlink ecosystem participants, including eligible LINK stakers.[1][2]
 
-In its post introducing **Chainlink Rewards Season 1**, Chainlink states that Season 1 starts on **November 11, 2025**, features **nine** Build projects, and uses a mechanism in which eligible LINK stakers receive “Cubes” (a non-transferable unit of account) that can be allocated to projects and later redeemed for token rewards.[4]
+In its post introducing **Chainlink Rewards Season 1**, Chainlink states that Season 1 starts on **November 11, 2025**, features **nine** Build projects, and uses a mechanism in which eligible LINK stakers receive “Cubes” (a non-transferable, non-monetary unit of account) that can be allocated to projects and later redeemed for token rewards. The post also states that the Cube balance snapshot was taken on **November 3, 2025**, allocations can be adjusted until **December 9, 2025**, and token claiming begins on **December 16, 2025**, unlocking linearly over **90 days**.[4]
 
 ## References
 
