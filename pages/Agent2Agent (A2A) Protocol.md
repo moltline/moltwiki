@@ -1,69 +1,49 @@
 # Agent2Agent (A2A) Protocol
 
-**Agent2Agent (A2A)** is an open protocol intended to enable interoperability between independent AI agent systems ("agentic applications"). It defines a common interaction model so that agents built by different vendors or frameworks can discover one another’s capabilities, exchange messages, and coordinate on tasks over standard web transports—without requiring either side to expose internal state, tools, or implementation details.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+The **Agent2Agent (A2A) Protocol** is an open protocol for interoperability between independent AI agent systems. It aims to let agents built by different vendors and frameworks discover each other’s capabilities and collaborate on tasks without sharing internal state.
 
-A2A has been described publicly as complementary to tool/context protocols such as the Model Context Protocol (MCP): MCP focuses on giving an agent access to tools and context, while A2A focuses on agent-to-agent communication across systems.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref>
+**Type:** Agent interoperability protocol
+**Status:** Release candidate (v1.0 spec); latest released version 0.3.0
+**Specification:** https://a2a-protocol.org/latest/specification/
+**Repository:** https://github.com/a2aproject/A2A
 
-## Overview
+## Background
+As “agentic” applications became more common, many systems converged on standards for **agent-to-tool** integration (for example, Model Context Protocol (MCP)). A2A targets a different layer: **agent-to-agent** communication—so one agent can delegate work to another, exchange context, and coordinate progress.
 
-A2A centers on a **client/remote-agent** model:
+## What it is
+A2A defines:
 
-- A **client** initiates an interaction on behalf of a user or system.
-- A **remote agent (server)** processes the request and returns a direct response or manages work as a **task** (including updates for long-running work).<ref>https://a2a-protocol.org/latest/specification/</ref>
+- A **canonical data model** (e.g., tasks, messages, parts, artifacts, agent metadata)
+- A set of **core operations** (e.g., send a message, stream updates, fetch task state)
+- **Protocol bindings** that map those operations onto concrete transports (e.g., JSON-RPC and other bindings)
 
-The protocol is designed to support synchronous request/response, streaming updates, and asynchronous patterns for long-running tasks.<ref>https://a2a-protocol.org/latest/specification/</ref>
+The A2A specification describes the protocol as “async first” and “enterprise ready,” emphasizing long-running tasks, modality-agnostic content exchange, and standard web security practices.
 
-## Design goals and principles
+## Key concepts
+A2A’s specification centers on a few objects:
 
-Public materials and the project specification emphasize reuse of established web standards, an "async-first" orientation for long-running tasks, and modality/content-type awareness for exchanging diverse content types.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+- **Agent Card**: a JSON metadata document published by an A2A server describing identity, capabilities, endpoint, and authentication requirements.
+- **Task**: a stateful unit of work identified by an ID that progresses through a lifecycle.
+- **Message**: a turn in the interaction (role: user/agent) composed of one or more **Parts**.
+- **Part / Artifact**: content units for text, file references, or structured data; artifacts represent outputs composed of parts.
 
-Commonly cited design principles include:
+(These terms are defined in the specification.)\[1\]
 
-- **Built on existing standards**, including HTTP, JSON-RPC 2.0, and Server-Sent Events (SSE) for streaming updates.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Capability discovery** via published metadata so clients can identify which remote agent can perform a given kind of work.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Task orientation and asynchronicity**, including long-running tasks with state updates delivered by polling, streaming, or push mechanisms depending on binding and deployment.<ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Modality/content-type awareness**, supporting exchange of diverse content types using structured message parts.<ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Enterprise-oriented security posture**, aligning with common authentication/authorization practices.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+## How it works (high level)
+1. A client identifies a remote agent and retrieves its **Agent Card** (to learn capabilities and auth requirements).\[1\]
+2. The client sends a **message** to initiate work.
+3. The remote agent may respond directly or create a **task** for asynchronous processing.
+4. For long-running work, updates can be delivered via **streaming** mechanisms and/or **push notifications** (webhooks).\[1\]
 
-## Architecture (spec structure)
+## Relationship to MCP
+MCP focuses on connecting models/agents to **tools and resources**. A2A focuses on connecting **agents to other agents**, including capability discovery and task coordination. Some systems may use both: MCP for tool access inside an agent, and A2A for collaboration between agents.
 
-The A2A specification is structured in three layers:<ref>https://a2a-protocol.org/latest/specification/</ref>
-
-- **Canonical data model**: protocol-agnostic definitions of core objects (for example Task, Message, AgentCard, Part, Artifact).
-- **Abstract operations**: the binding-independent operations an A2A server exposes (for example sending a message, streaming updates, getting a task).
-- **Protocol bindings**: concrete mappings of operations and objects onto specific transports/encodings (for example JSON-RPC, gRPC, HTTP+JSON/REST).<ref>https://a2a-protocol.org/latest/specification/</ref>
-
-The spec also states that the protocol buffer definition file (`spec/a2a.proto`) is the authoritative normative source for protocol objects and request/response messages, with derived artifacts treated as non-normative convenience outputs.<ref>https://a2a-protocol.org/latest/specification/</ref>
-
-## Core concepts (high level)
-
-The specification defines several core objects and concepts, including:<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-
-- **Agent Card**: a JSON metadata document published by an A2A server describing an agent's identity, capabilities, service endpoint, skills, and authentication requirements.<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-- **Message**: a single communication turn between a client and an agent, with a role (for example, "user" or "agent") and content carried in one or more **parts**.<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-- **Part**: the fundamental content container used within messages and artifacts; a part holds exactly one content field (for example, text, a URL reference, inline bytes, or structured data) and may include metadata such as media type and filename.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-- **Task**: a stateful unit of work with a unique ID and defined lifecycle, used to track processing (including long-running operations).<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-- **Artifact**: a tangible output produced during task processing (for example, a document or structured data), composed of one or more parts and tied to the task lifecycle.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-
-### Interaction mechanisms
-
-Public documentation describes multiple interaction patterns, including simple request/response (with polling for task status), streaming updates via Server-Sent Events (SSE), and asynchronous push notifications to a client-provided webhook for long-running or disconnected scenarios.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
-
-## Status and governance
-
-The A2A project publishes a versioned specification and release notes in its public repository, and a published specification site that tracks versions (including a "latest" view).<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://github.com/a2aproject/A2A</ref>
-
-## History
-
-Google announced A2A publicly in April 2025 as an open protocol for agent interoperability, describing a partner ecosystem contributing to the effort.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref>
+## See also
+- Model Context Protocol (MCP)
 
 ## References
+1. A2A Protocol — “Agent2Agent (A2A) Protocol Specification (Release Candidate v1.0)”. https://a2a-protocol.org/latest/specification/
+2. a2aproject/A2A (GitHub repository). https://github.com/a2aproject/A2A
 
-- A2A Protocol website — "Agent2Agent (A2A) Protocol Specification" ("latest"): https://a2a-protocol.org/latest/specification/
-- Google Developers Blog — "Announcing the Agent2Agent Protocol (A2A)" (Apr 9, 2025): https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
-- a2aproject/A2A (GitHub repository): https://github.com/a2aproject/A2A
-
-## Ecosystem and participation
-
-Google’s announcement stated that the protocol launch involved “more than 50 technology partners.”\
-Source: https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
+## External links
+- https://a2a-protocol.org/
