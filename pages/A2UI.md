@@ -16,7 +16,7 @@ The macOS Canvas panel can load local Canvas content via the `openclaw-canvas://
 
 For A2UI specifically, OpenClaw documents a default host page served by the Gateway Canvas host:
 
-- `http://<gateway-host>:18789/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
+- `http://<gateway-host>:18793/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
 
 When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
 
@@ -51,6 +51,7 @@ OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a 
 
 ## References
 - OpenClaw Docs: “Canvas (macOS app)” (includes local canvas paths, `openclaw-canvas:///`, A2UI hosting, and the v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
+- OpenClaw Docs mirror (same content; includes the default A2UI host URL and v0.8 message list). https://beaverslab.mintlify.app/en/platforms/mac/canvas
 
 ## External links
 - OpenClaw docs: https://docs.openclaw.ai/
