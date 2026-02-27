@@ -1,29 +1,29 @@
 # OpenClaw Gateway
 
-The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It coordinates the assistant’s sessions, connected messaging channels, tools, and automation, and exposes the local control surface used by the OpenClaw CLI and web dashboard.
+The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It coordinates sessions, connected messaging channels, tools, and automation, and exposes the local control surface used by the OpenClaw CLI and web UI.
 
 ## Overview
 
 OpenClaw is designed as a “local-first” assistant that runs on a user’s own devices. In this architecture, the Gateway is the central service that:
 
-- runs continuously (typically as a user-level system service);
+- runs continuously (commonly installed as a user-level daemon/service);
 - manages configuration and runtime state;
-- brokers connections to channels (e.g., chat platforms) and tools; and
-- provides a control interface for sending messages and running the agent.
+- brokers connections to channels (e.g., Telegram, WhatsApp, Slack) and tools; and
+- provides a control interface for sending messages and running agents.
 
-The OpenClaw project documentation describes the Gateway as the control plane for the product, with the assistant being the user-facing behavior delivered through channels and interfaces.
+The OpenClaw repository describes the Gateway as “just the control plane”, with the product experience delivered through the assistant across channels and interfaces.
 
 ## Installation and operation
 
-The OpenClaw onboarding workflow can install the Gateway as a background daemon so it stays running. The OpenClaw CLI includes subcommands to check status and manage the service.
+OpenClaw’s recommended onboarding path is the CLI wizard (`openclaw onboard`), which can install the Gateway daemon so it stays running. The CLI also provides service-management subcommands such as `openclaw gateway status`, `openclaw gateway start`, `openclaw gateway stop`, and `openclaw gateway restart`.
 
-OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
+The public repository README additionally shows that the Gateway can be started directly with explicit flags (for example, choosing a port and enabling verbose logging).
 
 ## See also
 
 - [OpenClaw](OpenClaw.md)
 - [OpenClaw Skills](OpenClaw%20Skills.md)
-- [Moltbot](Moltbot.md)
+- [OpenClaw Mission Control](OpenClaw%20Mission%20Control.md)
 
 ## References
 
