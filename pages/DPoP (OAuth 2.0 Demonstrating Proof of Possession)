@@ -1,0 +1,64 @@
+# OAuth 2.0 Demonstrating Proof of Possession (DPoP)
+
+**Demonstrating Proof of Possession (DPoP)** is an OAuth 2.0 mechanism for *sender-constraining* access tokens and (in some cases) refresh tokens at the application layer. Instead of treating an access token as a pure *bearer* credential (usable by anyone who obtains it), DPoP binds the token to a public key and requires the client to prove possession of the corresponding private key on each request.
+
+DPoP is standardized by the IETF as **RFC 9449** (Standards Track, September 2023). It is commonly discussed as a defense-in-depth measure to reduce the impact of access token theft and replay.
+
+## Overview
+
+In a DPoP-enabled OAuth flow:
+
+1. The client generates (or has access to) an asymmetric key pair.
+2. When the client makes a request to the authorization server’s token endpoint, it includes a **DPoP proof** in the `DPoP` HTTP header.
+3. The authorization server issues an access token that is **bound** to the public key conveyed in the proof, and signals this by returning `token_type` = `DPoP`.
+4. When calling a protected resource, the client presents:
+   - the access token using the `Authorization: DPoP <token>` scheme, and
+   - a fresh DPoP proof in the `DPoP` header.
+
+A resource server that supports DPoP verifies (a) the proof, (b) that the proof matches the current request, and (c) that the access token is bound to the same key as in the proof.
+
+## DPoP proof JWT
+
+A DPoP proof is a **JSON Web Token (JWT)** carried in the `DPoP` HTTP request header. The proof is signed by the client’s private key, and the corresponding public key is carried in the JWT header as a **JWK**.
+
+RFC 9449 defines required JOSE header parameters and claims, including:
+
+- JOSE header:
+  - `typ`: must be `dpop+jwt`
+  - `alg`: an asymmetric JWS algorithm (must not be `none` or symmetric MAC algorithms)
+  - `jwk`: the public key in JWK format (must not contain a private key)
+- JWT claims:
+  - `jti`: unique identifier for the proof (used for replay detection)
+  - `htm`: HTTP method of the request
+  - `htu`: target URI of the request (without query and fragment)
+  - `iat`: issued-at timestamp
+  - `ath`: (when used with an access token) base64url-encoded SHA-256 hash of the ASCII encoding of the access token value
+  - `nonce`: (when a server requires it) a recent nonce supplied via the `DPoP-Nonce` response header
+
+Each HTTP request requires a **unique** DPoP proof.
+
+## Token binding and confirmation (`cnf` / `jkt`)
+
+For a resource server to verify the key-binding of a DPoP access token, it needs a reliable way to learn which key the token is bound to.
+
+RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token is JWT-structured. The same `cnf`/`jkt` structure can also be conveyed via OAuth 2.0 Token Introspection responses.
+
+## Nonce support
+
+RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). This is intended to mitigate certain replay and precomputation risks.
+
+## Relationship to other sender-constraining techniques
+
+DPoP is positioned as an application-layer alternative for environments where transport-layer sender-constraining mechanisms (for example, mutual TLS for OAuth) are not available or desirable.
+
+## Security considerations (high level)
+
+DPoP aims to reduce the usefulness of stolen tokens by requiring the attacker to also possess the private key. It is not a substitute for transport security and is specified for use with HTTPS.
+
+DPoP does not, by itself, provide full request integrity for all HTTP message components; it signs a selected subset (method and target URI) to avoid the complexities of canonicalizing HTTP requests.
+
+## References
+
+- IETF. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP).* September 2023. https://datatracker.ietf.org/doc/html/rfc9449
+- RFC Editor. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP) — information page.* https://www.rfc-editor.org/info/rfc9449
+- OAuth.net. *DPoP (OAuth 2.0 Demonstrating Proof-of-Possession).* https://oauth.net/2/dpop/
