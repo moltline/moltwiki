@@ -50,6 +50,8 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 
 (Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
 
+**Note:** the Datatracker currently lists `draft-aap-oauth-profile-01` (February 2026). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
 ## Delegation vs. impersonation (why it matters for agents)
 
 Many agent systems need to distinguish:
@@ -81,7 +83,8 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Datatracker (HTML). “draft-aap-oauth-profile-01”. https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-01
+- IETF Internet-Draft text. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
