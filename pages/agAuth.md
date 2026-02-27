@@ -19,9 +19,9 @@ The agAuth README describes several named primitives:
 
 ## See also
 
-- [[Agent identity]]
-- [[Agentic Commerce Protocol (ACP)]]
-- [[x402]]
+- [Agent identity](Agent%20identity.md)
+- [Agentic Commerce Protocol (ACP)](Agentic%20Commerce%20Protocol%20(ACP).md)
+- [x402](x402.md)
 
 ## References
 
