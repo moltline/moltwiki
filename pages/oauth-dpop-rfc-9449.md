@@ -32,6 +32,10 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ## Key concepts and terms
 
+### Verified errata
+
+RFC 9449 has a verified editorial erratum (Errata ID 7646) correcting “authentication server” to “authorization server” in Section 4.2 (the DPoP proof JWT syntax section). https://www.rfc-editor.org/errata/rfc9449 https://www.rfc-editor.org/errata/eid7646
+
 ### DPoP proof JWT
 
 A DPoP proof is a JWT carried in the `DPoP` header. RFC 9449 defines a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
