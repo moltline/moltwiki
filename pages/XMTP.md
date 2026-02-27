@@ -20,26 +20,25 @@ XMTP’s website describes the protocol as open source and identity-agnostic, an
 ## Protocol components
 
 ### Encryption and security properties
-XMTP’s protocol documentation describes MLS-based end-to-end encryption for both 1:1 and group conversations, and outlines security properties such as forward secrecy and post-compromise security in terms of MLS mechanisms (for example, key ratcheting and commits).\[4\]
-
-XMTP’s security documentation also describes a hybrid approach to protecting MLS *Welcome* messages against “harvest now, decrypt later” threats, and documents specific cryptographic building blocks used by the protocol (for example, HPKE, AEAD, and Ed25519).\[4\]
+XMTP’s protocol documentation describes MLS-based end-to-end encryption for both 1:1 and group conversations.\[4\]
 
 An external security assessment commissioned by Ephemera (XMTP’s developer) and published by NCC Group describes a review of **libxmtp**, a Rust implementation of XMTP built on MLS and OpenMLS.\[5\]
 
 ### Identity model
 XMTP’s identity model centers on an **inbox ID**, described as a stable destination for messages that can have multiple associated identities and installations.\[3\]
 
-- **Inbox IDs** are described as opaque identifiers derived from a hash of the first associated wallet address and a nonce, and are intended to remain stable as identities and installations change.\[3\]
-- **Identities** are addressable accounts of different types (for example, Ethereum EOAs, smart contract wallets, and passkeys) that can be associated with a single inbox ID.\[3\]
-- The documentation describes the **first identity** linked to an inbox as a **recovery identity** with special privileges (for example, revoking installations).\[3\]
+- **Inbox IDs** are derived from the hash of the first associated wallet address and a nonce and act as opaque identifiers that apps use for messaging.\[3\]
+- **Identities** are addressable accounts that can be associated with an inbox ID; currently documented supported identity types include Ethereum EOAs, Ethereum smart contract wallets, and passkeys.\[3\]
+- The first identity linked to an inbox is described as a **recovery identity** with special privileges (for example, revoking installations).\[3\]
 - **Installations** represent specific app installations that can access an inbox, each with its own cryptographic keys; the documentation describes support for multiple installations per inbox (up to 10) and revocation by the recovery identity.\[3\]
 
 ### Delivery
-XMTP documentation describes delivery primitives including:
+XMTP documentation describes delivery primitives including topics, cursors, and intents.\[1\]
 
-- **Topics** for routing conversation traffic\[1\]
-- **Cursors** for efficient client synchronization\[1\]
-- **Intents** as an internal bookkeeping mechanism for applying group state changes reliably\[1\]
+### Consent and spam resistance (app-layer)
+XMTP is an open, permissionless network, so applications are expected to implement inbox experiences that remain usable in the presence of spam. XMTP’s chat-app documentation describes **user consent preferences** that let a user classify other identities or conversations as **unknown**, **allowed**, or **denied**; apps can then surface unknown senders as “message requests” and show only allowed contacts/conversations in the primary inbox.\[8\]
+
+The documentation also notes that consent preferences are stored privately in an encrypted consent list on the XMTP network and are accessible to other apps a user has authorized, enabling consent decisions to carry across XMTP apps.\[8\]
 
 ## Implementations
 
@@ -60,6 +59,7 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
 6. XMTP GitHub organization. https://github.com/xmtp
 7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+8. XMTP Docs — “Understand how user consent preferences support spam-free chats”. https://docs.xmtp.org/chat-apps/user-consent/user-consent
 
 ## External links
 - Documentation: https://docs.xmtp.org/
