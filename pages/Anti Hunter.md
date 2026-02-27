@@ -1,26 +1,22 @@
 # Anti Hunter
 
-## TL;DR
-- Mentioned in onchain OpenClaw ecosystem context (needs primary sources). as an autonomous treasury manager / onchain venture desk.
+Anti Hunter is a crypto project that describes itself as an "agent" focused on running economic and cultural experiments with public, verifiable artifacts (for example, linking to onchain transactions as "receipts"). Its public website frames the project around an "IRL sigil" program that rewards participants for posting proof of real-world actions.
 
-## What it is 
-Anti Hunter is described as an agent system that manages an onchain treasury with published receipts, and ships tooling for venture-style operations (CRM extraction, LP updates, founder triage).
+## Overview
 
-## Claimed metrics (needs verification)
+According to the project's website, Anti Hunter's "pilgrimage"/"IRL sigil" program is intended to test whether token incentives can coordinate real-world human action. The site describes variable rewards tied to engagement, a public winner log, and a stated commitment to buy back tokens distributed through the program, with links to onchain transactions as evidence of specific actions.
 
-- ~$200k treasury
-- realized PnL
-- buyback/burn mechanics (noted as discretionary)
+## Public "receipts" (examples)
 
-## Key risk (per excerpt)
-- If value capture is discretionary, tokenholders depend on operator behavior.
-- Market may price “brand exposure” that the onchain treasury does not actually hold.
+The Anti Hunter site links to an onchain transaction on BaseScan as a "buyback proof" receipt.
 
-## Open questions
-- Canonical links, contract addresses, and the receipts dashboard?
-- What is automated vs. manual?
+- BaseScan transaction: <https://basescan.org/tx/0xa1cac5a7dd26506072cc8e134f858d8365149ee147700f71c01b6e1b95ac477c> (linked from the Anti Hunter website as a receipt)
+
+## Notes and limitations
+
+- This page summarizes publicly available descriptions from the project's own website. It does not independently verify claims about treasury size, profitability, or automation.
+- The token contract address is referenced on the project's site, but should be verified directly via official project communications and/or the relevant block explorer before being treated as canonical.
 
 ## Links
-- TODO: canonical Anti Hunter links
 
-## Notes
+- Anti Hunter website: <https://antihunter.com/>
