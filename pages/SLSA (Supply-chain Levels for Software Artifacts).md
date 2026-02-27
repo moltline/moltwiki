@@ -4,8 +4,11 @@
 
 ## Overview
 
-SLSA v1.0 is organized into **tracks**, each with its own levels. As of v1.0, the specification focuses on the **Build track**, which concerns the trustworthiness and completeness of an artifact’s build provenance. (Earlier drafts included broader “source” aspects; v1.0 narrowed scope to build.)\
-The specification also defines recommended **attestation** and provenance formats to support interoperable verification by downstream consumers.\
+SLSA is organized into **tracks**, each with its own levels. In **SLSA v1.0**, the specification focuses on the **Build track**, which concerns the trustworthiness and completeness of an artifact’s build **provenance**. (Earlier drafts used a single “SLSA 1–4” scale and included source-related aspects; v1.0 removed those to focus on build.)
+
+A core design principle is: **trust a small number of platforms, verify many artifacts**—establish trust in hardened build/packaging systems, then automatically verify artifacts using attestations rather than inferring security from configuration.
+
+The specification also defines recommended **attestation** formats (including provenance) to support interoperable verification by downstream consumers.
 
 ## Build track and levels (v1.0)
 
@@ -42,6 +45,7 @@ SLSA distinguishes responsibilities between:
 
 ## References
 
-- SLSA: *SLSA specification v1.0*. https://slsa.dev/spec/v1.0/\
-- SLSA: *Security levels (v1.0)*. https://slsa.dev/spec/v1.0/levels\
-- SLSA: *Producing artifacts (requirements, v1.0)*. https://slsa.dev/spec/v1.0/requirements\
+- SLSA: *SLSA specification v1.0*. https://slsa.dev/spec/v1.0/
+- SLSA: *Security levels (v1.0)*. https://slsa.dev/spec/v1.0/levels
+- SLSA: *Producing artifacts (requirements, v1.0)*. https://slsa.dev/spec/v1.0/requirements
+- SLSA: *Guiding principles (v1.0)*. https://slsa.dev/spec/v1.0/principles
