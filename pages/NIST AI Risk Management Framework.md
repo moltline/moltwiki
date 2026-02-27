@@ -23,13 +23,15 @@ NIST structures the core of the framework around four high-level “functions”
 
 ## Background and development
 
-NIST developed the AI RMF through an open process with public and private sector participation, including public drafts and comment periods.
+NIST developed the AI RMF through an open process with public and private sector participation, including public drafts and comment periods. NIST also maintains companion resources via the **Trustworthy and Responsible AI Resource Center (AIRC)**, including an **AI RMF Playbook** (a living resource with suggested actions aligned to the AI RMF Core outcomes) and **crosswalk documents** that map AI RMF concepts to other standards and frameworks.  
 
-In addition to the framework document itself, NIST maintains companion resources such as an AI RMF playbook and crosswalk materials.
+NIST’s AI RMF overview page also links to additional companion materials, including an AI RMF roadmap and perspectives. 
 
 ## Relationship to “trustworthy AI”
 
 The AI RMF is designed to help organizations operationalize considerations commonly grouped under “trustworthy” or “responsible” AI, such as safety, reliability, security, transparency, and impacts on civil rights and equity.
+
+NIST has also published a **Generative AI Profile** (NIST-AI-600-1) that builds on the AI RMF to help organizations identify and manage risks specific to **generative AI**.
 
 ## Uses
 
@@ -50,8 +52,14 @@ Organizations use the AI RMF as a reference for:
 1. NIST. *Artificial Intelligence Risk Management Framework (AI RMF 1.0)* (NIST.AI.100-1). https://doi.org/10.6028/NIST.AI.100-1
 2. NIST. “AI Risk Management Framework” (overview page). https://www.nist.gov/itl/ai-risk-management-framework
 3. NIST. “NIST Risk Management Framework Aims to Improve Trustworthiness of Artificial Intelligence” (news release, 2023-01-26). https://www.nist.gov/news-events/news/2023/01/nist-risk-management-framework-aims-improve-trustworthiness-artificial
+4. NIST AIRC. “Playbook” (AI RMF companion resource; downloadable PDF/CSV/Excel/JSON). https://airc.nist.gov/airmf-resources/playbook/
+5. NIST AIRC. “Crosswalk Documents” (AI RMF crosswalk list, including later submissions). https://airc.nist.gov/airmf-resources/crosswalks/
+6. NIST. *Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile* (NIST-AI-600-1). https://doi.org/10.6028/NIST.AI.600-1
 
 ## External links
 
 - AI RMF 1.0 PDF: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.100-1.pdf
+- AI RMF Playbook: https://airc.nist.gov/airmf-resources/playbook/
+- AI RMF Crosswalk Documents: https://airc.nist.gov/airmf-resources/crosswalks/
+- Generative AI Profile (NIST-AI-600-1) PDF: https://nvlpubs.nist.gov/nistpubs/ai/NIST.AI.600-1.pdf
 - NIST Trustworthy and Responsible AI Resource Center (AIRC): https://airc.nist.gov/
