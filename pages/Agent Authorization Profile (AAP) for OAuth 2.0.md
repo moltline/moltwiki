@@ -1,37 +1,59 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an Internet-Draft that proposes an authorization profile for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in scenarios where **autonomous AI agents** access APIs on behalf of a principal or system. The draft describes structured JWT claims and validation rules intended to make agent-to-API authorization more **context-aware**, **auditable**, and amenable to **policy enforcement** (for example, by binding tokens to tasks, constraining permitted actions, and recording delegation chains).[1]
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that proposes a profile for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** when **autonomous or semi-autonomous agents** call APIs on behalf of a principal (a user, service, or organization). The draft defines additional JWT claims and validation guidance intended to make agent-to-API authorization more **explicit**, **auditable**, and suitable for **policy enforcement** (for example, by binding tokens to a task context and constraining permitted actions).
 
-Because AAP is published as an **IETF Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and are not intended to be cited as stable references.[1]
+Because AAP is published as an **IETF Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and are not intended to be cited as stable references. (IETF Datatracker: https://datatracker.ietf.org/doc/draft-aap-oauth-profile/)
 
-## Overview
+## What problem AAP is trying to solve
 
-The AAP draft frames agent authorization as an application of existing building blocks—OAuth 2.0, JWTs, OAuth Token Exchange, and proof-of-possession mechanisms—rather than a new protocol. It specifies additional token content and processing expectations so that authorization systems can reason about:
+OAuth 2.0 (RFC 6749: https://datatracker.ietf.org/doc/html/rfc6749) deliberately leaves many authorization semantics to deployments. In many systems, access tokens are treated as opaque or as bearer tokens with minimal structure (e.g., `aud`, `scope`). For agentic systems—where software may plan and execute multi-step tasks—operators often need more explicit answers to questions like:
 
-- **Agent identity** and related metadata
-- **Task context** (what the agent is trying to do)
-- **Operational constraints** (limits that narrow how the token may be used)
-- **Delegation chains** (how authority is derived or passed along)
-- **Human oversight requirements** (conditions under which a human must approve or supervise actions)[1]
+- *What task is this token meant for?*
+- *What actions and resources are permitted?*
+- *Who delegated authority to whom, and under what constraints?*
+- *What evidence should be logged for audit and incident response?*
 
-## Relationship to OAuth and JWT
+AAP’s approach is to **profile** existing standards (OAuth 2.0 + JWT) so that resource servers can apply consistent validation and authorization checks using structured claims.
 
-In OAuth deployments, access tokens are often treated as bearer tokens with limited built-in semantics beyond scope and audience. The AAP draft proposes a more structured approach using JWT claims so that resource servers can apply **validation rules** and enforce **capabilities and constraints** consistently across services.[1]
+## Relationship to core OAuth and JWT building blocks
 
-The draft explicitly positions AAP as a profile layered on top of existing standards, aiming to improve interoperability for agentic use cases without changing the underlying OAuth flows.[1]
+AAP is positioned as a profile layered on top of established components rather than a new authorization protocol:
+
+- **OAuth 2.0** provides the authorization framework and token issuance model (RFC 6749: https://datatracker.ietf.org/doc/html/rfc6749).
+- **JWT** provides a compact claims container that can be signed and validated (RFC 7519: https://datatracker.ietf.org/doc/html/rfc7519).
+- **OAuth 2.0 Token Exchange** is commonly used in delegation and “act-as / on-behalf-of” patterns (RFC 8693: https://datatracker.ietf.org/doc/html/rfc8693).
+- **Proof-of-possession / sender-constrained tokens** can reduce replay risk compared to bearer tokens; DPoP is one standardized mechanism (RFC 9449: https://www.rfc-editor.org/rfc/rfc9449.html).
+- **Rich Authorization Requests (RAR)** define `authorization_details` for fine-grained authorization data in OAuth messages (RFC 9396: https://datatracker.ietf.org/doc/html/rfc9396).
+
+AAP uses these as reference points and then specifies additional agent-oriented claims and processing expectations.
+
+## Key concepts (high-level)
+
+The draft’s recurring theme is making agent authorization **constrained and explainable**. At a high level, it aims to standardize how tokens can carry:
+
+- **Agent identity and metadata** (what software entity is acting)
+- **Task context** (what the agent is trying to accomplish)
+- **Operational constraints** (limits that narrow how, where, and when the token may be used)
+- **Delegation chain information** (how authority was derived, passed, or restricted)
+- **Oversight requirements** (when human approval or supervision is required)
+
+Exact claim names and validation rules are defined in the draft itself (IETF Datatracker: https://datatracker.ietf.org/doc/draft-aap-oauth-profile/).
 
 ## Delegation and constraints
 
-A recurring theme in the draft is reducing the risk of overbroad or drifting agent permissions. It describes mechanisms for expressing and validating:
+Agentic systems are particularly vulnerable to *permission drift* (agents accumulating broader access over time) and *confused deputy* style failures. AAP focuses on expressing and validating constraints such as:
 
-- **Delegation constraints**, such as limiting the depth or breadth of delegation
-- **Time- and environment-based restrictions**
-- **Data and security constraints**
-- **Audit and trace propagation** to support accountability and incident response[1]
+- Bounding delegation (e.g., limiting how far authority can be re-delegated)
+- Restricting token use by time, environment, or other context
+- Propagating audit/trace information so downstream services can attribute actions
 
-## Threat model and security considerations
+These constraints are intended to be enforced by resource servers as part of token validation and authorization decisions.
 
-The draft includes a threat model summary that discusses risks relevant to autonomous agents, including agent impersonation, capability escalation, excessive delegation, and prompt/data injection. It also describes resource server validation expectations and broader security considerations for authorization servers and token handling.[1]
+## Security considerations
+
+The draft discusses threats that become more salient with autonomous agents, including impersonation, capability escalation through delegation, and injection-style attacks that could cause an agent to misuse valid credentials. It also emphasizes resource-server validation expectations and safe token handling.
+
+Because this is an Internet-Draft, treat it as evolving guidance; production deployments should also rely on established OAuth security best practices and token sender-constraining mechanisms where appropriate.
 
 ## See also
 
@@ -41,4 +63,9 @@ The draft includes a threat model summary that discusses risks relevant to auton
 
 ## References
 
-1. A. Cruz. "Agent Authorization Profile (AAP) for OAuth 2.0" (Internet-Draft), draft-aap-oauth-profile-01, 7 Feb 2026. IETF Datatracker. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ (accessed 2026-02-27).
+- IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- RFC 6749. “The OAuth 2.0 Authorization Framework.” https://datatracker.ietf.org/doc/html/rfc6749
+- RFC 7519. “JSON Web Token (JWT).” https://datatracker.ietf.org/doc/html/rfc7519
+- RFC 8693. “OAuth 2.0 Token Exchange.” https://datatracker.ietf.org/doc/html/rfc8693
+- RFC 9396. “OAuth 2.0 Rich Authorization Requests.” https://datatracker.ietf.org/doc/html/rfc9396
+- RFC 9449. “OAuth 2.0 Demonstrating Proof of Possession (DPoP).” https://www.rfc-editor.org/rfc/rfc9449.html
