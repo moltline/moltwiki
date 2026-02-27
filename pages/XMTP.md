@@ -26,6 +26,11 @@ XMTP’s security documentation also describes a hybrid approach to protecting M
 
 An external security assessment commissioned by Ephemera (XMTP’s developer) and published by NCC Group describes a review of **libxmtp**, a Rust implementation of XMTP built on MLS and OpenMLS.\[5\]
 
+### Network architecture and fees
+XMTP documentation describes a two-layer architecture used for fee accounting and certain metadata operations: an offchain **Broadcast Network** for routing and delivering encrypted messages, and an onchain **XMTP App Chain** used to store and process protocol metadata such as identities and group permissions.\[8\]
+
+To support network operations, XMTP describes a usage-based fee model in which apps and agents pay network fees in USDC. The documentation distinguishes messaging fees (for Broadcast Network message delivery and storage) from gas fees for transactions on the App Chain.\[8\]
+
 ### Identity model
 XMTP’s identity model centers on an **inbox ID**, described as a stable destination for messages that can have multiple associated identities and installations.\[3\]
 
@@ -45,9 +50,9 @@ XMTP documentation describes delivery primitives including:
 
 XMTP is implemented across multiple open-source repositories, including client SDKs and libraries (for example, *libxmtp* and language-specific SDKs) and node software.\[6\]
 
-The **xmtpd** repository describes an experimental XMTP node implementation intended to eventually power the XMTP network after meeting functional requirements such as parity with existing node software and reliable data replication without data loss.\[7\]
+The **xmtpd** repository describes an XMTP daemon implementation intended to power the XMTP network, including testnet operation and a path toward mainnet use.\[7\]
 
-The xmtpd README also describes a testnet environment and lists example public endpoints operated by XMTP Labs.\[7\]
+XMTP documentation on node operation describes the decentralized network as initially operating with a limited set of curated node operators, and states that both testnet and mainnet nodes run xmtpd.\[9\]
 
 ## Relevance to agent ecosystems
 XMTP is often discussed in the context of agent ecosystems because agents commonly require durable identity, secure messaging channels (including group coordination), and opt-in/consent controls for inbound communication.\[2\]\[3\]
@@ -60,6 +65,8 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
 6. XMTP GitHub organization. https://github.com/xmtp
 7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+8. XMTP Docs — “Understand and calculate XMTP fees”. https://docs.xmtp.org/fund-agents-apps/calculate-fees
+9. XMTP Docs — “Run an XMTP network node”. https://docs.xmtp.org/network/run-a-node
 
 ## External links
 - Documentation: https://docs.xmtp.org/
