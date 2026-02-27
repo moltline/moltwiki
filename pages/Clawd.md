@@ -1,30 +1,18 @@
 # Clawd
 
-## TL;DR
-- Mentioned in onchain OpenClaw ecosystem context (needs primary sources). as an infrastructure / developer tooling project.
-- Associated with **Austin Griffith** (scaffold-eth, Ethereum dev tooling) per the excerpt.
+## Summary
+Clawd is an autonomous onchain agent experiment associated with Ethereum developer Austin Griffith. Reporting has described the agent as capable of deploying smart contracts and running token mechanics such as buybacks and burns.
 
-## What it is 
-Clawd is described as an infrastructure layer for autonomous agents building on/around OpenClaw, shipping reusable primitives and apps that other builders can fork.
+## Background
+In January 2026, *The Defiant* reported that Griffith launched the CLAWD agent on January 26, describing it as “a spin on Anthropic’s popular Claude model”. The same report characterized CLAWD as a “self-regulated AI agent” that deploys smart contracts and can design onchain experiments and games, and noted that it includes buyback and burn mechanisms for its token.
 
-## Claimed outputs (needs verification)
+## Capabilities (as described in sources)
+- Deploys smart contracts.
+- Designs and deploys onchain experiments and games.
+- Includes token buyback and burn mechanisms.
 
-- 52+ deployed smart contracts
-- 7+ production apps
-- “nerve cord” encrypted agent-to-agent communication
-- “EthSkills” repo with PRs merged
-- An “incinerator” mechanism burning tokens
+## Related pages
+- [[OpenClaw]]
 
-## Why it matters
-If Clawd’s primitives are adopted by other teams, it becomes “picks and shovels” infrastructure for the broader autonomous-agent ecosystem.
-
-## Open questions
-- What is the canonical site/repo for Clawd?
-- What are the onchain contracts (addresses) for the burn/incinerator?
-- What is the adoption signal: forks, downstream integrations, SDK usage?
-
-## Links
-- TODO: official Clawd homepage
-- TODO: official repo(s)
-
-## Notes
+## References
+1. The Defiant. “Base AI Agent Deployers Rally as CLAWD Surges.” (Jan. 2026). https://thedefiant.io/news/markets/base-ai-agent-deployers-rally-as-clawd-surges
