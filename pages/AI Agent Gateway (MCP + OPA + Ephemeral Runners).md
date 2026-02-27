@@ -67,6 +67,28 @@ A gateway is a natural place to capture:
 
 OPA notes that policy decisions can support audit and compliance by providing a detailed history that can be replayed for analysis/debugging. [OPA](https://www.openpolicyagent.org/)
 
+## Design principles (practical)
+
+Common design principles for an agent gateway include:
+
+- **Treat agents as untrusted requesters**: agents submit structured requests, but do not hold direct access to infrastructure APIs.
+- **Defense in depth**: use multiple independent controls (validation, authorization, isolation, and observability) so a single failure does not become full compromise.
+- **Policy-as-code authorization**: externalize allow/deny and constraint logic into a policy engine (often OPA) rather than hard-coding authorization into tool handlers.
+- **Ephemeral execution**: run approved actions in short-lived, isolated environments that are destroyed after completion.
+- **Observability by default**: emit traces/metrics/logs that let operators answer not only *what happened*, but also *which decision point allowed it*.
+
+The InfoQ reference architecture describes request validation (including schema checks and request normalization), policy evaluation, queuing jobs for execution, and using OpenTelemetry-style observability to support debugging and audit. [InfoQ](https://www.infoq.com/articles/building-ai-agent-gateway-mcp/)
+
+## Techniques for auditability and replay
+
+In addition to standard request/decision logging, some gateway designs use techniques such as:
+
+- **Plan hashes**: compute a stable hash of the normalized request or generated plan so later reviews can confirm what was authorized matches what was executed.
+- **Idempotency keys**: ensure retries do not produce duplicate side effects.
+- **Immutable job metadata**: persist request context, policy decision, and execution identifiers to support post-incident investigation.
+
+These mechanisms are discussed as part of the gateway’s “versioning and auditability” goals in the InfoQ article. [InfoQ](https://www.infoq.com/articles/building-ai-agent-gateway-mcp/)
+
 ## Relation to OpenClaw / agent tool systems
 
 OpenClaw-style agent tool calling often involves powerful capabilities (code execution, API calls, message sending). A gateway pattern complements such systems by:
