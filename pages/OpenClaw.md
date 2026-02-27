@@ -64,6 +64,7 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 
 ## History
 - **2026-02-26:** Steinberger published a post about joining OpenAI and moving OpenClaw to a foundation.\[1\]
+- **2026-02-26:** The OpenClaw project published the `openclaw 2026.2.25` release on GitHub, including changes across Android UI, configuration/heartbeat delivery semantics, and multiple channel and cron fixes.\[7\]
 
 ## Related
 - [Moltbook](./Moltbook.md)
@@ -75,6 +76,7 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 4. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
 5. OpenClaw Docs: “Session Management”. https://docs.openclaw.ai/concepts/session
 6. OpenClaw Docs: “Getting Started” (quick setup and environment variables). https://docs.openclaw.ai/start/getting-started
+7. GitHub releases: “openclaw 2026.2.25” (Feb 26, 2026). https://github.com/openclaw/openclaw/releases
 
 ## External links
 - Project site: https://openclaw.ai/
