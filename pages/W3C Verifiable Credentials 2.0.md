@@ -47,11 +47,19 @@ Issuers often need to publish whether a credential has been **revoked** or **sus
 In 2025, W3C published the Verifiable Credentials 2.0 family of specifications as W3C Recommendations (W3C Standards). [W3C Press Release: Verifiable Credentials 2.0](https://www.w3.org/press-releases/2025/verifiable-credentials-2-0/) and [W3C News: VC 2.0 family is now a Recommendation](https://www.w3.org/news/2025/the-verifiable-credentials-2-0-family-of-specifications-is-now-a-w3c-recommendation/).
 
 ## Related W3C specifications (commonly used with VC 2.0)
-The VC 2.0 ecosystem is typically implemented together with additional W3C specifications that define securing mechanisms and status checking.
+The VC 2.0 ecosystem is typically implemented together with additional W3C specifications that define securing mechanisms, status checking, and (in newer work) rendering and confidence mechanisms.
 
 - **Verifiable Credential Data Integrity 1.0**: a data integrity proof framework for verifiable credentials and similar constrained documents. [W3C TR: Verifiable Credential Data Integrity 1.0](https://www.w3.org/TR/vc-data-integrity/)
 - **Securing Verifiable Credentials using JOSE and COSE**: defines JOSE/COSE-based securing for VC data model documents. [W3C TR: VC JOSE/COSE](https://www.w3.org/TR/vc-jose-cose/)
 - **Bitstring Status List v1.0**: a bitstring-based mechanism for publishing credential status (e.g., revocation/suspension). [W3C TR: Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/)
+
+
+### Related work in the W3C Verifiable Credentials Working Group (post-VC 2.0)
+The VC Working Group’s (proposed) 2026 charter describes continued maintenance of the VC Recommendations and lists additional deliverables under development, including:
+
+- **Verifiable Credential Rendering Methods v1.0** (Working Draft): an extension mechanism for representing a Verifiable Credential through a visual, auditory, or haptic medium (e.g., physical document, digital image, screen reader, braille). [Editor’s Draft: Verifiable Credential Rendering Methods v1.0](https://w3c.github.io/vc-render-method/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
+- **Confidence Method v1.0** (Working Draft): mechanisms used with VC Data Model v2.0 to increase a verifier’s confidence about a subject identified in a VC. [Editor’s Draft: Confidence Method v1.0](https://w3c.github.io/vc-confidence-method/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
+- **Data Integrity BBS Cryptosuites v1.0** (Candidate Recommendation): a Data Integrity cryptosuite based on the BBS signature scheme, intended to support selective disclosure and unlinkable derived proofs. [Editor’s Draft: Data Integrity BBS Cryptosuites v1.0](https://w3c.github.io/vc-di-bbs/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
 
 ## References
 - [W3C TR: Verifiable Credentials Overview](https://www.w3.org/TR/vc-overview/)
@@ -60,3 +68,4 @@ The VC 2.0 ecosystem is typically implemented together with additional W3C speci
 - [W3C TR: Securing Verifiable Credentials using JOSE and COSE](https://www.w3.org/TR/vc-jose-cose/)
 - [W3C TR: Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/)
 - [W3C Press Release: Verifiable Credentials 2.0 is a W3C Recommendation](https://www.w3.org/press-releases/2025/verifiable-credentials-2-0/)
+- [Verifiable Credentials Working Group Charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
