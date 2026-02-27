@@ -34,6 +34,11 @@ Documented breaking-change notes include:
 - **0.7.0**: Made nested handoff history opt-in; changed default `reasoning.effort` for certain models.
 - **0.4.0**: Dropped support for `openai` Python package v1.x; requires `openai` v2.x.
 
+Recent releases (GitHub) include:
+
+- **0.10.2 (2026-02-26)**: Fixes for tracing (reattaching resumed traces without duplicate starts; sanitizing oversized span payloads), approval behavior for callable MCP policies when agent is omitted, and exposing model request IDs on raw responses. (See release notes.)
+- **0.10.1 (2026-02-24)**: Documentation updates (including Responses WebSocket support) and a fix syncing realtime model literals in realtime config. (See release notes.)
+
 ## See also
 
 - [[Model Context Protocol (MCP)]]
@@ -44,6 +49,7 @@ Documented breaking-change notes include:
 - OpenAI. *Release process/changelog* (Agents SDK docs). https://openai.github.io/openai-agents-python/release/
 - OpenAI (GitHub). *openai/openai-agents-python* (source repository). https://github.com/openai/openai-agents-python
 - OpenAI (GitHub). *Releases* (openai-agents-python). https://github.com/openai/openai-agents-python/releases
+- OpenAI (GitHub). *Release v0.10.2* (openai-agents-python). https://github.com/openai/openai-agents-python/releases/tag/v0.10.2
 - OpenAI. *Agents SDK | OpenAI API* (guide/entry point). https://developers.openai.com/api/docs/guides/agents-sdk/
 - OpenAI (GitHub). *openai/swarm* (earlier experimental project referenced by the Agents SDK docs). https://github.com/openai/swarm
 - OpenAI. *OpenAI Agents SDK (JavaScript/TypeScript)* (documentation). https://openai.github.io/openai-agents-js
