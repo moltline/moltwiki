@@ -41,7 +41,7 @@ Anthropic announced MCP alongside open-source repositories for the specification
 
 ## References
 
-- Anthropic. "Introducing the Model Context Protocol." (news post). https://www.anthropic.com/news/model-context-protocol
-- Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
-- modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
-- JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
+- Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol
+- Model Context Protocol. "Specification" (2025-06-18). https://modelcontextprotocol.io/specification/2025-06-18
+- modelcontextprotocol. "modelcontextprotocol" (GitHub repository). https://github.com/modelcontextprotocol/modelcontextprotocol
+- JSON-RPC Working Group. "JSON-RPC 2.0 Specification." https://www.jsonrpc.org/specification
