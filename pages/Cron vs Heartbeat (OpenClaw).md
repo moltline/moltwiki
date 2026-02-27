@@ -25,7 +25,7 @@ OpenClaw’s cron supports three schedule kinds:
 - **Fixed intervals** (`schedule.kind = "every"`): run on a cadence expressed in milliseconds.
 - **Cron expressions** (`schedule.kind = "cron"`): 5-field (or 6-field with seconds) expressions with an optional IANA timezone.
 
-For recurring “top-of-hour” expressions (for example `0 * * * *`), OpenClaw applies a deterministic stagger window by default to reduce synchronized load spikes across many gateways; fixed-hour expressions such as `0 7 * * *` remain exact.
+For recurring “top-of-hour” expressions (for example `0 * * * *` or `0 */2 * * *`), OpenClaw applies a deterministic per-job stagger window (up to about 5 minutes) by default to reduce synchronized load spikes across many gateways; fixed-hour expressions such as `0 7 * * *` remain exact. Cron schedules can also set an explicit `schedule.staggerMs` value, including `0` for exact timing.
 
 ### Main vs isolated execution
 
@@ -38,8 +38,8 @@ OpenClaw distinguishes two execution styles:
 
 Cron jobs can control both **delivery** and **wake behavior**:
 
-- **Delivery** (isolated jobs): `delivery.mode` can be `announce` (send to a channel/target), `webhook` (HTTP POST), or `none` (internal only). If delivery is omitted for isolated jobs, OpenClaw defaults to `announce`.
-- **Wake mode**: jobs can request `wakeMode = "now"` (immediate) versus `wakeMode = "next-heartbeat"` (wait for the next scheduled heartbeat) for when summaries are posted back to the main session.
+- **Delivery** (isolated jobs): `delivery.mode` can be `announce` (deliver to a channel/target and post a brief main-session summary), `webhook` (HTTP POST to `delivery.to`), or `none` (internal only). If delivery is omitted for isolated jobs, OpenClaw defaults to `announce`.
+- **Wake mode**: jobs can request `wakeMode = "now"` (immediate) versus `wakeMode = "next-heartbeat"` (wait for the next scheduled heartbeat) for when main-session summaries are posted.
 
 ## Choosing between them
 
