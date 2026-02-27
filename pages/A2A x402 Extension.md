@@ -14,11 +14,11 @@ The repository describes the extension’s goal as providing a standardized way 
 
 ## Protocol flow
 
-The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[4]
 
-In the standalone flow described by the specification, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3]
+The extension supports two transport patterns for the same core x402 objects: a **Standalone Flow**, where the `x402PaymentRequiredResponse` is carried in `task.status.message.metadata` under `x402.payment.required` and the signed `PaymentPayload` is carried in `message.metadata` under `x402.payment.payload`; and an **Embedded Flow**, where those objects are nested inside higher-level protocol artifacts/parts (for example, AP2 mandates) rather than being placed directly in metadata.[4]
 
-A typical interaction involves a **client agent** and a **merchant (service) agent**:[3]
+A typical interaction involves a **client agent** and a **merchant (service) agent**:[4]
 
 1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example, `x402.payment.status: "payment-required"` and `x402.payment.required: { ... }`).
 2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload correlated to the original task (for example, `x402.payment.status: "payment-submitted"` and `x402.payment.payload: { ... }`).
@@ -26,13 +26,13 @@ A typical interaction involves a **client agent** and a **merchant (service) age
 
 ## Extension declaration
 
-Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3]
+Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[4]
 
 ## Relationship to x402
 
-The A2A x402 extension is related to the broader **x402** payments concept, which revives the HTTP **402 Payment Required** status code to enable programmatic payments over HTTP. Coinbase describes x402 as an open payment protocol for automatic stablecoin payments over HTTP, using a payment-required response followed by a client-supplied payment payload that the server verifies and settles.[4]
+The A2A x402 extension is related to the broader **x402** payments concept, which revives the HTTP **402 Payment Required** status code to enable programmatic payments over HTTP. Coinbase describes x402 as an open payment protocol for automatic stablecoin payments over HTTP, using a payment-required response followed by a client-supplied payment payload that the server verifies and settles.[5]
 
-While x402 is often described in terms of HTTP request/response semantics, the A2A x402 extension adapts similar ideas to A2A task and message flows, using A2A-defined task states and message metadata to negotiate and prove payment.[3]
+While x402 is often described in terms of HTTP request/response semantics, the A2A x402 extension adapts similar ideas to A2A task and message flows, using A2A-defined task states and message metadata to negotiate and prove payment.[4]
 
 ## See also
 
