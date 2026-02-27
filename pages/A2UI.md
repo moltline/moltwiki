@@ -4,6 +4,8 @@
 
 In OpenClaw, the A2UI renderer is served by the Gateway’s Canvas host and displayed inside the macOS app’s Canvas panel (a WKWebView-based workspace). A2UI messages are pushed from the agent to the node to update UI components and data models. https://docs.openclaw.ai/platforms/mac/canvas
 
+The Canvas documentation also describes where local Canvas content lives on macOS (under `~/Library/Application Support/OpenClaw/canvas/`) and how it is served into the panel via the `openclaw-canvas:///` custom URL scheme. https://docs.openclaw.ai/platforms/mac/canvas
+
 ## Overview
 
 ### What it’s for
@@ -15,6 +17,8 @@ The macOS Canvas panel can load local Canvas content via the `openclaw-canvas://
 For A2UI specifically, OpenClaw documents a default host page served by the Gateway Canvas host:
 
 - `http://<gateway-host>:18789/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
+
+When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
 
 ## Protocol and versions
 
@@ -35,6 +39,8 @@ https://docs.openclaw.ai/platforms/mac/canvas
 ### Transport / API surface
 Canvas is exposed via the Gateway WebSocket API, so an agent can show/hide the panel, navigate, evaluate JavaScript, capture snapshots, and push A2UI updates. https://docs.openclaw.ai/platforms/mac/canvas
 
+The documentation notes that `canvas.navigate` accepts local canvas paths (including `/` for the scaffold or `index.html`), HTTP(S) URLs, and `file://` URLs. https://docs.openclaw.ai/platforms/mac/canvas
+
 ### CLI example (A2UI v0.8)
 OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a node via the CLI (and a quick “smoke” push that sends a text string). https://docs.openclaw.ai/platforms/mac/canvas
 
@@ -44,7 +50,7 @@ OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a 
 - [OpenClaw Gateway](./OpenClaw%20Gateway.md)
 
 ## References
-- OpenClaw Docs: “Canvas (macOS app)” (includes “A2UI in Canvas” and v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
+- OpenClaw Docs: “Canvas (macOS app)” (includes local canvas paths, `openclaw-canvas:///`, A2UI hosting, and the v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
 
 ## External links
 - OpenClaw docs: https://docs.openclaw.ai/
