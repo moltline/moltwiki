@@ -68,7 +68,7 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 7. xmtp/xmtp-node-go repository README. https://github.com/xmtp/xmtp-node-go
 8. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
 9. XMTP Docs — “Run an XMTP network node”. https://docs.xmtp.org/network/run-a-node
-10. XMTP XIPs — “XIP-54: XMTP network node operator qualification criteria”. https://github.com/xmtp/XIPs/blob/main/XIPs/xip-54-node-operator-qualifications.md
+10. XMTP XIPs repository. https://github.com/xmtp/XIPs
 
 ## External links
 - Documentation: https://docs.xmtp.org/
