@@ -6,14 +6,16 @@ They aim to make telemetry from LLM calls, tool invocations, and multi-step agen
 
 ## Overview
 
-OpenTelemetry (OTel) is a vendor-neutral observability framework. In addition to general semantic conventions (for HTTP, databases, messaging, etc.), OpenTelemetry publishes **semantic conventions for generative AI systems**. These conventions cover multiple signal types:
+OpenTelemetry (OTel) is a vendor-neutral observability framework. In addition to general semantic conventions (for HTTP, databases, messaging, etc.), OpenTelemetry publishes **semantic conventions for generative AI systems**.
 
-- **Events** for model inputs/outputs.
-- **Metrics** describing GenAI operations.
-- **Model spans** for model-level operations (for example, chat/completions).
-- **Agent spans** for agent and framework operations (for example, creating or invoking an agent, or executing tools).
+Per the OpenTelemetry spec, the **GenAI semantic conventions** are currently in **document status: Development** and are defined across multiple signal types:
 
-The GenAI semantic conventions are marked with **document status: Development**, indicating they are still evolving. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/)
+- **Events**: inputs/outputs captured as events (opt-in). (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-events/)
+- **Metrics**: instruments describing GenAI operations. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/)
+- **Model spans**: spans for model operations (e.g., chat / completion). (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)
+- **Agent spans**: spans for agent and framework operations. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)
+
+The top-level GenAI semantic conventions page also lists **technology-specific** GenAI semantic conventions (e.g., OpenAI, AWS Bedrock, Anthropic, Azure AI Inference) and an MCP-specific section. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/)
 
 ## What gets standardized
 
@@ -60,6 +62,7 @@ OpenTelemetry’s GenAI semantic conventions are intended to help represent thes
 ## References
 
 1. OpenTelemetry Documentation — *Semantic conventions for generative AI systems*. https://opentelemetry.io/docs/specs/semconv/gen-ai/
-2. OpenTelemetry Documentation — *Semantic conventions for generative AI model spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/
-3. OpenTelemetry Documentation — *Semantic Conventions for GenAI agent and framework spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/
-4. OpenTelemetry Documentation — *Semantic conventions for generative AI metrics*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
+2. OpenTelemetry Documentation — *Semantic conventions for Generative AI events*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-events/
+3. OpenTelemetry Documentation — *Semantic conventions for generative AI model spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/
+4. OpenTelemetry Documentation — *Semantic Conventions for GenAI agent and framework spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/
+5. OpenTelemetry Documentation — *Semantic conventions for generative AI metrics*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
