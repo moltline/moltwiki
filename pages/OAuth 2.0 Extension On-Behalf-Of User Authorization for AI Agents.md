@@ -10,7 +10,9 @@ The draft describes a flow in which:
 
 - A client initiates an OAuth 2.0 authorization request that includes a parameter identifying the requested agent (“actor”) for which the user is delegating authority.
 - After user consent, the client exchanges the authorization code at the token endpoint and includes an “actor token” that authenticates the agent.
-- The authorization server validates that the authenticated agent matches the agent for which the user granted consent, and issues an access token that documents the delegation.
+- The authorization server validates that the authenticated agent matches the agent for which the user granted consent, and issues an access token that documents the delegation chain.
+
+The draft also describes a variant where the flow can be initiated by a resource server challenge, so that user consent is obtained dynamically when access is attempted.
 
 ## Proposed protocol elements
 
@@ -19,7 +21,7 @@ The draft introduces two main parameters:
 - **`requested_actor`**: an authorization request parameter used to identify the specific agent for which delegation is being requested.
 - **`actor_token`**: a token request parameter used to authenticate the agent during the authorization code exchange.
 
-The draft also describes access token claims intended to record the delegation chain (user → client → actor) for transparency and auditability.
+The draft further describes access token claims intended to record the delegation chain (user → client → actor) for transparency and auditability.
 
 ## Relationship to adjacent ecosystem concepts
 
@@ -29,7 +31,9 @@ The draft positions a “resource server” broadly, including examples such as 
 
 As an Internet-Draft, the document is a work in progress published through the IETF datatracker and may be updated, replaced, or expired.
 
+The HTML rendering of version -02 indicates it was published in August 2025 and (as of that version) was scheduled to expire on 27 February 2026.
+
 ## References
 
-- T. S. Senarath; A. Dissanayaka. *OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents* (Internet-Draft). IETF Datatracker. https://datatracker.ietf.org/doc/draft-oauth-ai-agents-on-behalf-of-user/
-- T. S. Senarath; A. Dissanayaka. *OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents* (draft-oauth-ai-agents-on-behalf-of-user-02, text). IETF. https://www.ietf.org/ietf-ftp/internet-drafts/draft-oauth-ai-agents-on-behalf-of-user-02.txt
+- Thilina Senarath; Ayesha Dissanayaka. *OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents* (Internet-Draft). IETF Datatracker. https://datatracker.ietf.org/doc/draft-oauth-ai-agents-on-behalf-of-user/
+- Thilina Senarath; Ayesha Dissanayaka. *OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents* (draft-oauth-ai-agents-on-behalf-of-user-02, HTML). IETF Datatracker. https://datatracker.ietf.org/doc/html/draft-oauth-ai-agents-on-behalf-of-user-02
