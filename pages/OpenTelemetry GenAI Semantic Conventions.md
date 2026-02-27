@@ -13,7 +13,7 @@ OpenTelemetry (OTel) is a vendor-neutral observability framework. In addition to
 - **Model spans** for model-level operations (for example, chat/completions).
 - **Agent spans** for agent and framework operations (for example, creating or invoking an agent, or executing tools).
 
-The GenAI semantic conventions are marked with **document status: Development**, indicating they are still evolving.
+The GenAI semantic conventions are marked with **document status: Development**, indicating they are still evolving. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/)
 
 ## What gets standardized
 
@@ -23,14 +23,16 @@ The conventions define:
 - **Provider identification** (for example `gen_ai.provider.name`) to distinguish telemetry “flavors” and provider-specific attributes.
 - **Model identifiers** (for example `gen_ai.request.model`) and related request/response metadata.
 - **Agent-specific attributes** (for example `gen_ai.agent.name`, `gen_ai.agent.id`, `gen_ai.agent.version`) when applicable.
-- Guidance on **span kind** (for example `CLIENT` for remote agent services vs `INTERNAL` for in-process agent frameworks).
+- Guidance on **span kind** (for example `CLIENT` for remote services vs `INTERNAL` for in-process frameworks).
+
+The spec also calls out a small set of attributes that are important for sampling decisions and **SHOULD be provided at span creation time** (if provided at all), including `gen_ai.operation.name`, `gen_ai.provider.name`, `gen_ai.request.model`, and server address/port. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)
 
 ## Agent spans
 
 The agent-span specification includes patterns for operations such as:
 
-- **Create agent**: describes agent creation (often for remote agent services).
-- **Invoke agent**: describes invoking an agent to perform work.
+- **Create agent**: describes agent creation (often for remote agent services). `gen_ai.operation.name` SHOULD be `create_agent`, and span name SHOULD be `create_agent {gen_ai.agent.name}`. Span kind SHOULD be `CLIENT`. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)
+- **Invoke agent**: describes invoking an agent to perform work. `gen_ai.operation.name` SHOULD be `invoke_agent`, and span name SHOULD be `invoke_agent {gen_ai.agent.name}` when available. Span kind SHOULD be `CLIENT` for remote agent services and MAY be `INTERNAL` for in-process agent frameworks. (See: https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)
 
 It also describes how GenAI agent conventions extend and override the more general GenAI span conventions.
 
@@ -51,11 +53,13 @@ OpenTelemetry’s GenAI semantic conventions are intended to help represent thes
 ## See also
 
 - [OpenTelemetry semantic conventions for generative AI systems](https://opentelemetry.io/docs/specs/semconv/gen-ai/)
+- [Semantic conventions for generative AI model spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/)
 - [Semantic conventions for GenAI agent and framework spans](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/)
 - [Semantic conventions for generative AI metrics](https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/)
 
 ## References
 
 1. OpenTelemetry Documentation — *Semantic conventions for generative AI systems*. https://opentelemetry.io/docs/specs/semconv/gen-ai/
-2. OpenTelemetry Documentation — *Semantic Conventions for GenAI agent and framework spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/
-3. OpenTelemetry Documentation — *Semantic conventions for generative AI metrics*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
+2. OpenTelemetry Documentation — *Semantic conventions for generative AI model spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-spans/
+3. OpenTelemetry Documentation — *Semantic Conventions for GenAI agent and framework spans*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-agent-spans/
+4. OpenTelemetry Documentation — *Semantic conventions for generative AI metrics*. https://opentelemetry.io/docs/specs/semconv/gen-ai/gen-ai-metrics/
