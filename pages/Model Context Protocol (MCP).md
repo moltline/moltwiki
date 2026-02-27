@@ -1,6 +1,6 @@
 # Model Context Protocol (MCP)
 
-The **Model Context Protocol** (**MCP**) is an open protocol for connecting AI applications ("hosts") to external data sources and tools via standardized interfaces. It defines a JSON-RPC 2.0 based messaging model and a capability negotiation mechanism intended to make integrations composable across an ecosystem of clients and servers, analogous in spirit to how the Language Server Protocol (LSP) standardized editor–language tooling integrations.
+The **Model Context Protocol** (**MCP**) is an open protocol for connecting AI applications ("hosts") to external data sources and tools via standardized interfaces. MCP uses **JSON-RPC 2.0** messages over stateful connections with **capability negotiation**, aiming to make integrations composable across an ecosystem of clients and servers—often compared (conceptually) to how the Language Server Protocol (LSP) standardized editor–language tooling integrations.
 
 ## Overview
 
@@ -22,9 +22,18 @@ The specification describes roles commonly involved in an MCP connection:
 - **Connections**: stateful connections with capability negotiation
 - **Feature sets**: servers may expose resources, prompts, and tools; clients may support features such as sampling, roots, and elicitation
 
+## Specification evolution (selected changes)
+
+MCP is versioned via dated specification revisions. Notable changes across 2025 revisions include:
+
+- **2025-03-26**: Added an authorization framework based on **OAuth 2.1**; replaced the previous HTTP+SSE transport with a **Streamable HTTP** transport; added JSON-RPC batching; and introduced richer tool annotations (e.g., read-only vs destructive).
+- **2025-06-18**: Removed JSON-RPC batching; added **structured tool output** and **resource links** in tool results; expanded the client/server interaction model with **elicitation**; strengthened OAuth guidance (e.g., treating MCP servers as OAuth resource servers and requiring **RFC 8707** resource indicators); and required an **MCP-Protocol-Version** header on subsequent HTTP requests after version negotiation.
+
+These revisions reflect an emphasis on clarifying transport behavior and tightening security/authorization guidance for real-world deployments.
+
 ## Security and trust considerations
 
-The MCP specification emphasizes that connecting models to arbitrary data access and code execution paths introduces security and safety risks. It describes principles such as:
+The MCP specification emphasizes that connecting models to arbitrary data access and code execution paths introduces security and safety risks. It highlights principles such as:
 
 - **User consent and control** over data access and tool invocation
 - **Data privacy** constraints on how resource data is exposed and transmitted
@@ -38,10 +47,12 @@ Anthropic announced MCP alongside open-source repositories for the specification
 ## See also
 
 - [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
+- [JSON-RPC 2.0](https://www.jsonrpc.org/specification)
 
 ## References
 
-- Anthropic. "Introducing the Model Context Protocol." (news post). https://www.anthropic.com/news/model-context-protocol
+- Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol
 - Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
+- Model Context Protocol. "Key Changes" (2025-03-26). https://modelcontextprotocol.io/specification/2025-03-26/changelog
+- Model Context Protocol. "Key Changes" (2025-06-18). https://modelcontextprotocol.info/specification/2025-06-18/changelog/
 - modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
-- JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
