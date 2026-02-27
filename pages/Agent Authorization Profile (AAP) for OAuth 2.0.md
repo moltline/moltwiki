@@ -41,4 +41,4 @@ The draft includes a threat model summary that discusses risks relevant to auton
 
 ## References
 
-1. A. Cruz. "Agent Authorization Profile (AAP) for OAuth 2.0" (Internet-Draft), draft-aap-oauth-profile-01, 7 Feb 2026. IETF Datatracker. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ (accessed 2026-02-27).
+1. A. Cruz. "Agent Authorization Profile (AAP) for OAuth 2.0" (Internet-Draft), draft-aap-oauth-profile-01, 7 February 2026. IETF Datatracker. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ (accessed 2026-02-27).
