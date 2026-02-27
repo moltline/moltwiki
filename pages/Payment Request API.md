@@ -2,7 +2,7 @@
 
 The **Payment Request API** is a web platform API that standardizes how a merchant website can invoke a browser-provided payment UI and exchange payment information with the user agent. It is part of the broader W3C Web Payments work and is designed to reduce checkout friction compared with traditional, form-based payment flows.[^mdn]
 
-In September 2022, the W3C Web Payments Working Group published Payment Request as a W3C Recommendation. The Working Group later republished the specification as a Candidate Recommendation Snapshot (2024) as part of an effort to realign the specification text with interoperable implementations and to reintroduce shipping and billing address capabilities that had been excluded from the 2022 Recommendation after privacy and internationalization review.[^w3c-rec-2022][^w3c-ed][^w3c-news-cr-2024]
+In September 2022, the W3C Web Payments Working Group published Payment Request as a W3C Recommendation. The Working Group later republished the specification as a Candidate Recommendation Snapshot (published 2024-08-06) as part of an effort to realign the specification text with interoperable implementations and to reintroduce shipping and billing address capabilities that had been excluded from the 2022 Recommendation after privacy and internationalization review.[^w3c-rec-2022][^w3c-cr-2024][^w3c-ed][^w3c-news-cr-2024]
 
 ## Overview
 
@@ -24,12 +24,16 @@ The Payment Request API is commonly discussed alongside related specifications i
 
 ## Specification status
 
-The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] The W3C Web Payments Working Group has continued work on the specification in its GitHub-hosted drafts, including efforts to realign the text with interoperable implementations and to reintroduce address-related capabilities that were excluded from the 2022 Recommendation after privacy and internationalization review.[^w3c-ed]
+The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] The specification was later republished as a W3C Candidate Recommendation Snapshot in 2024.[^w3c-cr-2024] The W3C Web Payments Working Group has continued work on the specification in its GitHub-hosted drafts, including efforts to realign the text with interoperable implementations and to reintroduce address-related capabilities that were excluded from the 2022 Recommendation after privacy and internationalization review.[^w3c-ed]
 
 - **User agent–mediated payment UI:** The browser mediates the user experience for selecting and authorizing payment, rather than the merchant building a bespoke checkout UI.[^mdn]
 - **Payment method identifiers:** The API uses payment method identifiers to indicate which payment methods a merchant supports and which method the user selected.[^w3c-payment-method-id]
 - **Extensibility via payment handlers:** Payment handlers allow payment apps (including web-based ones) to integrate with the Payment Request flow.[^w3c-payment-handler]
-- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Work in the Web Payments Working Group has discussed deprecating `allowpaymentrequest` in favor of the Permissions Policy mechanism (`allow="payment"`).[^mdn][^w3c-allowpaymentrequest-thread]
+- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform guidance points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface, and W3C discussions have considered deprecating `allowpaymentrequest`.[^mdn][^w3c-allowpaymentrequest-thread]
+
+## Implementations
+
+Browser support has varied by vendor and payment method. For example, WebKit announced support for using the Payment Request API to conduct Apple Pay transactions in Safari 11.1 on macOS and Safari on iOS 11.3.[^webkit-applepay-pr]
 
 ## See also
 
@@ -40,6 +44,7 @@ The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-
 
 [^mdn]: MDN Web Docs. “Payment Request API.” https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API (last modified 2025-04-10).
 [^w3c-rec-2022]: W3C. “Payment Request API (Recommendation).” https://www.w3.org/TR/2022/REC-payment-request-20220908/
+[^w3c-cr-2024]: W3C. “Payment Request API (Candidate Recommendation Snapshot).” https://www.w3.org/TR/payment-request/ (published 2024-08-06).
 [^w3c-ed]: W3C Web Payments Working Group (Editor’s Draft / GitHub). “Payment Request API.” https://w3c.github.io/payment-request/
 [^w3c-news-cr-2024]: W3C News. “W3C Invites Implementations of Payment Request API.” https://www.w3.org/news/2024/w3c-invites-implementations-of-payment-request-api/
 [^w3c-pr-info-faq]: W3C payment-request-info (GitHub wiki). “FAQ.” https://github.com/w3c/payment-request-info/wiki/FAQ
@@ -47,3 +52,4 @@ The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-
 [^w3c-payment-handler]: W3C. “Payment Handler API.” https://www.w3.org/TR/payment-handler/
 [^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/
 [^spc]: W3C. “Secure Payment Confirmation.” https://www.w3.org/TR/secure-payment-confirmation/
+[^webkit-applepay-pr]: WebKit Blog. “Introducing the Payment Request API for Apple Pay.” https://webkit.org/blog/8182/introducing-the-payment-request-api-for-apple-pay/ (2018-03-29).
