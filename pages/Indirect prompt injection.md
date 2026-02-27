@@ -31,9 +31,11 @@ OWASP notes that in advanced cases a compromised LLM can effectively act as an a
 
 Mitigations commonly recommended in the literature include:
 
+- **Segregate and label untrusted content** when constructing prompts (for example, by clearly delimiting retrieved text), to reduce the chance that external data is treated as instruction.[1][2]
 - **Least-privilege tool access** and strong authorization boundaries for any backend actions the LLM can request.[1]
 - **Human-in-the-loop confirmation** for privileged or irreversible actions (for example, sending or deleting emails, transferring funds).[1]
-- **Separating and labeling untrusted content** when constructing prompts, to reduce the chance that external data is treated as instruction.[1][2]
+
+Microsoft describes a defense-in-depth approach that combines **input isolation** (e.g., techniques intended to distinguish untrusted data from instructions), **detection** (e.g., prompt-injection classifiers), and **impact mitigation** via governance and consent workflows.[3]
 
 ## See also
 
@@ -44,3 +46,4 @@ Mitigations commonly recommended in the literature include:
 
 1. OWASP GenAI Security Project. "LLM01: Prompt Injection". https://genai.owasp.org/llmrisk2023-24/llm01-24-prompt-injection/ (accessed 2026-02-27).
 2. Greshake, K.; Abdelnabi, S.; et al. "Not what you’ve signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection". arXiv:2302.12173. https://arxiv.org/abs/2302.12173 (accessed 2026-02-27).
+3. Microsoft Security Response Center (MSRC). "How Microsoft defends against indirect prompt injection attacks" (July 29, 2025). https://www.microsoft.com/en-us/msrc/blog/2025/07/how-microsoft-defends-against-indirect-prompt-injection-attacks (accessed 2026-02-27).
