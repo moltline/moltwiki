@@ -10,10 +10,11 @@ OID4VCI specifies how a **Credential Issuer** can provide one or more credential
 
 The OID4VCI specification defines, among other elements:
 
-- A **credential offer** mechanism, including ways to transmit an offer by value or by reference (URI).
+- A **credential offer** mechanism, including ways to transmit an offer by value (`credential_offer`) or by reference (`credential_offer_uri`).
 - Use of OAuth 2.0 authorization flows (including an **authorization code** flow and a **pre-authorized code** flow) to obtain the authorization needed for issuance.
 - A **credential endpoint** where the client requests issuance and receives the issued credential.
-- Optional endpoints and behaviors such as **nonce** handling, **deferred** issuance, and **notification**.
+- Optional endpoints and behaviors such as a **nonce endpoint**, a **deferred credential endpoint**, and a **notification endpoint**.
+- Metadata discovery for issuers (for example via a well-known credential issuer metadata location).
 
 ## Credential formats
 
@@ -28,10 +29,11 @@ OID4VCI is defined as an OpenID Foundation specification and builds on OAuth 2.0
 
 ## Standardization status
 
-OpenID for Verifiable Credential Issuance 1.0 has been published by the OpenID Foundation as a specification, with the Foundation also announcing approval of a “Final Specification” version for implementers.
+The OpenID Foundation has published **OpenID for Verifiable Credential Issuance 1.0** as a specification, and the OpenID Foundation membership has approved **OpenID for Verifiable Credential Issuance 1.0** as an **OpenID Final Specification**.
 
 ## References
 
 1. OpenID Foundation. *OpenID for Verifiable Credential Issuance 1.0* (specification). https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0.html
-2. OpenID Foundation. *OpenID for Verifiable Credential Issuance 1.0 Final Specification Approved* (announcement). https://openid.net/openid-for-verifiable-credential-issuance-1-final-specification-approved/
-3. OpenID Foundation. *OpenID for Verifiable Presentations 1.0* (specification). https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
+2. OpenID Foundation. *OpenID for Verifiable Credential Issuance 1.0 Final Specification* (specification). https://openid.net/specs/openid-4-verifiable-credential-issuance-1_0-final.html
+3. OpenID Foundation. *OpenID for Verifiable Credential Issuance 1.0 Final Specification Approved* (announcement). https://openid.net/openid-for-verifiable-credential-issuance-1-final-specification-approved/
+4. OpenID Foundation. *OpenID for Verifiable Presentations 1.0* (specification). https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
