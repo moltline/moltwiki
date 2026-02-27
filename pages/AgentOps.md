@@ -24,6 +24,20 @@ A common framing of AgentOps emphasizes **observability**, i.e., the ability to 
 
 In addition to the research framing, the term is also used for commercial/open-source tooling that provides **session replays**, **event timelines (waterfalls)**, and **cost/latency monitoring** for agent runs, often via automatic instrumentation and framework integrations.
 
+## Common artifacts and telemetry
+
+AgentOps work often centers on deciding **which artifacts to capture** and **how to represent them** so that agent behavior can be inspected and reproduced.
+
+Typical telemetry includes:
+
+- **transcripts / traces / trajectories**: the full record of a run (messages, tool calls, intermediate results, and final output) used for debugging and evaluation. Anthropic describes a *transcript* (also called a *trace* or *trajectory*) as the complete record of a trial in an agent evaluation.[1]
+- **grading signals for evals**: task definitions, graders/assertions, and aggregated results produced by an evaluation harness.[1]
+- **span-structured traces**: end-to-end traces composed of spans/events/attributes, often modeled after distributed tracing. OpenTelemetry is standardizing **semantic conventions for Generative AI systems**, including conventions for **model spans**, **agent spans**, **events**, and **metrics**.[2]
+
+## Testing and evaluation (agent evals)
+
+Because agent runs are **non-deterministic**, evaluation often involves running multiple trials and scoring outcomes with automated graders. Anthropic frames agent evaluation in terms of tasks, trials, graders, and an evaluation harness that runs tasks end-to-end and records transcripts.[1]
+
 ## Lifecycle activities
 
 AgentOps is commonly described as spanning multiple stages of an agent lifecycle, including:
@@ -47,6 +61,9 @@ AgentOps is often motivated by concerns that autonomous agents can produce unint
 - [Agentic systems](Agentic%20systems.md)
 
 ## References
+
+- Anthropic. *Demystifying evals for AI agents.* https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
+- OpenTelemetry. *Semantic conventions for generative AI systems.* https://opentelemetry.io/docs/specs/semconv/gen-ai/
 
 - Snehotosh Banerjee, Yuekang Li, Kexin Pei, and David Lo. *AgentOps: Enabling Observability of LLM Agents.* arXiv (2024). https://arxiv.org/abs/2411.05285
 - AgentOps. *Introduction.* AgentOps documentation. https://docs.agentops.ai/v2/introduction
