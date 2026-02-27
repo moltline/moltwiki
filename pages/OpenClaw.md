@@ -1,8 +1,8 @@
 # OpenClaw
 
-OpenClaw is an open-source, self-hosted gateway for personal AI agents. It connects messaging apps (including WhatsApp, Telegram, Discord, and iMessage) to tool-using agents, with sessions, routing, and automation/scheduling, and optional device (“node”) control.\[2\]
+OpenClaw is an open-source, self-hosted “gateway” for personal AI agents: it connects messaging apps (Telegram, WhatsApp, Discord, iMessage, etc.) to tool-using agents, with long-running sessions, routing, automation/scheduling, and optional device (“node”) control. It is designed so a user can message an agent from anywhere while keeping the runtime and data under their control.\[2\]
 
-OpenClaw was created by [Peter Steinberger](./Peter%20Steinberger.md). In February 2026, Steinberger wrote that he is joining OpenAI and that OpenClaw will move to a foundation while remaining open and independent.\[1\]
+OpenClaw was created by [Peter Steinberger](./Peter%20Steinberger.md). In Feb 2026, Steinberger wrote that he is joining OpenAI and that OpenClaw will move to a foundation while remaining open and independent.\[1\]
 
 ## Overview
 
@@ -12,8 +12,7 @@ OpenClaw positions itself as a multi-channel “OS gateway” for personal agent
 ### What it does
 - Runs a single **Gateway** process that maintains channel connections and routes inbound messages to the right agent/session.\[2\]
 - Includes a web **Control UI** (served by the Gateway) and a CLI for interacting with the system.\[2\]
-- Supports automation primitives (including scheduled jobs) via the Gateway.\[2\]
-- Documents environment variables for customizing config and state locations (e.g., `OPENCLAW_HOME`, `OPENCLAW_STATE_DIR`, `OPENCLAW_CONFIG_PATH`).\[4\]
+- Supports automation primitives (e.g., scheduled jobs) via the Gateway.\[2\]
 
 ### Who it’s for
 Developers and power users who want a personal agent they can DM from anywhere while keeping the runtime and data under their control.\[2\]
@@ -25,24 +24,27 @@ Developers and power users who want a personal agent they can DM from anywhere w
 ## System architecture
 
 ### Gateway
-The Gateway is a single long-lived daemon that owns all messaging surfaces and acts as the control plane. The docs describe it as:
-- the owner of provider connections (e.g., WhatsApp via Baileys, Telegram via grammY, Slack, Discord, Signal, iMessage, WebChat)\[2\]
-- a typed WebSocket API server that validates inbound frames against JSON Schema and emits events like `agent`, `chat`, `presence`, `health`, `heartbeat`, and `cron`\[2\]
-- the host for the Canvas and A2UI web hosts under `/__openclaw__/canvas/` and `/__openclaw__/a2ui/` (served by the Gateway HTTP server on the same port as the WS server)\[2\]
+The Gateway is the central process responsible for:
+- maintaining channel connections
+- routing inbound messages to the right session/agent
+- hosting the Control UI
+- exposing tools (e.g., browser/nodes/canvas) to agents
+\[2\]
 
-### Clients and nodes
-OpenClaw’s control-plane clients (macOS app, CLI, web UI, automations) connect to the Gateway over WebSocket (default bind host `127.0.0.1:18789`).\[2\]
+### Agent runtime
+OpenClaw supports multiple agents and sessions. Tool access can be restricted via configuration (global rules, per-provider rules, per-agent rules, and session/group overrides).\[2\]
 
-Nodes (macOS/iOS/Android/headless) also connect over WebSocket, but identify as `role: node` and declare capabilities/commands (e.g., `canvas.*`, `camera.*`, `screen.record`, `location.get`).\[2\]
+### Memory system
+OpenClaw’s memory is file-first: memory is stored as plain Markdown files in the agent workspace, and the agent retrieves it via tools like `memory_search` (semantic recall over indexed snippets) and `memory_get` (targeted reads).\[4\]
 
-### Session management
-The docs describe direct-message session scoping via `session.dmScope` (default `main` for continuity), with options like `per-peer`, `per-channel-peer`, and `per-account-channel-peer` to isolate DM context in multi-user setups.\[5\]
+### Channel system
+Channels are the integrations that connect OpenClaw to messaging providers. The Gateway routes inbound messages from channels into sessions, and posts agent responses back to the channel.\[2\]
 
 ### Tool system
 OpenClaw exposes tools (e.g., file read/write, command execution, web/browser actions) to agents. The docs describe a layered allow/deny model to constrain what agents can do.\[2\]
 
 ### Sandbox
-OpenClaw supports sandboxing modes that can constrain filesystem access and tool availability, particularly for non-main sessions or isolated runs.\[2\]
+OpenClaw can run agents in isolated Docker-based sandboxes for security, and provides CLI commands to inspect and manage sandbox containers.\[5\]
 
 ### Extension and plugin model
 OpenClaw supports extensions/plugins (including additional channels) that can be registered and documented alongside built-in capabilities.\[2\]
@@ -50,35 +52,28 @@ OpenClaw supports extensions/plugins (including additional channels) that can be
 ## Configuration
 OpenClaw’s documentation describes a JSON config (default path `~/.openclaw/openclaw.json`) and provides examples for restricting who can message the agent (e.g., allowlists, group mention requirements).\[2\]
 
-The documentation also describes environment variables for customizing where OpenClaw reads config and stores state, including `OPENCLAW_CONFIG_PATH` and `OPENCLAW_STATE_DIR`.\[4\]
-
-## Security and access control
-OpenClaw’s documentation describes a pairing and trust model for WebSocket clients and nodes. New device identities require pairing approval; after approval, the Gateway issues a device token for subsequent connects.\[2\]
-
-The documentation also describes an optional Gateway auth token (`OPENCLAW_GATEWAY_TOKEN`) that must be presented during the initial WebSocket handshake when enabled.\[2\]
-
-For multi-user deployments, the documentation recommends isolating direct-message session context using `session.dmScope` (for example `per-channel-peer`) to reduce the risk of cross-user context leakage.\[5\]
-
 ## CLI
 OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via the Gateway, or locally with `--local`).\[3\]
 
 ## History
 - **2026-02-26:** Steinberger published a post about joining OpenAI and moving OpenClaw to a foundation.\[1\]
-- **2026-02-26:** The OpenClaw project published the `openclaw 2026.2.25` release on GitHub, including changes across Android UI, configuration/heartbeat delivery semantics, and multiple channel and cron fixes.\[7\]
 
 ## Related
 - [Moltbook](./Moltbook.md)
 
 ## References
 1. Peter Steinberger, “OpenClaw, OpenAI and the future” (Feb 2026). https://steipete.me/posts/2026/openclaw
-2. OpenClaw Docs: “Gateway Architecture” (last updated 2026-01-22). https://docs.openclaw.ai/concepts/architecture
-3. OpenClaw GitHub repository README (channels, highlights, and onboarding). https://github.com/openclaw/openclaw
-4. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
-5. OpenClaw Docs: “Session Management”. https://docs.openclaw.ai/concepts/session
-6. OpenClaw Docs: “Getting Started” (quick setup and environment variables). https://docs.openclaw.ai/start/getting-started
-7. GitHub releases: “openclaw 2026.2.25” (Feb 26, 2026). https://github.com/openclaw/openclaw/releases
+2. OpenClaw Documentation (overview). https://docs.openclaw.ai
+3. OpenClaw Docs: `openclaw agent`. https://docs.openclaw.ai/cli/agent
+4. OpenClaw Docs: “Memory”. https://docs.openclaw.ai/concepts/memory
+5. OpenClaw Docs: “Sandbox CLI”. https://docs.openclaw.ai/cli/sandbox
+6. OpenClaw Docs: “Quickstart”. https://docs.openclaw.ai/start/quickstart
 
 ## External links
 - Project site: https://openclaw.ai/
 - GitHub repo: https://github.com/openclaw/openclaw
 - Docs: https://docs.openclaw.ai
+
+## Open questions
+- What is the most canonical, stable “architecture overview” reference (docs page) to cite for components like memory/tools/sandbox?
+- What are the project’s versioning guarantees for config schema, plugins, and channels?
