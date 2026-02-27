@@ -1,8 +1,15 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** scenarios (machine-to-machine), especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF *Internet-Draft* that defines an authorization **profile** for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
-Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+The draft’s goal is to make agentic authorization more **explicit and auditable** by standardizing:
+
+- a **structured JWT claim schema** for agent identity, task context, constraints, and oversight signals, and
+- **resource-server validation expectations** for those claims.
+
+Primary spec (work in progress): https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ (and the Internet-Draft text at https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html)
+
+Because AAP is an **Internet-Draft**, it may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## When you might want AAP
 
@@ -18,7 +25,9 @@ Typical needs include:
 
 ## Relationship to OAuth 2.0, JWT, and proof-of-possession
 
-AAP does **not** introduce a new authorization protocol. It profiles and composes existing standards:
+AAP is positioned as a profile for **agent-to-API** deployments that often use OAuth’s **Client Credentials** grant for machine-to-machine access tokens. https://www.rfc-editor.org/rfc/rfc6749
+
+AAP does **not** define a new authorization protocol. It profiles and composes existing standards:
 
 - **OAuth 2.0** provides the authorization framework and token issuance model. https://www.rfc-editor.org/rfc/rfc6749
 - **JWT** provides a signed (and optionally encrypted) claims container used as a token format in many deployments. https://www.rfc-editor.org/rfc/rfc7519
@@ -38,17 +47,17 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 
 ## AAP claim “sections” (high-level)
 
-The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
+AAP defines a set of structured JWT claim sections intended to make agent-to-API authorization more explicit and machine-checkable. The draft’s normative claim names include:
 
 - `aap_agent` (agent identity and execution context)
 - `aap_task` (task identifier/purpose/topic/sensitivity)
-- `aap_capabilities` (actions + constraints)
-- `aap_oversight` (oversight/approval intent)
-- `aap_delegation` (delegation metadata; may be used alongside the Token Exchange `act` claim)
-- `aap_context` (environment/network/time restrictions)
+- `aap_capabilities` (authorized actions plus constraints)
+- `aap_oversight` (human oversight requirements metadata)
+- `aap_delegation` (delegation metadata; may be used alongside Token Exchange’s `act` (actor) claim)
+- `aap_context` (network/time/other contextual restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+Draft section “Structured Sections (Claim Names)”: https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -60,6 +69,20 @@ Many agent systems need to distinguish:
 OAuth Token Exchange explicitly calls out these different semantics and provides a standardized protocol for requesting tokens that represent them, including the `act` (actor) claim used to represent a delegation chain. https://www.rfc-editor.org/rfc/rfc8693
 
 AAP builds on these patterns by making the resulting token’s semantics more explicit and consistently verifiable by resource servers. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
+## Resource server validation (what changes operationally)
+
+The draft includes a dedicated section on **resource server validation rules**, describing additional checks beyond baseline JWT validation (signature, issuer, audience, expiry) to enforce task binding, capabilities/constraints, delegation semantics, and contextual restrictions. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
+Examples of validation categories called out by the draft include:
+
+- **Proof-of-possession validation** (when PoP is used). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Agent identity validation** (how the server interprets agent identity claims). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Task binding validation** (ensuring use is consistent with the declared task/purpose). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Capability enforcement** (checking requested operations against structured capabilities/constraints). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Oversight requirement enforcement** (how “approval required” signals are handled). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Delegation chain validation** (ensuring delegation depth/constraints are respected). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Contextual restriction enforcement** (network/domain/time/rate constraints are respected). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## Security notes
 
@@ -81,7 +104,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft HTML. “Agent Authorization Profile (AAP) for OAuth 2.0” (archive copy). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
