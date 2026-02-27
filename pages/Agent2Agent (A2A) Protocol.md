@@ -19,11 +19,11 @@ Public materials and the project specification emphasize reuse of established we
 
 Commonly cited design principles include:
 
-- **Built on existing standards**, including HTTP, JSON-RPC 2.0, and Server-Sent Events (SSE) for streaming updates.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Capability discovery** via published metadata so clients can identify which remote agent can perform a given kind of work.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Task orientation and asynchronicity**, including long-running tasks with state updates delivered by polling, streaming, or push mechanisms depending on binding and deployment.<ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Modality/content-type awareness**, supporting exchange of diverse content types using structured message parts.<ref>https://a2a-protocol.org/latest/specification/</ref>
-- **Enterprise-oriented security posture**, aligning with common authentication/authorization practices.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+- **Built on existing standards**, including HTTP(S), JSON-RPC 2.0, and Server-Sent Events (SSE) for streaming updates.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+- **Capability discovery** via published metadata ("Agent Cards") so clients can identify which remote agent can perform a given kind of work.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Task orientation and asynchronicity**, including long-running tasks with state updates delivered by polling, streaming, or push notifications depending on deployment and binding.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
+- **Modality/content-type awareness**, supporting exchange of diverse content types using structured message parts ("Parts").<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Enterprise-oriented security posture**, with authentication requirements declared in the Agent Card and credentials typically passed via HTTP headers using standard web security practices.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 
 ## Core concepts (high level)
 
@@ -37,7 +37,7 @@ The specification defines several core objects and concepts, including:<ref>http
 
 ## Status and governance
 
-The A2A project publishes a versioned specification and release notes in its public repository, and a published specification site that tracks versions (including a "latest" view).<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://github.com/a2aproject/A2A</ref>
+The A2A project publishes a versioned specification and release notes in its public repository, and a published specification site that tracks versions (including a "latest" view). The specification site also links to a released versioned specification (for example, v0.3.0) and earlier versions.<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://github.com/a2aproject/A2A</ref>
 
 ## History
 
