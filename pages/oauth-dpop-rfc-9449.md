@@ -7,7 +7,7 @@ description: "IETF standard for sender-constraining OAuth 2.0 tokens using appli
 
 **DPoP (Demonstrating Proof-of-Possession)** is an OAuth 2.0 mechanism for **sender-constraining tokens to a key**: the client includes a signed **DPoP proof JWT** in an HTTP `DPoP` header to prove possession of a private key corresponding to a public key, and the authorization server can bind issued tokens to that public key. Recipients can then verify that the presenter of the token also possesses the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP’s objective is to reduce the impact of **bearer token replay** after token leakage by requiring proof-of-possession when the token is used. https://www.rfc-editor.org/rfc/rfc9449
+DPoP's objective is to reduce the impact of **bearer token replay** after token leakage by requiring proof-of-possession when the token is used. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Why it matters (especially for agents)
 
@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldn't be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn't practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -45,7 +45,7 @@ Common proof claims include:
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
 
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+(Implementation guides often summarize these checks; see, e.g., Auth0's DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ### Public key confirmation (`cnf` / `jkt`)
 
