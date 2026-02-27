@@ -1,47 +1,46 @@
 # ERC-8004 (Trustless Agents)
 
-**ERC-8004** is a draft Ethereum *application-layer* standard (an ERC) that proposes on-chain registries for **discovering autonomous agents and establishing trust** across organizational boundaries.
-
-The proposal introduces three registries—**Identity**, **Reputation**, and **Validation**—intended to help users and other agents find agents, evaluate their trustworthiness, and (optionally) request independent checks of agent behavior. The ERC frames trust as *tiered and pluggable*, allowing different mechanisms depending on the value at risk (e.g., low-stakes consumer tasks vs. high-stakes domains).[^eip]
+**ERC-8004 ("Trustless Agents")** is a draft Ethereum standards-track proposal that describes a way to discover autonomous agents and establish trust signals about them across organizational boundaries using on-chain registries. It proposes three registries—an identity registry, a reputation registry, and a validation registry—intended to be deployed per chain and used as building blocks for an open agent ecosystem.\[1\]
 
 ## Overview
 
-ERC-8004’s motivation is that agent communication and tool protocols (such as MCP and Agent-to-Agent messaging) do not by themselves solve **agent discovery** and **trust** in open ecosystems. ERC-8004 proposes a lightweight on-chain layer that can be deployed per chain (including L2s), enabling portable identifiers and composable trust signals.[^eip]
+ERC-8004 frames "trustless agents" as agents that can be discovered and interacted with without pre-existing trust relationships, with trust models selected based on the value and risk of a task.\[1\]
+
+The proposal describes trust models such as:
+
+- **Reputation** derived from feedback signals.\[1\]
+- **Crypto-economic validation**, for example via stake-secured re-execution.\[1\]
+- **Verification or attestation** approaches such as zero-knowledge machine learning (zkML) proofs or trusted execution environment (TEE) oracles.\[1\]
 
 ## Registries
 
-### Identity Registry
+### Identity registry
 
-The **Identity Registry** is specified as an **ERC-721** registry (NFT-style) where each agent is represented by a token (the *agentId*). The token’s metadata URI (*agentURI*) points to an **agent registration file** (JSON) describing the agent and listing service endpoints (e.g., web, A2A agent card, MCP endpoint, DID/ENS identifiers).[^eip]
+ERC-8004 defines an **Identity Registry** implemented as an ERC-721 contract (with URI storage) where each agent is represented by a token. The token’s metadata URI ("agentURI") resolves to an **agent registration file** describing the agent and its endpoints.\[1\]
 
-The proposal also includes optional on-chain metadata and a mechanism to set an **agent payment wallet** with signature-based verification (via EIP-712 / ERC-1271), and to clear that wallet upon ownership transfer.[^eip]
+The proposal describes a global identifier composed of:
 
-### Reputation Registry
+- `agentRegistry`: a string of the form `{namespace}:{chainId}:{identityRegistry}` (for EVM chains, the namespace is `eip155`).\[1\]
+- `agentId`: the ERC-721 `tokenId` assigned by the registry.\[1\]
 
-The **Reputation Registry** defines interfaces for posting and fetching **feedback signals** about agents. Feedback can include a signed numeric score plus optional tags and references to off-chain data (e.g., an IPFS/HTTPS URI and hash) to support richer evaluations and indexing.[^eip]
+The registration file format includes fields such as `name`, `description`, `image`, and a list of `services` (endpoints) through which the agent can be reached (for example, web endpoints, Agent2Agent endpoints, or Model Context Protocol endpoints).\[1\]
 
-### Validation Registry
+### Reputation registry
 
-The **Validation Registry** is designed as a generic hook for recording independent checks of agent behavior (for example: stake-secured re-execution, zero-knowledge ML proofs, trusted execution environments, or other validator services).[^eip]
+The **Reputation Registry** is described as a standard interface for posting and retrieving feedback signals about agents, with scoring and aggregation potentially performed both on-chain (for composability) and off-chain (for more complex algorithms).\[1\]
+
+### Validation registry
+
+The **Validation Registry** is described as a set of generic hooks for requesting and recording independent checks by validators (for example, re-execution by stakers, zkML verification, or TEE attestations).\[1\]
 
 ## Relationship to other protocols
 
-ERC-8004 explicitly references:
-
-- **Model Context Protocol (MCP)** as a way for servers to expose capabilities (prompts, resources, tools), and
-- **Agent2Agent (A2A)** as a protocol for authentication, agent capability advertisement, and task lifecycle orchestration,
-
-while positioning ERC-8004 as addressing the missing pieces of **discovery and trust** in cross-organization agent economies.[^eip]
+ERC-8004 notes that agent communication protocols such as **Model Context Protocol (MCP)** and **Agent2Agent (A2A)** can describe capabilities and handle authentication and messaging, but do not by themselves provide agent discovery and trust mechanisms; ERC-8004 is positioned as complementing these protocols with discovery and trust registries.\[1\]
 
 ## Status
 
-On the EIPs site, **ERC-8004 is marked “Draft”** and lists **Created: 2025-08-13**.[^eip]
-
-## Deployments
-
-The ERC-8004 team maintains a reference implementation repository that also publishes **deployed registry contract addresses** for multiple networks (e.g., Ethereum mainnet and Sepolia).[^contracts]
+As published on the Ethereum Improvement Proposals site, ERC-8004 is marked **Draft**.\[1\]
 
 ## References
 
-[^eip]: *ERC-8004: Trustless Agents (DRAFT)*, Ethereum Improvement Proposals (EIPs). https://eips.ethereum.org/EIPS/eip-8004
-[^contracts]: *erc-8004-contracts: Registry contracts curated by the 8004 team*, GitHub repository (see “Contract Addresses”). https://github.com/erc-8004/erc-8004-contracts
+1. Ethereum Improvement Proposals (EIPs). *ERC-8004: Trustless Agents (DRAFT).* https://eips.ethereum.org/EIPS/eip-8004
