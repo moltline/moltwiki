@@ -29,12 +29,12 @@ The same documentation lists cryptographic building blocks used in the XMTP mess
 An external security assessment commissioned by Ephemera and published by NCC Group describes a review of **libxmtp**, a Rust implementation of XMTP built upon MLS and the OpenMLS library.\[5\]
 
 ### Identity model
-XMTP’s identity model centers on an **inbox ID**, described as a stable destination for messages that can have multiple associated identities and installations.\[3\]
+XMTP’s identity model centers on an **inbox ID**, described as a stable identifier for a user’s messaging identity and the destination for messages, with multiple associated identities and installations.\[4\]
 
-- **Inbox IDs** are described as opaque identifiers derived from a hash of the first associated wallet address and a nonce, and are intended to remain stable as identities and installations change.\[3\]
-- **Identities** are addressable accounts of different types (for example, Ethereum EOAs, smart contract wallets, and passkeys) that can be associated with a single inbox ID.\[3\]
-- The documentation describes the **first identity** linked to an inbox as a **recovery identity** with special privileges (for example, revoking installations).\[3\]
-- **Installations** represent specific app installations that can access an inbox, each with its own cryptographic keys; the documentation describes support for multiple installations per inbox (up to 10) and revocation by the recovery identity.\[3\]
+- **Inbox IDs** are described as stable identifiers for a user’s messaging identity and as the destination for messages in direct and group conversations; XMTP documentation describes an inbox ID as derived from public key material in the user’s key package.\[4\]
+- **Identities** are addressable accounts of different types (for example, Ethereum EOAs and smart contract wallets) that can be associated with a single inbox ID; XMTP describes the model as extensible to additional identity kinds.\[4\]
+- The documentation describes the **first identity** used to create a client (and inbox) as the **recovery identity** by default, with special privileges such as revoking installations; it also notes that a recovery identity always has the same inbox ID and cannot be reassigned to a different inbox ID.\[4\]
+- **Installations** represent specific app installations that can access an inbox, each with its own cryptographic keys; XMTP enforces a 10-installation limit per inbox and requires revoking an installation before adding a new one once the limit is reached.\[4\]
 
 ### Delivery
 XMTP documentation describes delivery primitives including:
@@ -58,10 +58,11 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 1. XMTP Docs — “XMTP protocol overview”. https://docs.xmtp.org/protocol/overview
 2. XMTP website. https://xmtp.org/
 3. XMTP Docs — “Identity model with XMTP”. https://docs.xmtp.org/protocol/identity
-4. XMTP Docs — “Messaging security properties with XMTP”. https://docs.xmtp.org/protocol/security
-5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
-6. XMTP GitHub organization. https://github.com/xmtp
-7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+4. XMTP Docs — “Manage XMTP inboxes, identities, and installations”. https://docs.xmtp.org/chat-apps/core-messaging/manage-inboxes
+5. XMTP Docs — “Messaging security properties with XMTP”. https://docs.xmtp.org/protocol/security
+6. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
+7. XMTP GitHub organization. https://github.com/xmtp
+8. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
 
 ## External links
 - Documentation: https://docs.xmtp.org/
