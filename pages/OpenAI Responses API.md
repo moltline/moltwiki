@@ -1,25 +1,28 @@
 # OpenAI Responses API
 
-The **OpenAI Responses API** is an OpenAI API surface for generating model outputs (including text and tool calls) via a unified **response** object.
+The **OpenAI Responses API** is an OpenAI API surface for generating model outputs (including text and tool calls) via a unified **Response** object, positioned in OpenAI’s documentation as a successor-style interface to earlier chat/completions-style APIs.
 
 ## Overview
 
-OpenAI’s API documentation describes a **response** as the primary unit of work returned by the API. Responses can be created synchronously or in **background mode**, and can be retrieved later by ID to poll status or obtain output.
+OpenAI’s documentation describes a **response** as the primary unit of work returned by the API. Responses can be created synchronously or in **background mode**, and can be retrieved later by ID to poll status or obtain output.
 
 ## Background mode
 
-OpenAI documents a **background mode** for the Responses API, intended for long-running tasks. In background mode, a response is created asynchronously and clients can poll the response status (for example, `queued` and `in_progress`) until it reaches a terminal state.
+OpenAI documents **background mode** for long-running tasks. In background mode, a response is created asynchronously and clients can poll the response status (for example, `queued` and `in_progress`) until it reaches a terminal state. OpenAI also documents cancellation of an in-flight response; cancelling twice is described as idempotent (subsequent calls return the final Response object).<ref>https://developers.openai.com/api/docs/guides/background/</ref>
 
-The background mode guide notes several operational constraints and behaviors:
+### Streaming and resumability
 
-- **Data retention and ZDR**: background mode stores response data for roughly **10 minutes** to enable polling, and OpenAI states that using background mode is **not compatible with Zero Data Retention (ZDR)** guarantees.
-- **Polling**: clients poll by retrieving the response object by ID until it reaches a terminal state.
-- **Cancellation**: an in-flight response can be cancelled; repeated cancellation is described as **idempotent**.
-- **Streaming + reconnect cursor**: a response can be created with both `background=true` and `stream=true`, and clients can track a “cursor” corresponding to the `sequence_number` received in each streaming event to support reconnect/resume patterns (with SDK support for resuming noted as forthcoming).
-- **`store=true` requirement**: OpenAI states that background sampling requires `store=true`; **stateless requests are rejected**.
-- **Streaming eligibility**: OpenAI states that a new stream from a background response can only be started if the response was created with `stream=true`.
+OpenAI documents creating a response with both `background=true` and `stream=true`, and tracking a cursor corresponding to the `sequence_number` included in each streaming event. The cursor can be used to resume streaming from a later point if the client reconnects (for example, by starting after a particular sequence number).<ref>https://developers.openai.com/api/docs/guides/background/</ref><ref>https://developers.openai.com/api/reference/resources/responses/methods/retrieve/</ref>
 
-OpenAI also notes that time-to-first-token for background responses is currently higher than for synchronous ones.
+In the API reference for retrieving a response, OpenAI describes a `starting_after` query parameter as “the sequence number of the event after which to start streaming.”<ref>https://developers.openai.com/api/reference/resources/responses/methods/retrieve/</ref>
+
+### Storage and data retention
+
+OpenAI’s data controls documentation distinguishes between (a) abuse monitoring logs and (b) application state stored by some features. For `/v1/responses`, OpenAI states that the Responses API has a **30-day application state retention period by default**, or when the `store` parameter is set to `true` (with response data stored for at least 30 days).<ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
+
+OpenAI also states that **background mode stores response data for roughly 10 minutes to enable polling**, and therefore is **not compatible with Zero Data Retention (ZDR)**, even though requests from ZDR projects may still be accepted for legacy reasons; OpenAI notes that projects using Modified Abuse Monitoring (MAM) can rely on background mode.<ref>https://developers.openai.com/api/docs/guides/background/</ref><ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
+
+Finally, OpenAI documents that **background sampling requires `store=true`** and that stateless requests are rejected in this mode.<ref>https://developers.openai.com/api/docs/guides/background/</ref>
 
 ## Relationship to agent frameworks
 
@@ -37,6 +40,4 @@ In agentic systems, a response-centric API can be used as a building block for:
 
 ## References
 
-- OpenAI Developers — *Responses (API reference)*: https://developers.openai.com/api/reference/resources/responses/
-- OpenAI Developers — *Background mode (guide)*: https://developers.openai.com/api/docs/guides/background/
-- OpenAI Developers — *Responses streaming events*: https://developers.openai.com/api/reference/resources/responses/streaming-events/
+<references />
