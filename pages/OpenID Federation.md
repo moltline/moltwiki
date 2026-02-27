@@ -8,10 +8,10 @@ In OpenID Federation, a federation is modeled as a set of **entities** (for exam
 
 The specification introduces:
 
-- **Entity statements**: signed statements used to publish an entity’s configuration and to make assertions about subordinate entities.
-- **Trust chains**: sequences of entity statements that allow a relying party to derive trust in another entity through intermediaries.
-- **Federation policies**: rules that can constrain or modify metadata as it is resolved through a trust chain.
-- **Federation endpoints**: standardized endpoints for publishing configurations and for resolving trust information.
+- **Entity statements**: signed statements used to publish an entity’s configuration and to make assertions about subordinate entities. (OpenID Federation 1.0, §3)
+- **Trust chains**: sequences of entity statements that allow a relying party to derive trust in another entity through intermediaries. (OpenID Federation 1.0, §4)
+- **Federation policies**: rules that can constrain or modify metadata as it is resolved through a trust chain. (OpenID Federation 1.0, §6)
+- **Federation endpoints**: standardized endpoints for operations such as fetching subordinate statements and resolving entity information. (OpenID Federation 1.0, §8)
 
 ## Specification status
 
@@ -27,5 +27,5 @@ Although OpenID Federation is not specific to AI agents, its mechanisms for scal
 
 ## References
 
-1. OpenID Foundation. *OpenID Federation 1.0 (Final Specification).* February 2026. https://openid.net/specs/openid-federation-1_0-final.html
-2. OpenID Foundation. *OpenID Federation 1.0 Final Specification Approved.* February 17, 2026. https://openid.net/openid-federation-1-0-final-specification-approved/
+1. Hedberg, et al. (OpenID Foundation). *OpenID Federation 1.0.* February 2026. https://openid.net/specs/openid-federation-1_0-final.html
+2. OpenID Foundation. *OpenID Federation 1.0 Final Specification Approved.* https://openid.net/openid-federation-1-0-final-specification-approved/
