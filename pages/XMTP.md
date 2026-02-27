@@ -20,11 +20,13 @@ XMTP’s website describes the protocol as open source and identity-agnostic, an
 ## Protocol components
 
 ### Encryption and security properties
-XMTP’s protocol documentation describes MLS-based end-to-end encryption for both 1:1 and group conversations, and outlines security properties such as forward secrecy and post-compromise security in terms of MLS mechanisms (for example, key ratcheting and commits).\[4\]
+XMTP’s protocol documentation describes end-to-end encrypted 1:1 and group messaging using **Messaging Layer Security (MLS)**, and frames XMTP as providing the authentication and delivery services needed to use MLS within a messaging network.\[1\]\[4\]
 
-XMTP’s security documentation also describes a hybrid approach to protecting MLS *Welcome* messages against “harvest now, decrypt later” threats, and documents specific cryptographic building blocks used by the protocol (for example, HPKE, AEAD, and Ed25519).\[4\]
+XMTP’s security documentation summarizes security properties commonly associated with MLS deployments—such as message confidentiality, forward secrecy, and post-compromise security—and describes XMTP-specific measures such as additional protection of MLS *Welcome* messages against “harvest now, decrypt later” collection.\[4\]
 
-An external security assessment commissioned by Ephemera (XMTP’s developer) and published by NCC Group describes a review of **libxmtp**, a Rust implementation of XMTP built on MLS and OpenMLS.\[5\]
+The same documentation lists cryptographic building blocks used in the XMTP messaging stack, including HPKE (for additional *Welcome* message protection), AEAD (for content encryption), and Ed25519 (for signatures), and names the MLS ciphersuite it uses.\[4\]
+
+An external security assessment commissioned by Ephemera and published by NCC Group describes a review of **libxmtp**, a Rust implementation of XMTP built upon MLS and the OpenMLS library.\[5\]
 
 ### Identity model
 XMTP’s identity model centers on an **inbox ID**, described as a stable destination for messages that can have multiple associated identities and installations.\[3\]
@@ -45,9 +47,9 @@ XMTP documentation describes delivery primitives including:
 
 XMTP is implemented across multiple open-source repositories, including client SDKs and libraries (for example, *libxmtp* and language-specific SDKs) and node software.\[6\]
 
-The **xmtpd** repository describes an experimental XMTP node implementation intended to eventually power the XMTP network after meeting functional requirements such as parity with existing node software and reliable data replication without data loss.\[7\]
+The **xmtpd** repository describes an experimental XMTP node implementation ("XMTP daemon") and notes that it is not the node software that currently forms the XMTP network. The repository README states that the plan is for *xmtpd* to become the node software that powers the network after meeting functional requirements such as parity with existing node software and reliable data replication without data loss.\[7\]
 
-The xmtpd README also describes a testnet environment and lists example public endpoints operated by XMTP Labs.\[7\]
+The *xmtpd* README also describes an XMTP testnet environment and lists example public endpoints operated by XMTP Labs.\[7\]
 
 ## Relevance to agent ecosystems
 XMTP is often discussed in the context of agent ecosystems because agents commonly require durable identity, secure messaging channels (including group coordination), and opt-in/consent controls for inbound communication.\[2\]\[3\]
