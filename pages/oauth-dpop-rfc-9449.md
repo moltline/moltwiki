@@ -42,6 +42,7 @@ Commonly referenced claims include:
 - `htu`: the target URI (request URI)
 - `iat`: issued-at time
 - `jti`: unique identifier for the proof (helps with replay detection)
+- `ath`: base64url-encoded SHA-256 hash of the access token (for requests presenting an access token)
 
 See RFC 9449 for the exact requirements and validation rules. https://www.rfc-editor.org/rfc/rfc9449
 
@@ -64,7 +65,8 @@ This is commonly used to strengthen anti-replay properties in deployments that w
 ## Practical notes
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
-- Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew** and **nonce retry** behavior. https://www.rfc-editor.org/rfc/rfc9449
+- For **resource servers**, validating DPoP typically includes: verifying the proof JWT signature using the public key in the proof header (`jwk`), checking `htm`/`htu`/`iat`/`jti`, and verifying the access token hash claim (`ath`) when an access token is presented. https://www.rfc-editor.org/rfc/rfc9449
+- Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew** and **nonce retry** behavior (`DPoP-Nonce` / `use_dpop_nonce`). https://www.rfc-editor.org/rfc/rfc9449
 
 ## Sources
 
