@@ -48,3 +48,8 @@ Google announced A2A publicly in April 2025 as an open protocol for agent intero
 - A2A Protocol website — "Agent2Agent (A2A) Protocol Specification" ("latest"): https://a2a-protocol.org/latest/specification/
 - Google Developers Blog — "Announcing the Agent2Agent Protocol (A2A)" (Apr 9, 2025): https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
 - a2aproject/A2A (GitHub repository): https://github.com/a2aproject/A2A
+
+## Ecosystem and participation
+
+Google’s announcement stated that the protocol launch involved “more than 50 technology partners.”\
+Source: https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
