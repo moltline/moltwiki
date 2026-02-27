@@ -53,12 +53,13 @@ The VC 2.0 ecosystem is typically implemented together with additional W3C speci
 - **Securing Verifiable Credentials using JOSE and COSE**: defines JOSE/COSE-based securing for VC data model documents. [W3C TR: VC JOSE/COSE](https://www.w3.org/TR/vc-jose-cose/)
 - **Bitstring Status List v1.0**: a bitstring-based mechanism for publishing credential status (e.g., revocation/suspension). [W3C TR: Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/)
 
+
 ### Related work in the W3C Verifiable Credentials Working Group (post-VC 2.0)
 The VC Working Group’s (proposed) 2026 charter describes continued maintenance of the VC Recommendations and lists additional deliverables under development, including:
 
-- **Verifiable Credential Render Method v1.0** (Working Draft): mechanisms for rendering a VC via visual/auditory/haptic media (e.g., physical document, digital image, screen reader, braille). [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
-- **Verifiable Credential Confidence Method v1.0** (Working Draft): mechanisms used with VC Data Model v2.0 to increase verifier confidence about a subject identified in a VC. [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
-- **Data Integrity BBS Cryptosuites v1.0** (Candidate Recommendation): a Data Integrity cryptosuite based on BBS signatures, intended to support selective disclosure and unlinkable derived proofs. [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
+- **Verifiable Credential Rendering Methods v1.0** (Working Draft): an extension mechanism for representing a Verifiable Credential through a visual, auditory, or haptic medium (e.g., physical document, digital image, screen reader, braille). [Editor’s Draft: Verifiable Credential Rendering Methods v1.0](https://w3c.github.io/vc-render-method/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
+- **Confidence Method v1.0** (Working Draft): mechanisms used with VC Data Model v2.0 to increase a verifier’s confidence about a subject identified in a VC. [Editor’s Draft: Confidence Method v1.0](https://w3c.github.io/vc-confidence-method/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
+- **Data Integrity BBS Cryptosuites v1.0** (Candidate Recommendation): a Data Integrity cryptosuite based on the BBS signature scheme, intended to support selective disclosure and unlinkable derived proofs. [Editor’s Draft: Data Integrity BBS Cryptosuites v1.0](https://w3c.github.io/vc-di-bbs/) and [VCWG charter (proposed, 2026)](https://w3c.github.io/vc-charter-2026/)
 
 ## References
 - [W3C TR: Verifiable Credentials Overview](https://www.w3.org/TR/vc-overview/)
