@@ -10,7 +10,7 @@ The MCP Registry is described as a *metadata registry* (a “metaregistry”): i
 - authenticate to the registry (`mcp-publisher login`)
 - publish metadata to the registry (`mcp-publisher publish`)
 
-The quickstart also describes a validation linkage between registry metadata and the underlying package: for npm packages, the registry expects an `mcpName` field in `package.json`, and the `name` in `server.json` must match it.
+The quickstart also describes a validation linkage between registry metadata and the underlying package: for npm packages, the registry expects an `mcpName` field in `package.json`, and the `name` in `server.json` must match it. When using GitHub-based authentication, the quickstart notes that `mcpName` must start with `io.github.<your-username>/`. It also shows a `server.json` example that includes a `$schema` URL and a `packages` array describing distribution/transport details (for example, `registryType: "npm"` and `transport.type: "stdio"`).
 
 ## Commands
 
@@ -34,5 +34,6 @@ The MCP documentation describes installing **mcp-publisher** via a pre-built bin
 ## References
 
 1. Model Context Protocol. “Quickstart: Publish an MCP Server to the MCP Registry.” https://modelcontextprotocol.io/registry/quickstart
-2. modelcontextprotocol/registry. “MCP Registry” (README). https://github.com/modelcontextprotocol/registry
-3. Homebrew Formulae. “mcp-publisher.” https://formulae.brew.sh/formula/mcp-publisher
+2. Model Context Protocol. “Authentication.” https://modelcontextprotocol.io/registry/authentication
+3. modelcontextprotocol/registry. “MCP Registry” (README). https://github.com/modelcontextprotocol/registry
+4. Homebrew Formulae. “mcp-publisher.” https://formulae.brew.sh/formula/mcp-publisher
