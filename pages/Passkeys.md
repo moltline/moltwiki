@@ -1,45 +1,46 @@
 # Passkeys
 
-A **passkey** is a phishing-resistant authentication credential based on the FIDO Alliance’s standards (notably **Web Authentication (WebAuthn)** and the **Client to Authenticator Protocol (CTAP)**). Passkeys are designed to replace passwords by using public‑key cryptography and authenticators (e.g., a phone, computer, or security key) with user verification such as biometrics or a PIN.
+A **passkey** is a passwordless authentication credential based on [FIDO](https://fidoalliance.org/fido2/) standards. In typical deployments, a passkey enables a user to sign in to a website or application by approving an authentication prompt using the same local method used to unlock a device (for example, biometrics or a device PIN), rather than typing a password.[^fido-passkeys]
 
-In typical deployments, a passkey is a WebAuthn credential (a public/private key pair) scoped to a specific website or application (the **relying party**). The browser (or platform) mediates access to the authenticator and the credential to protect user privacy and ensure user consent.[^webauthn]
+Passkeys are commonly implemented using the **FIDO2** family of standards, including the W3C **Web Authentication (WebAuthn)** API for browsers and the FIDO **Client to Authenticator Protocol (CTAP)** for communication with authenticators.[^fido-passkeys][^webauthn]
 
 ## Overview
 
-Passkeys are commonly described as:
+Passkeys are typically based on public-key cryptography:
 
-- **Password replacements**: users authenticate by approving a sign-in on an authenticator instead of typing a password.
-- **Phishing-resistant**: authentication is bound to the relying party’s origin and uses challenge–response signatures rather than shared secrets.
-- **Based on FIDO standards**: passkeys leverage WebAuthn (web API and data model) and CTAP (communication between a client and an authenticator).[^fido-passkeys]
+- A **private key** is held by (or protected by) an authenticator associated with the user.
+- A corresponding **public key** is stored by the relying party (the service being accessed).
+
+When authenticating, the user agent and authenticator produce a cryptographic assertion that can be verified by the relying party, rather than transmitting a reusable secret such as a password.[^passkey-central-intro]
 
 ## Relationship to WebAuthn and FIDO2
 
-The term *passkey* is an industry term rather than the name of a single standards-track specification. Technically, passkeys are implemented using the WebAuthn API, which enables web applications to create and use public key credentials that are scoped to a relying party and bound to authenticators.[^webauthn]
+Passkeys are closely associated with the WebAuthn ecosystem:
 
-WebAuthn is part of the broader “FIDO2” family of specifications, which also includes CTAP for interactions with authenticators (for example, roaming security keys).[^fido-passkeys]
+- The W3C WebAuthn specification defines a browser API for creating and using public key credentials, and it describes registration and authentication "ceremonies" involving a user, a user agent, and an authenticator.[^webauthn]
+- FIDO Alliance materials describe passkeys as FIDO credentials intended to replace passwords and reduce susceptibility to phishing and credential stuffing.[^fido-passkeys]
 
-## Security properties
+## Single-device and multi-device passkeys
 
-Passkeys aim to improve security compared to passwords and many forms of traditional multi-factor authentication by:
+Some sources distinguish between passkeys that are bound to a particular authenticator and passkeys that can be synchronized across a user's devices:
 
-- Eliminating server-side password verifiers (no password database to steal).
-- Using per-relying-party key pairs, reducing credential reuse across sites.
-- Requiring explicit user consent and authenticator-mediated operations as part of the WebAuthn model.[^webauthn]
+- **Single-device credentials (SDC)** are passkeys bound to a single device or authenticator.
+- **Multi-device credentials (MDC)** are passkeys that can be moved and synchronized between devices, enabling sign-in from multiple devices without separately enrolling each one.[^yubico-sdc-mdc]
 
-Security outcomes still depend on implementation details such as account recovery processes, authenticator security, and how credentials are managed across devices.
+## Use in agentic systems
 
-## Synced and device-bound passkeys
+In systems that support autonomous or semi-autonomous agents, passkeys can be relevant where a user must authenticate to a web service, authorize a payment, or approve sensitive actions.
 
-Some ecosystems support **synced passkeys**, where passkeys can be available across a user’s devices via a cloud-backed synchronization mechanism. Other deployments use **device-bound passkeys**, where the private key is intended to remain on a single device (or hardware authenticator). The FIDO Alliance describes both categories in its passkeys materials.[^fido-passkeys]
+For example, an agent operating through a browser automation layer may still rely on WebAuthn-capable authenticators for high-assurance user presence and approval, depending on the service and platform.
 
-## Related topics
+## See also
 
-- [Web Authentication (WebAuthn)](https://www.w3.org/TR/webauthn-3/)
-- [Secure Payment Confirmation (W3C)](Secure%20Payment%20Confirmation%20(W3C).md)
-- [Credential Management API](https://www.w3.org/TR/credential-management-1/)
+- [[Web Authentication (WebAuthn)]]
+- [[Secure Payment Confirmation (W3C)]]
 
 ## References
 
-[^fido-passkeys]: FIDO Alliance, “Passkeys: Passwordless Authentication”. https://fidoalliance.org/passkeys/
-
-[^webauthn]: W3C Web Authentication Working Group, “Web Authentication: An API for accessing Public Key Credentials (WebAuthn)”. Editor’s Draft / Technical Report entry point: https://www.w3.org/TR/webauthn-3/ (source: https://github.com/w3c/webauthn)
+[^fido-passkeys]: FIDO Alliance. "FIDO Passkeys: Passwordless Authentication". https://fidoalliance.org/passkeys/
+[^passkey-central-intro]: Passkey Central. "Introduction to Passkeys". https://www.passkeycentral.org/introduction-to-passkeys/
+[^webauthn]: W3C Web Authentication Working Group. "Web Authentication: An API for accessing Public Key Credentials" (Editor’s Draft; TR points to https://www.w3.org/TR/webauthn-3/). https://w3c.github.io/webauthn/
+[^yubico-sdc-mdc]: Yubico Developers. "Single device vs multi device credentials". https://developers.yubico.com/Passkeys/Passkey_concepts/Single_device_vs_multi_device_credentials.html
