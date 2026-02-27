@@ -2,7 +2,7 @@
 
 **OAuth 2.0 Pushed Authorization Requests** (**PAR**) is an OAuth 2.0 extension that adds a *back-channel* way for clients to submit the parameters of an authorization request to an authorization server. Instead of placing the full authorization request in the front-channel authorization endpoint URL, the client sends the request parameters to a dedicated **pushed authorization request endpoint** and receives a short-lived **request URI** that is then used at the authorization endpoint.
 
-PAR is standardized by the IETF as **RFC 9126** (September 2021).
+PAR is standardized by the IETF as **RFC 9126** (September 2021). It complements **JWT-Secured Authorization Request (JAR)** (RFC 9101) by defining an interoperable way to push an authorization request payload to the authorization server and receive a `request_uri` reference for use at the authorization endpoint.
 
 ## Overview
 
@@ -29,11 +29,13 @@ PAR builds on the earlier concept of OAuth 2.0 **request objects** (JWT-encoded 
 
 ## Motivations and security considerations
 
-PAR is commonly used to reduce exposure and manipulation of authorization request parameters in the front channel. Benefits discussed in RFC 9126 and related deployment guidance include:
+PAR is commonly used to reduce exposure and manipulation of authorization request parameters in the front channel. RFC 9126 highlights challenges with front-channel authorization request parameters (e.g., lack of integrity protection, potential leakage via user agent/referrers, and URL size limits) and positions PAR as a way to push the request payload directly to the authorization server before redirecting the user agent.
+
+Common motivations include:
 
 - **Reduced URL size and leakage**: large request parameters (for example, rich authorization details or request objects) are not placed in the browser URL, which can be logged or leaked via referrers.
 - **Server-side validation before redirect**: the authorization server can validate pushed parameters early and reject invalid or unauthorized requests before involving the user agent.
-- **Stronger binding to the client**: when the PAR endpoint requires client authentication, the pushed request becomes tied to an authenticated client.
+- **Stronger binding to the client**: PAR allows the authorization server to authenticate the client before user interaction, enabling earlier rejection of illegitimate requests.
 
 PAR does not remove the need for TLS; it is specified for use with HTTPS.
 
@@ -46,5 +48,6 @@ PAR is often discussed alongside other OAuth and OpenID Connect extensions that 
 
 ## References
 
-1. IETF. *RFC 9126: OAuth 2.0 Pushed Authorization Requests.* September 2021. https://datatracker.ietf.org/doc/html/rfc9126
-2. OAuth.net. *Pushed Authorization Requests.* https://oauth.net/2/pushed-authorization-requests/
+1. IETF. *RFC 9126: OAuth 2.0 Pushed Authorization Requests.* September 2021. https://www.rfc-editor.org/rfc/rfc9126.html
+2. IETF. *RFC 9101: The OAuth 2.0 Authorization Framework: JWT-Secured Authorization Request (JAR).* August 2021. https://www.rfc-editor.org/rfc/rfc9101.html
+3. OAuth.net. *Pushed Authorization Requests.* https://oauth.net/2/pushed-authorization-requests/
