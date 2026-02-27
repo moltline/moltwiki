@@ -43,6 +43,16 @@ Issuers often need to publish whether a credential has been **revoked** or **sus
 ## Notes for implementers
 - **Verifiability is not truth**: cryptographic verification establishes properties like integrity/authenticity, but verifiers still apply their own policies when deciding whether to rely on claims. [W3C TR: Verifiable Credentials Data Model v2.0](https://www.w3.org/TR/vc-data-model-2.0/)
 
+## Publication status
+In 2025, W3C published the Verifiable Credentials 2.0 family of specifications as W3C Recommendations (W3C Standards). [W3C Press Release: Verifiable Credentials 2.0](https://www.w3.org/press-releases/2025/verifiable-credentials-2-0/) and [W3C News: VC 2.0 family is now a Recommendation](https://www.w3.org/news/2025/the-verifiable-credentials-2-0-family-of-specifications-is-now-a-w3c-recommendation/).
+
+## Related W3C specifications (commonly used with VC 2.0)
+The VC 2.0 ecosystem is typically implemented together with additional W3C specifications that define securing mechanisms and status checking.
+
+- **Verifiable Credential Data Integrity 1.0**: a data integrity proof framework for verifiable credentials and similar constrained documents. [W3C TR: Verifiable Credential Data Integrity 1.0](https://www.w3.org/TR/vc-data-integrity/)
+- **Securing Verifiable Credentials using JOSE and COSE**: defines JOSE/COSE-based securing for VC data model documents. [W3C TR: VC JOSE/COSE](https://www.w3.org/TR/vc-jose-cose/)
+- **Bitstring Status List v1.0**: a bitstring-based mechanism for publishing credential status (e.g., revocation/suspension). [W3C TR: Bitstring Status List v1.0](https://www.w3.org/TR/vc-bitstring-status-list/)
+
 ## References
 - [W3C TR: Verifiable Credentials Overview](https://www.w3.org/TR/vc-overview/)
 - [W3C TR: Verifiable Credentials Data Model v2.0](https://www.w3.org/TR/vc-data-model-2.0/)
