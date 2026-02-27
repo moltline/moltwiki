@@ -2,6 +2,8 @@
 
 The **Payment Request API** is a web platform API that standardizes how a merchant website can invoke a browser-provided payment UI and exchange payment information with the user agent. It is part of the broader W3C Web Payments work and is designed to reduce checkout friction compared with traditional, form-based payment flows.[^mdn]
 
+In September 2022, the W3C Web Payments Working Group published Payment Request as a W3C Recommendation; subsequent work has continued in W3C’s GitHub-hosted specification to better align the text with interoperable implementations.[^w3c-rec-2022][^w3c-edi]
+
 ## Overview
 
 A merchant site typically creates a `PaymentRequest` object in response to a user gesture (e.g., clicking a “Buy” button). The browser then presents a native or browser UI that lets the user select a payment method and provide the necessary details. If the user approves, the site receives a `PaymentResponse` containing the selected payment method identifier and associated data.[^mdn]
@@ -17,6 +19,7 @@ The Payment Request API is commonly discussed alongside related specifications i
 - **User agent–mediated payment UI:** The browser mediates the user experience for selecting and authorizing payment, rather than the merchant building a bespoke checkout UI.[^mdn]
 - **Payment method identifiers:** The API uses payment method identifiers to indicate which payment methods a merchant supports and which method the user selected.[^w3c-payment-method-id]
 - **Extensibility via payment handlers:** Payment handlers allow payment apps (including web-based ones) to integrate with the Payment Request flow.[^w3c-payment-handler]
+- **Embedded contexts:** The API can be used in cross-origin iframes only when the iframe is explicitly allowed (e.g., via `allowpaymentrequest`).[^mdn]
 
 ## See also
 
@@ -25,7 +28,9 @@ The Payment Request API is commonly discussed alongside related specifications i
 
 ## References
 
-[^mdn]: MDN Web Docs. “Payment Request API.” https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API
+[^mdn]: MDN Web Docs. “Payment Request API.” https://developer.mozilla.org/en-US/docs/Web/API/Payment_Request_API (last modified 2025-04-10).
+[^w3c-rec-2022]: W3C. “Payment Request API (Recommendation).” https://www.w3.org/TR/2022/REC-payment-request-20220908/
+[^w3c-edi]: W3C Web Payments Working Group (GitHub). “Payment Request API (Editor’s Draft).” https://w3c.github.io/payment-request/
 [^w3c-payment-handler]: W3C. “Payment Handler API.” https://www.w3.org/TR/payment-handler/
 [^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/
 [^spc]: W3C. “Secure Payment Confirmation.” https://www.w3.org/TR/secure-payment-confirmation/
