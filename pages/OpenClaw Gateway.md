@@ -1,31 +1,50 @@
 # OpenClaw Gateway
 
-The **OpenClaw Gateway** is the always-on control-plane service for the OpenClaw personal AI assistant. It coordinates the assistant’s sessions, connected messaging channels, tools, and automation, and exposes the local control surface used by the OpenClaw CLI and web dashboard.
+The **OpenClaw Gateway** is OpenClaw’s always-on control-plane service. It runs as a WebSocket server that coordinates channels, nodes, sessions, and hooks, and provides the RPC surface used by the OpenClaw CLI and Control UI.
 
 ## Overview
 
 OpenClaw is designed as a “local-first” assistant that runs on a user’s own devices. In this architecture, the Gateway is the central service that:
 
-- runs continuously (typically as a user-level system service);
+- runs continuously (often under launchd or systemd);
 - manages configuration and runtime state;
-- brokers connections to channels (e.g., chat platforms) and tools; and
-- provides a control interface for sending messages and running the agent.
+- brokers connections to channels (e.g., Telegram/WhatsApp/Slack/Discord) and tools (e.g., browser, nodes); and
+- exposes a WebSocket RPC interface for health checks, status, and agent runs.
 
-The OpenClaw project documentation describes the Gateway as the control plane for the product, with the assistant being the user-facing behavior delivered through channels and interfaces.
+The OpenClaw docs describe the Gateway as the product’s control plane.
 
-## Installation and operation
+## Running the Gateway
 
-The OpenClaw onboarding workflow can install the Gateway as a background daemon so it stays running. The OpenClaw CLI includes subcommands to check status and manage the service.
+You can run the Gateway in the foreground with:
 
-OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
+- `openclaw gateway` (alias: `openclaw gateway run`)
+
+The CLI docs note that the Gateway may refuse to start unless `gateway.mode=local` is set in the config, and that `--allow-unconfigured` can be used for ad-hoc/dev runs.
+
+## Service lifecycle and operator commands
+
+OpenClaw supports installing the Gateway as a supervised background service and managing it via the CLI:
+
+- `openclaw gateway install`
+- `openclaw gateway status` (optionally probes the RPC endpoint)
+- `openclaw gateway start | stop | restart | uninstall`
+
+The Gateway runbook also documents typical “day-2” operations such as `openclaw secrets reload`, `openclaw logs --follow`, and `openclaw doctor`.
+
+## Ports, bind, and auth (high level)
+
+The Gateway typically binds to loopback by default and expects authentication (token or password). The runbook documents port/bind precedence and notes that binding beyond loopback without auth is blocked as a safety guardrail.
 
 ## See also
 
 - [OpenClaw](OpenClaw.md)
+- [OpenClaw Gateway](OpenClaw%20Gateway.md)
 - [OpenClaw Skills](OpenClaw%20Skills.md)
-- [Moltbot](Moltbot.md)
+- [OpenClaw Gateway runbook](https://docs.openclaw.ai/gateway)
 
 ## References
 
-- OpenClaw documentation, “Getting Started”. https://docs.openclaw.ai/start/getting-started
+- OpenClaw Docs — “Gateway CLI”. https://docs.openclaw.ai/cli/gateway
+- OpenClaw Docs — “Gateway Runbook”. https://docs.openclaw.ai/gateway
+- OpenClaw Docs — “Updating” (restart and service notes). https://docs.openclaw.ai/install/updating
 - OpenClaw GitHub repository README. https://github.com/openclaw/openclaw
