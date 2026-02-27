@@ -1,64 +1,73 @@
 # OAuth 2.0 Demonstrating Proof of Possession (DPoP)
 
-**Demonstrating Proof of Possession (DPoP)** is an OAuth 2.0 mechanism for *sender-constraining* access tokens and (in some cases) refresh tokens at the application layer. Instead of treating an access token as a pure *bearer* credential (usable by anyone who obtains it), DPoP binds the token to a public key and requires the client to prove possession of the corresponding private key on each request.
+**Demonstrating Proof of Possession (DPoP)** is an application-layer mechanism for *sender-constraining* OAuth 2.0 access tokens (and optionally refresh tokens). Instead of treating an access token as a pure *bearer* credential (usable by anyone who obtains it), DPoP binds the token to a public key and requires the client to prove possession of the corresponding private key on each request. https://www.rfc-editor.org/rfc/rfc9449.txt
 
-DPoP is standardized by the IETF as **RFC 9449** (Standards Track, September 2023). It is commonly discussed as a defense-in-depth measure to reduce the impact of access token theft and replay.
+DPoP is standardized by the IETF as **RFC 9449** (Standards Track, September 2023). https://www.rfc-editor.org/info/rfc9449
+
+## What “sender-constraining” means
+
+A *sender-constrained* token is intended to be usable only by the party that can demonstrate possession of some additional secret material (here: a private key). With DPoP, the additional proof is a signed JWT in the `DPoP` header, and the token is bound to the public key used to sign that proof. https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## Overview
 
 In a DPoP-enabled OAuth flow:
 
-1. The client generates (or has access to) an asymmetric key pair.
-2. When the client makes a request to the authorization server’s token endpoint, it includes a **DPoP proof** in the `DPoP` HTTP header.
-3. The authorization server issues an access token that is **bound** to the public key conveyed in the proof, and signals this by returning `token_type` = `DPoP`.
+1. The client generates (or already has) an asymmetric key pair.
+2. When the client makes a request to the authorization server’s token endpoint, it includes a **DPoP proof** in the `DPoP` HTTP header. https://www.rfc-editor.org/rfc/rfc9449.txt
+3. The authorization server issues an access token that is **bound** to the public key conveyed in the proof, and signals this by returning `token_type` = `DPoP`. https://www.rfc-editor.org/rfc/rfc9449.txt
 4. When calling a protected resource, the client presents:
    - the access token using the `Authorization: DPoP <token>` scheme, and
-   - a fresh DPoP proof in the `DPoP` header.
+   - a fresh DPoP proof in the `DPoP` header. https://www.rfc-editor.org/rfc/rfc9449.txt
 
-A resource server that supports DPoP verifies (a) the proof, (b) that the proof matches the current request, and (c) that the access token is bound to the same key as in the proof.
+A resource server that supports DPoP verifies (a) the proof signature, (b) that the proof is bound to the current request (method + target URI), and (c) that the access token is bound to the same key as in the proof. https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## DPoP proof JWT
 
-A DPoP proof is a **JSON Web Token (JWT)** carried in the `DPoP` HTTP request header. The proof is signed by the client’s private key, and the corresponding public key is carried in the JWT header as a **JWK**.
+A DPoP proof is a **JSON Web Token (JWT)** carried in the `DPoP` HTTP request header. The proof is signed by the client’s private key, and the corresponding public key is carried in the JWT header as a **JWK**. https://www.rfc-editor.org/rfc/rfc9449.txt
+
+### Required header parameters and claims (high level)
 
 RFC 9449 defines required JOSE header parameters and claims, including:
 
 - JOSE header:
-  - `typ`: must be `dpop+jwt`
-  - `alg`: an asymmetric JWS algorithm (must not be `none` or symmetric MAC algorithms)
-  - `jwk`: the public key in JWK format (must not contain a private key)
+  - `typ`: must be `dpop+jwt` https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `alg`: an asymmetric JWS algorithm (must not be `none` or symmetric MAC algorithms) https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `jwk`: the public key in JWK format (must not contain a private key) https://www.rfc-editor.org/rfc/rfc9449.txt
 - JWT claims:
-  - `jti`: unique identifier for the proof (used for replay detection)
-  - `htm`: HTTP method of the request
-  - `htu`: target URI of the request (without query and fragment)
-  - `iat`: issued-at timestamp
-  - `ath`: (when used with an access token) base64url-encoded SHA-256 hash of the ASCII encoding of the access token value
-  - `nonce`: (when a server requires it) a recent nonce supplied via the `DPoP-Nonce` response header
+  - `jti`: unique identifier for the proof (used for replay detection) https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `htm`: HTTP method of the request https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `htu`: target URI of the request (without query and fragment) https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `iat`: issued-at timestamp https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `ath`: (when used with an access token) base64url-encoded SHA-256 hash of the ASCII encoding of the access token value https://www.rfc-editor.org/rfc/rfc9449.txt
+  - `nonce`: (when a server requires it) a server-provided nonce value https://www.rfc-editor.org/rfc/rfc9449.txt
 
-Each HTTP request requires a **unique** DPoP proof.
+Each HTTP request requires a **fresh** DPoP proof; replay detection is typically based on `jti` (and, in some deployments, nonce usage). https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## Token binding and confirmation (`cnf` / `jkt`)
 
 For a resource server to verify the key-binding of a DPoP access token, it needs a reliable way to learn which key the token is bound to.
 
-RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token is JWT-structured. The same `cnf`/`jkt` structure can also be conveyed via OAuth 2.0 Token Introspection responses.
+RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token is JWT-structured; the same confirmation structure can also be conveyed via OAuth 2.0 Token Introspection responses. https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## Nonce support
 
-RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). This is intended to mitigate certain replay and precomputation risks.
+RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). https://www.rfc-editor.org/rfc/rfc9449.txt
+
+When a server requires a nonce, it provides a nonce value out-of-band (e.g., via a response header) and rejects proofs that omit it. (Exact error handling and header names are defined in RFC 9449.) https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## Relationship to other sender-constraining techniques
 
-DPoP is positioned as an application-layer alternative for environments where transport-layer sender-constraining mechanisms (for example, mutual TLS for OAuth) are not available or desirable.
+DPoP is an application-layer alternative for environments where transport-layer sender-constraining mechanisms (for example, mutual TLS for OAuth) are not available or desirable. https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## Security considerations (high level)
 
-DPoP aims to reduce the usefulness of stolen tokens by requiring the attacker to also possess the private key. It is not a substitute for transport security and is specified for use with HTTPS.
+DPoP reduces the usefulness of stolen tokens by requiring the attacker to also possess the private key corresponding to the bound public key. It is not a substitute for transport security and is specified for use with HTTPS. https://www.rfc-editor.org/rfc/rfc9449.txt
 
-DPoP does not, by itself, provide full request integrity for all HTTP message components; it signs a selected subset (method and target URI) to avoid the complexities of canonicalizing HTTP requests.
+DPoP does not, by itself, provide full request integrity for all HTTP message components; it signs a selected subset (method and target URI) to avoid the complexities of canonicalizing HTTP requests. https://www.rfc-editor.org/rfc/rfc9449.txt
 
 ## References
 
-- IETF. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP).* September 2023. https://datatracker.ietf.org/doc/html/rfc9449
-- RFC Editor. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP) — information page.* https://www.rfc-editor.org/info/rfc9449
-- OAuth.net. *DPoP (OAuth 2.0 Demonstrating Proof-of-Possession).* https://oauth.net/2/dpop/
+- RFC 9449 (canonical spec): https://www.rfc-editor.org/rfc/rfc9449.txt
+- RFC Editor info page (status, formats, DOI): https://www.rfc-editor.org/info/rfc9449
+- IETF Datatracker HTML view: https://datatracker.ietf.org/doc/html/rfc9449
+- OAuth.net overview (non-normative): https://oauth.net/2/dpop/
