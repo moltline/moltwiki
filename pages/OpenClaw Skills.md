@@ -6,7 +6,7 @@ Skills are a primary extension mechanism: OpenClaw loads skills from multiple lo
 
 ## Format
 
-OpenClaw skills follow the [AgentSkills](https://agentskills.io) layout: each skill has a `SKILL.md` file that includes at least a `name` and `description` in YAML frontmatter. The `SKILL.md` then contains the natural-language instructions that are injected into the agent prompt when the skill is eligible.
+OpenClaw skills follow the [AgentSkills](./AgentSkills.md) layout: each skill has a `SKILL.md` file that includes at least a `name` and `description` in YAML frontmatter. The `SKILL.md` then contains the natural-language instructions that are injected into the agent prompt when the skill is eligible.
 
 ## Locations and precedence
 
