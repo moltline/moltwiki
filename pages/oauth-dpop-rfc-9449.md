@@ -69,7 +69,17 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
+## Errata
+
+RFC 9449 has at least one **verified editorial erratum** (Errata ID 7646): Section 4.2 should say “authorization server” (not “authentication server”) when referring to a server providing a `DPoP-Nonce`. https://www.rfc-editor.org/errata/rfc9449
+
+## Implementation notes (from deployments)
+
+Some deployments require the nonce mechanism in practice. For example, Okta’s DPoP guidance describes a flow where an initial `/token` request returns a nonce that must be echoed in a subsequent DPoP proof’s `nonce` claim, and it emphasizes replay prevention via unique `jti` values. https://developer.okta.com/docs/guides/dpop/oktaresourceserver/main/
+
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
+- RFC 9449 errata (RFC Editor): https://www.rfc-editor.org/errata/rfc9449
+- Okta DPoP guide (example deployment guidance): https://developer.okta.com/docs/guides/dpop/oktaresourceserver/main/
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
