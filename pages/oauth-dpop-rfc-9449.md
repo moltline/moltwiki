@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -43,7 +43,7 @@ Commonly referenced proof claims include:
 - `iat`: issued-at time
 - `jti`: unique identifier for the proof (helps with replay detection)
 
-For requests that include an access token, deployments commonly include an `ath` claim: a base64url-encoded SHA-256 hash of the access token. (This is described in RFC 9449 and shown in vendor implementation guidance.) https://www.rfc-editor.org/rfc/rfc9449 https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+For requests that include an access token, a proof can include an `ath` claim. RFC 9449 defines `ath` as the **base64url-encoded SHA-256 hash of the ASCII encoding of the associated access token’s value**. https://www.rfc-editor.org/rfc/rfc9449
 
 ### Public key confirmation (`cnf` / `jkt`)
 
@@ -53,13 +53,21 @@ DPoP-bound tokens are bound to a public key. When the access token is a JWT, the
 
 RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., `use_dpop_nonce`). https://www.rfc-editor.org/rfc/rfc9449
 
-Some implementations require this nonce behavior for public clients (e.g., SPAs / mobile apps) when requesting DPoP-bound tokens. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
-
 ## Relationship to adjacent standards
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+
+## Implementation and deployment notes
+
+### What servers validate
+
+RFC 9449 defines how recipients validate the DPoP proof JWT, including checks on the proof header and claims (e.g., the `typ` value `dpop+jwt` and required claims such as `htm`, `htu`, `iat`, and `jti`). https://www.rfc-editor.org/rfc/rfc9449
+
+### Library support example (Spring Security)
+
+Spring Security includes DPoP-related components for resource servers, such as `DPoPProofJwtDecoderFactory` (since Spring Security 6.5), which provides a `JwtDecoderFactory` and includes default validation for DPoP proof claims like `htm`, `htu`, `jti`, and `iat`. https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/jwt/DPoPProofJwtDecoderFactory.html
 
 ## Practical notes
 
@@ -71,3 +79,4 @@ Some implementations require this nonce behavior for public clients (e.g., SPAs 
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Spring Security API: `DPoPProofJwtDecoderFactory`: https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/oauth2/jwt/DPoPProofJwtDecoderFactory.html
