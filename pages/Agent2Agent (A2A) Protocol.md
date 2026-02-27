@@ -25,6 +25,16 @@ Commonly cited design principles include:
 - **Modality/content-type awareness**, supporting exchange of diverse content types using structured message parts.<ref>https://a2a-protocol.org/latest/specification/</ref>
 - **Enterprise-oriented security posture**, aligning with common authentication/authorization practices.<ref>https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/</ref><ref>https://a2a-protocol.org/latest/specification/</ref>
 
+## Architecture (spec structure)
+
+The A2A specification is structured in three layers:<ref>https://a2a-protocol.org/latest/specification/</ref>
+
+- **Canonical data model**: protocol-agnostic definitions of core objects (for example Task, Message, AgentCard, Part, Artifact).
+- **Abstract operations**: the binding-independent operations an A2A server exposes (for example sending a message, streaming updates, getting a task).
+- **Protocol bindings**: concrete mappings of operations and objects onto specific transports/encodings (for example JSON-RPC, gRPC, HTTP+JSON/REST).<ref>https://a2a-protocol.org/latest/specification/</ref>
+
+The spec also states that the protocol buffer definition file (`spec/a2a.proto`) is the authoritative normative source for protocol objects and request/response messages, with derived artifacts treated as non-normative convenience outputs.<ref>https://a2a-protocol.org/latest/specification/</ref>
+
 ## Core concepts (high level)
 
 The specification defines several core objects and concepts, including:<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
@@ -34,6 +44,10 @@ The specification defines several core objects and concepts, including:<ref>http
 - **Part**: the fundamental content container used within messages and artifacts; a part holds exactly one content field (for example, text, a URL reference, inline bytes, or structured data) and may include metadata such as media type and filename.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 - **Task**: a stateful unit of work with a unique ID and defined lifecycle, used to track processing (including long-running operations).<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 - **Artifact**: a tangible output produced during task processing (for example, a document or structured data), composed of one or more parts and tied to the task lifecycle.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+
+### Interaction mechanisms
+
+Public documentation describes multiple interaction patterns, including simple request/response (with polling for task status), streaming updates via Server-Sent Events (SSE), and asynchronous push notifications to a client-provided webhook for long-running or disconnected scenarios.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 
 ## Status and governance
 
