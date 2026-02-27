@@ -1,59 +1,69 @@
 # Payment Handler API
 
-The **Payment Handler API** (also referred to in W3C materials as the **Web-based Payment Handler API**) is a W3C specification that lets a web application act as a **payment handler** for the browser’s [Payment Request API](Payment%20Request%20API.md). In practice, a payment handler is typically implemented with a **service worker** that receives events from the user agent during a Payment Request checkout and returns a response back to the merchant.[^w3c-wbph] [^mdn-ph]
+The **Payment Handler API** is a W3C specification that defines how a web application can act as a **payment handler** for payments initiated through the Web Payments ecosystem—most notably, via the **Payment Request API**. It enables a site (typically implemented using a **service worker**) to register itself as able to handle certain payment methods, and to receive a `PaymentRequestEvent` when the user selects it as the payment app.
 
-In the Web Payments architecture, **Payment Request** is the merchant-facing API and browser-mediated UI, while **Payment Handler** is the integration point for payment apps that can be invoked from that UI.[^mdn-ph]
+In effect, the API provides a browser-mediated bridge between:
 
-## Core concepts
+- a **payee/merchant** website that creates a `PaymentRequest`, and
+- a **payer**’s chosen **web-based payment handler** that returns a payment response.
 
-- **Payment handler (payment app):** A web app that can be selected by the user to fulfill a payment request. It is registered by an origin and is invoked by the user agent when appropriate.[^w3c-wbph]
-- **Payment handler window:** A window opened by the payment handler (via the event object) to present UI for authentication/approval and to collect any needed information.[^mdn-openwindow] [^webdev-overview]
-- **Payment method identifier:** A string (often a URL) that identifies a payment method supported by the merchant and handled by compatible payment apps.[^w3c-payment-method-id]
+## How it fits into the Web Payments stack
 
-## Typical end-to-end flow
+The Payment Handler API complements other W3C Web Payments specifications:
 
-1. The merchant constructs a `PaymentRequest` with one or more supported payment method identifiers and calls `PaymentRequest.show()` in response to a user gesture.[^mdn-ph]
-2. The user agent discovers eligible payment apps/handlers for those methods (e.g., previously registered handlers and/or handlers discovered via payment method manifests).[^mdn-ph]
-3. The user selects a handler in the browser-provided UI.
-4. The user agent fires a `paymentrequest` event on the selected payment app’s service worker.[^mdn-pre]
-5. The handler may open a payment handler window (same-origin) to show UI, then completes authorization/processing steps as needed.[^mdn-openwindow]
-6. The handler calls `PaymentRequestEvent.respondWith()` to provide a `PaymentResponse`-shaped result back to the merchant (including the selected method identifier and method-specific `details`).[^mdn-respondwith]
+- **Payment Request API**: used by merchants to request payment and present a browser UI for selecting a payment method/handler.
+- **Payment Method Identifiers** and **Payment Method Manifest**: used to identify payment methods and (optionally) discover compatible handlers.
 
-## Service worker event model
+The Payment Handler API focuses on the **handler side**: registration, permissions, and dispatching the payment request to the handler.
 
-Payment handlers run in the **service worker** global scope and are driven by events.
+## High-level flow
 
-### `paymentrequest`
+The specification describes a flow in which:
 
-After the merchant calls `PaymentRequest.show()`, the browser fires a `paymentrequest` event on the payment app’s service worker. The event object provides information such as the accepted methods (`methodData`), totals, and origins, and exposes helper methods like `openWindow()` and `respondWith()`.[^mdn-pre]
+1. An origin requests permission from the user to handle payment requests for one or more supported payment methods.
+2. Payment handlers are implemented in **service worker** code.
+3. When a merchant calls `canMakePayment()` or `show()` on a `PaymentRequest`, the user agent computes candidate payment handlers, potentially including handlers registered previously via this API.
+4. The browser presents candidate handlers to the user.
+5. When the user selects a handler, the browser fires a `PaymentRequestEvent` in the handler’s service worker, carrying details from the `PaymentRequest` plus additional context (e.g., the payee origin).
+6. The handler performs whatever steps are needed to handle the payment request and returns a response.
 
-### `canmakepayment` (readiness signal)
+This flow is described in the specification’s “Overview” section. [^w3c-payment-handler-overview]
 
-The Payment Handler API also defines a `canmakepayment` event fired on the payment app’s service worker to let the app signal whether it is currently able to handle a request. MDN notes this can be used as an additional readiness mechanism alongside the merchant-side `PaymentRequest.canMakePayment()` check.[^mdn-ph]
+## Key concepts
 
-## Relationship to other Web Payments specifications
+### Web-based payment handler
 
-The Payment Handler API is commonly used together with:
+A **web-based payment handler** is an event handler for `PaymentRequestEvent` running in a service worker context. [^w3c-payment-handler-intro]
 
-- **Payment Request API**, which defines the merchant-facing API and the overall request/response model.[^w3c-payment-request]
-- **Payment Method Identifiers** and **Payment Method Manifests**, which define how payment methods are identified and how user agents can discover compatible payment apps.[^w3c-payment-method-id]
-- **Secure Payment Confirmation (SPC)**, which can be used in Payment Request flows to strengthen authentication/confirmation with WebAuthn-capable authenticators.[^spc]
+### PaymentRequestEvent
+
+The `PaymentRequestEvent` is the event delivered to the selected payment handler. It contains information derived from the merchant’s `PaymentRequest` (as defined by the Payment Request API), along with additional information needed by handlers (such as the payee’s origin). [^w3c-payment-handler-overview]
+
+### PaymentManager
+
+The API extends the service worker registration with a `PaymentManager` interface to manage properties of web-based payment handlers. [^w3c-payment-handler-intro]
+
+## Security and privacy considerations (overview)
+
+Because payment handlers participate in sensitive user flows, the model relies on browser enforcement and user mediation:
+
+- **Permissioning**: an origin requests permission to handle payment requests for specified payment methods. [^w3c-payment-handler-overview]
+- **Browser UI choice**: the user agent presents available handlers and the user selects which handler to use.
+- **Service worker isolation**: handlers are implemented in service worker code, and the browser controls event dispatch and lifetime.
+
+For detailed requirements and threat considerations, refer to the specification’s security and privacy sections. [^w3c-payment-handler]
 
 ## See also
 
-- [Payment Request API](Payment%20Request%20API.md)
-- [Payment Method Identifiers (W3C)](Payment%20Method%20Identifiers%20(W3C).md)
-- [Payment Method Manifest (W3C)](Payment%20Method%20Manifest%20(W3C).md)
-- [Secure Payment Confirmation (W3C)](Secure%20Payment%20Confirmation%20(W3C).md)
+- [[Payment Request API]]
+- [[Payment Method Identifiers (W3C)]]
+- [[Payment Method Manifest (W3C)]]
+- [[Secure Payment Confirmation (W3C)]]
 
 ## References
 
-[^w3c-wbph]: W3C Web Payments Working Group. “Web-based Payment Handler API.” https://w3c.github.io/web-based-payment-handler/
-[^mdn-ph]: MDN Web Docs. “Payment Handler API.” https://developer.mozilla.org/en-US/docs/Web/API/Payment_Handler_API
-[^mdn-pre]: MDN Web Docs. “PaymentRequestEvent.” https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequestEvent
-[^mdn-openwindow]: MDN Web Docs. “PaymentRequestEvent: openWindow() method.” https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequestEvent/openWindow
-[^mdn-respondwith]: MDN Web Docs. “PaymentRequestEvent: respondWith() method.” https://developer.mozilla.org/en-US/docs/Web/API/PaymentRequestEvent/respondWith
-[^webdev-overview]: web.dev. “Web-based payment apps overview.” https://web.dev/articles/web-based-payment-apps-overview
-[^w3c-payment-request]: W3C. “Payment Request API.” https://www.w3.org/TR/payment-request/
-[^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/
-[^spc]: W3C. “Secure Payment Confirmation.” https://www.w3.org/TR/secure-payment-confirmation/
+[^w3c-payment-handler]: W3C. *Payment Handler API* (W3C Technical Report). https://www.w3.org/TR/payment-handler/
+
+[^w3c-payment-handler-intro]: W3C. *Payment Handler API* — Introduction (defines features including `PaymentRequestEvent` and `PaymentManager`). https://www.w3.org/TR/payment-handler/
+
+[^w3c-payment-handler-overview]: W3C. *Payment Handler API* — Overview (describes the end-to-end flow). https://www.w3.org/TR/payment-handler/
