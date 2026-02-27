@@ -1,34 +1,30 @@
 # Mastercard Agent Pay Acceptance Framework
 
-The **Mastercard Agent Pay Acceptance Framework** is a set of specifications and practices described by Mastercard for enabling merchants to accept payments initiated by AI agents in so-called *agentic commerce*. Mastercard presents the framework as a trust and interoperability layer focused on registering and verifying agents, and enabling tokenized transactions with minimal changes required by merchants.
+The **Mastercard Agent Pay Acceptance Framework** is a set of specifications described by Mastercard for enabling merchants to **recognize and accept payments initiated by AI agents** in an “agentic commerce” setting. The framework is positioned as a **trust and interoperability layer** intended to help distinguish legitimate agents from malicious automation, verify consumer authorization/intent, and enable secure payment data exchange with minimal merchant integration effort.
 
 ## Overview
 
-Mastercard positions the framework as addressing merchant concerns about distinguishing legitimate AI agents from malicious automation, verifying that a consumer authorized an agent to transact, and improving traceability and auditability of agent-initiated purchases.
+Mastercard describes agentic commerce as a model in which AI agents can assist with shopping and, in some cases, autonomously execute purchases guided by a consumer’s intent. In this context, Mastercard argues merchants face new questions such as how to verify that an AI agent is legitimate, that the consumer authorized the purchase, and that the agent followed the consumer’s instructions.
 
-In Mastercard’s description, the framework emphasizes:
+To address these issues, Mastercard introduced the Agent Pay Acceptance Framework as a scalable, backward-compatible approach for merchant participation in agent-mediated payments.
 
-- **Agent registration and verification** before an agent is permitted to transact on the Mastercard network.
-- Use of **"agentic tokens"** (described as dynamic, cryptographically secured credentials) to initiate transactions and to make agent involvement recognizable.
-- A "minimal lift" approach for merchants, including verification of agent authenticity at the **content delivery network (CDN) layer**, and reuse of existing checkout forms.
+## Key concepts
 
-## Merchant verification approach
+Mastercard’s description of the framework highlights several core elements:
 
-Mastercard states that merchants can verify agent authenticity by implementing an emerging **Web Bot Auth** standard at the CDN layer, allowing merchants to recognize Mastercard-approved agents while blocking untrusted traffic.
+- **Agent registration and verification**: AI agents are registered and verified before being allowed to transact on the Mastercard network, and each agent is uniquely identified.
+- **Agentic tokens**: Verified agents initiate transactions using “agentic tokens,” described as dynamic cryptographic credentials intended to make transactions traceable and authenticated.
+- **Merchant verification with minimal integration**: Mastercard describes a “no-code” path where merchants can verify agent authenticity at the **CDN layer** by implementing an emerging **Web Bot Auth** standard, enabling recognition of Mastercard-approved agents and blocking untrusted traffic.
+- **Checkout compatibility**: After verification, agents can submit a token verification value formatted to fit standard card-payment fields in existing checkout forms.
+- **Data elements for richer integrations**: For merchants adopting deeper integrations (including via protocols such as MCP, A2A, and ACP), Mastercard describes standardized data elements including trusted agent recognition, purchase intent data (e.g., cart contents, limits, validity windows), agentic tokens, and consumer identity.
 
-Mastercard also describes a mechanism in which verified agents submit a **Dynamic Token Verification Code** (an agentic token formatted for standard card payment fields) through existing checkout forms.
+## Relationship to standards and ecosystem
 
-## Interoperability and related protocols
+Mastercard links the framework to broader work on cryptographic identity and verification for web interactions. In particular, Mastercard states it is contributing to the **FIDO Payments Working Group** to define how **verifiable credentials** can be used to authenticate agent and consumer interactions in a portable, privacy-preserving way.
 
-Mastercard describes the framework as designed to be compatible with multiple agent-oriented protocols and integration approaches, mentioning **Model Context Protocol (MCP)**, **Agent2Agent (A2A)**, and the **Agentic Commerce Protocol (ACP)** as examples of protocols that may be used for richer data exchange by "agentic-first" merchants.
-
-Mastercard also states it is contributing to the **FIDO Payments Working Group** on the use of verifiable credentials for authenticating agent and consumer interactions.
-
-## Industry partnerships
-
-Mastercard has described partnerships intended to support adoption of the framework, including work with **Cloudflare** related to Web Bot Auth, and a collaboration with **PayPal** in which PayPal would pilot the framework in connection with integrating Mastercard Agent Pay into PayPal’s wallet.
+Mastercard also cites collaboration with Cloudflare to support Web Bot Auth, which it describes as building on **IETF RFC 9421 (HTTP Message Signatures)**.
 
 ## References
 
-1. Mastercard. "Agentic token framework: Driving trusted AI transactions." *Mastercard News & Trends* (2025). https://www.mastercard.com/global/en/news-and-trends/stories/2025/agentic-commerce-framework.html
-2. PayPal Newsroom. "Mastercard and PayPal Join Forces To Accelerate Secure Global Agentic Commerce." (27 Oct 2025). https://newsroom.paypal-corp.com/2025-10-27-Mastercard-and-PayPal-Join-Forces-To-Accelerate-Secure-Global-Agentic-Commerce
+- Mastercard, “Agentic token framework: Driving trusted AI transactions” (introducing the Mastercard Agent Pay Acceptance Framework). https://www.mastercard.com/global/en/news-and-trends/stories/2025/agentic-commerce-framework.html
+- Mastercard, “Mastercard Agent Pay: secure, scalable and trusted agentic AI” (product page). https://www.mastercard.com/global/en/business/artificial-intelligence/mastercard-agent-pay.html
