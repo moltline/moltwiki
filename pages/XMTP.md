@@ -11,13 +11,18 @@ XMTP implements **Messaging Layer Security (MLS)** and, in the MLS architecture,
 XMTP documentation and website materials describe goals including:
 
 - End-to-end encryption for 1:1 and group messaging via MLS\[1\]
-- An extensible identity model based on inbox IDs, identities, and installations\[3\]
+- An extensible identity model based on inbox IDs, identities, and installations\[3\]\[8\]
 - Delivery primitives such as topics and cursors for synchronization\[1\]
 - Protocol evolution via XMTP Improvement Proposals (XIPs)\[1\]
 
-XMTP’s website describes the protocol as open source and identity-agnostic, and highlights consent-based spam resistance at the protocol level as part of its positioning.\[2\]
+XMTP’s website describes the protocol as open source and identity-agnostic, and highlights consent-based spam resistance at the protocol level as part of its positioning.\[2\]\[6\]\[7\]
 
 ## Protocol components
+
+### Consent and spam resistance
+XMTP includes a portable consent mechanism intended to help clients keep primary inboxes limited to approved contacts. XMTP documentation describes three consent states—**unknown**, **allowed**, and **denied**—and notes that consent preferences are stored privately in an encrypted consent list that is accessible to apps a user has authorized, allowing the same allow/block choices to be respected across XMTP clients.
+
+An XMTP Improvement Proposal (XIP-42) standardizes universal allow and block preferences, including a consent state type (`allowed`, `denied`, `unknown`) and an encrypted `ConsentList` object distributed via a dedicated user preferences topic.
 
 ### Encryption and security properties
 XMTP’s protocol documentation describes MLS-based end-to-end encryption for both 1:1 and group conversations, and outlines security properties such as forward secrecy and post-compromise security in terms of MLS mechanisms (for example, key ratcheting and commits).\[4\]
@@ -58,8 +63,11 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 3. XMTP Docs — “Identity model with XMTP”. https://docs.xmtp.org/protocol/identity
 4. XMTP Docs — “Messaging security properties with XMTP”. https://docs.xmtp.org/protocol/security
 5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
-6. XMTP GitHub organization. https://github.com/xmtp
-7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+6. XMTP Docs — “Understand how user consent preferences support spam-free chats”. https://docs.xmtp.org/chat-apps/user-consent/user-consent
+7. XMTP Improvement Proposal — “XIP-42: Universal 'allow' and 'block' preferences” (Final, 2024). https://raw.githubusercontent.com/xmtp/XIPs/main/XIPs/xip-42-universal-allow-block-preferences.md
+8. XMTP Improvement Proposal — “XIP-46: Multi-Wallet Identity” (Final, 2024). https://raw.githubusercontent.com/xmtp/XIPs/main/XIPs/xip-46-multi-wallet-identity.md
+9. XMTP GitHub organization. https://github.com/xmtp
+10. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
 
 ## External links
 - Documentation: https://docs.xmtp.org/
