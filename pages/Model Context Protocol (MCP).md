@@ -1,47 +1,59 @@
 # Model Context Protocol (MCP)
 
-The **Model Context Protocol** (**MCP**) is an open protocol for connecting AI applications ("hosts") to external data sources and tools via standardized interfaces. It defines a JSON-RPC 2.0 based messaging model and a capability negotiation mechanism intended to make integrations composable across an ecosystem of clients and servers, analogous in spirit to how the Language Server Protocol (LSP) standardized editor–language tooling integrations.
+The **Model Context Protocol** (**MCP**) is an open protocol for connecting AI/LLM applications to external data sources and tools through a standardized interface. It defines a client–server architecture (with “hosts” initiating connections) and uses JSON-RPC 2.0 messages to exchange context, prompts, and tool invocations.\[1\]
+
+Anthropic announced MCP as an open standard intended to reduce the need for bespoke, per-integration connectors by providing a single protocol for “secure, two-way connections” between AI tools and data systems.\[2\]
+
+**Type:** Open protocol / integration standard  
+**Status:** Active  
+**Website:** https://modelcontextprotocol.io  
+**Specification:** https://modelcontextprotocol.io/specification/2025-11-25  
+**Repository:** https://github.com/modelcontextprotocol/modelcontextprotocol
 
 ## Overview
 
-MCP is designed to reduce the need for bespoke, per-tool connectors by providing a common protocol for:
+MCP standardizes how applications can:
 
-- **Resources** (context and data made available to the host/model)
-- **Tools** (functions that can be invoked by an AI system)
-- **Prompts** (templated workflows/messages)
+- Share contextual information with language models
+- Expose tools and capabilities to AI systems
+- Build composable integrations and workflows\[1\]
 
-The specification describes roles commonly involved in an MCP connection:
+The specification describes three main roles:\[1\]
 
-- **Hosts**: LLM applications that initiate connections
-- **Clients**: connectors within the host application
-- **Servers**: services that provide context and capabilities
+- **Hosts:** LLM applications that initiate connections
+- **Clients:** connectors within the host application
+- **Servers:** services that provide context and capabilities
 
-## Protocol characteristics
+## Protocol and features
 
-- **Message format**: JSON-RPC 2.0 messages
-- **Connections**: stateful connections with capability negotiation
-- **Feature sets**: servers may expose resources, prompts, and tools; clients may support features such as sampling, roots, and elicitation
+The MCP base protocol uses **JSON-RPC 2.0** over stateful connections, including capability negotiation between client and server.\[1\]
 
-## Security and trust considerations
+The specification groups server-provided features into:\[1\]
 
-The MCP specification emphasizes that connecting models to arbitrary data access and code execution paths introduces security and safety risks. It describes principles such as:
+- **Resources** (context and data)
+- **Prompts** (templated messages/workflows)
+- **Tools** (functions the model can execute)
 
-- **User consent and control** over data access and tool invocation
-- **Data privacy** constraints on how resource data is exposed and transmitted
-- **Tool safety** precautions for arbitrary code execution
-- **Controls for model sampling** requests
+It also defines optional client-provided features such as **sampling**, **roots**, and **elicitation**.\[1\]
 
-## Ecosystem
+## Security considerations
 
-Anthropic announced MCP alongside open-source repositories for the specification/SDKs and reference server implementations, and noted support for local MCP servers in Claude desktop applications.
+The specification notes that MCP can enable powerful capabilities (including arbitrary data access and code execution paths) and emphasizes user consent and control, data privacy, and safe tool invocation as key security principles for implementers.\[1\]
+
+## History
+
+Anthropic introduced MCP as an open standard and announced open-sourced specification/SDKs, local server support in Claude Desktop apps, and a repository of MCP servers.\[2\]
 
 ## See also
 
-- [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
+- Agent2Agent (A2A) Protocol
+- A2UI
 
 ## References
 
-- Anthropic. "Introducing the Model Context Protocol." (news post). https://www.anthropic.com/news/model-context-protocol
-- Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
-- modelcontextprotocol (GitHub organization). https://github.com/modelcontextprotocol
-- JSON-RPC 2.0 Specification. https://www.jsonrpc.org/specification
+1. Model Context Protocol — “Specification” (version 2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
+2. Anthropic. “Introducing the Model Context Protocol.” https://www.anthropic.com/news/model-context-protocol
+
+## External links
+
+- Model Context Protocol (GitHub organization). https://github.com/modelcontextprotocol
