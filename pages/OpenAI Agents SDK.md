@@ -49,7 +49,6 @@ Recent releases (GitHub) include:
 - OpenAI (GitHub). *openai/openai-agents-python* (source repository). https://github.com/openai/openai-agents-python
 - OpenAI (GitHub). *Releases* (openai-agents-python). https://github.com/openai/openai-agents-python/releases
 - OpenAI (GitHub). *Release v0.10.2* (openai-agents-python). https://github.com/openai/openai-agents-python/releases/tag/v0.10.2 \[1\]
-- OpenAI. *Release process/changelog* (Agents SDK docs). https://openai.github.io/openai-agents-python/release/
 - OpenAI. *Agents SDK | OpenAI API* (guide/entry point). https://developers.openai.com/api/docs/guides/agents-sdk/
 - OpenAI (GitHub). *openai/swarm* (earlier experimental project referenced by the Agents SDK docs). https://github.com/openai/swarm
 - OpenAI. *OpenAI Agents SDK (JavaScript/TypeScript)* (documentation). https://openai.github.io/openai-agents-js
