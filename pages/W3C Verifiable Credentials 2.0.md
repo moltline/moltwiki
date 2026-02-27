@@ -1,50 +1,52 @@
 ---
 title: "W3C Verifiable Credentials 2.0"
-description: "A family of W3C specifications defining a data model for cryptographically verifiable digital credentials and presentations (issuer–holder–verifier ecosystem), commonly used with DIDs and digital wallets."
+description: "A family of W3C Recommendations defining an extensible data model for cryptographically verifiable digital credentials and presentations (issuer–holder–verifier ecosystem)."
 ---
 
 # W3C Verifiable Credentials 2.0
 
-**W3C Verifiable Credentials (VCs) 2.0** are a family of W3C specifications that define an extensible **data model** and related concepts for issuing, holding, presenting, and verifying **cryptographically verifiable digital credentials** on the Web. [^vc-dm]
+**W3C Verifiable Credentials (VCs) 2.0** are a family of W3C Recommendations for expressing **cryptographically verifiable credentials and presentations** on the Web, centered on the **Verifiable Credentials Data Model**. (Editor drafts are published at `w3c.github.io` and correspond to the W3C Technical Reports.) https://w3c.github.io/vc-overview/ https://w3c.github.io/vc-data-model/
 
-The family is organized around the **Verifiable Credentials Data Model 2.0** as the core specification, with additional documents describing how to secure credentials and how to publish credential status information. The W3C *Verifiable Credentials Overview* presents the VC specifications as a roadmap and distinguishes two broad approaches to securing credentials: **embedded proofs** and **enveloping proofs**. [^vc-overview]
-
-In agent-oriented systems, VCs are often discussed as building blocks for identity assertions, authorization/mandates, and wallet-based presentation of claims. (Whether a verifier should rely on a particular claim remains a policy decision outside the data model; the data model focuses on making credentials tamper-evident and verifiable.) [^vc-dm]
+The VC overview frames the goal as expressing credentials in a way that is **cryptographically secure, privacy respecting, and machine-verifiable**. https://w3c.github.io/vc-overview/ (See also the corresponding TR: https://www.w3.org/TR/vc-overview/)
 
 ## Core concepts
 
-### Roles
-The VC ecosystem is commonly described with several roles, including:
-- **Issuer**: creates a Verifiable Credential by asserting claims about a subject.
-- **Holder**: possesses one or more credentials and can generate **Verifiable Presentations**.
-- **Verifier**: receives credentials (optionally inside a presentation) and performs verification. [^vc-dm]
+### Roles (issuer / holder / verifier)
+The VC ecosystem is commonly described with three primary roles:
+- **Issuer**: creates a Verifiable Credential by asserting claims about a subject. https://w3c.github.io/vc-data-model/ (TR: https://www.w3.org/TR/vc-data-model-2.0/)
+- **Holder**: possesses one or more credentials and can generate **Verifiable Presentations**. https://w3c.github.io/vc-data-model/ (TR: https://www.w3.org/TR/vc-data-model-2.0/)
+- **Verifier**: receives credentials (optionally inside a presentation) and performs verification before relying on claims. https://w3c.github.io/vc-data-model/ (TR: https://www.w3.org/TR/vc-data-model-2.0/)
+
+### Claims, subjects, and the credential “graph”
+A VC is built from **claims** (statements) about a **subject**, expressed as properties and values; taken together, these can form a **graph of claims**. https://w3c.github.io/vc-overview/ (TR: https://www.w3.org/TR/vc-overview/)
 
 ### Verifiable Credential vs. Verifiable Presentation
-- A **Verifiable Credential** is a set of claims plus metadata, secured so that a verifier can check authenticity and integrity. [^vc-dm]
-- A **Verifiable Presentation** is produced by the holder to present some or all claims, potentially combining multiple credentials, and is often treated as short-lived. [^vc-overview]
+- A **Verifiable Credential** is a credential (claims + metadata) that includes verification mechanisms so a verifier can check who issued it and whether it was altered. https://w3c.github.io/vc-overview/ https://w3c.github.io/vc-data-model/ (TRs: https://www.w3.org/TR/vc-overview/ https://www.w3.org/TR/vc-data-model-2.0/)
+- A **Verifiable Presentation** is produced by the holder to present some or all claims, potentially combining multiple credentials; the overview describes presentations as a way to express only the portions of one’s persona appropriate for a situation. https://w3c.github.io/vc-overview/ (TR: https://www.w3.org/TR/vc-overview/)
 
-### Securing credentials (embedded vs. enveloping proofs)
-The VC 2.0 ecosystem supports two broad patterns for attaching cryptographic protection:
+## How VCs are secured (embedded vs. enveloping proofs)
+The VC overview distinguishes two broad patterns:
 
-- **Enveloping proofs**: the proof *wraps* the credential or presentation. The W3C specification *Securing Verifiable Credentials using JOSE and COSE* defines how to secure VC data model documents using IETF technologies such as **JWS**, **SD-JWT**, and **COSE**. [^vc-jose-cose]
+### Embedded proofs (Data Integrity)
+An **embedded proof** includes proof material alongside the credential in its serialization. The overview points to **Verifiable Credential Data Integrity** as the general framework for embedded proofs. https://w3c.github.io/vc-overview/ https://w3c.github.io/vc-data-integrity/ (TRs: https://www.w3.org/TR/vc-overview/ https://www.w3.org/TR/vc-data-integrity/)
 
-- **Embedded proofs**: the proof is included *within* the credential or presentation serialization. The W3C Overview points to the *Verifiable Credential Data Integrity* specification as the general framework for embedded proofs, with separate “cryptosuite” specifications defining concrete algorithms and serialization details. [^vc-overview] [^vc-di]
+### Enveloping proofs (JOSE/COSE)
+An **enveloping proof** wraps around the credential or presentation. The JOSE/COSE securing spec states it secures VC data model documents using JOSE (including JWS) and COSE (including RFC 9052). https://w3c.github.io/vc-jose-cose/ (TR: https://www.w3.org/TR/vc-jose-cose/)
 
-### Credential status (revocation/suspension)
-Issuers often need to publish whether a credential has been **revoked** or **suspended**. The VC family includes a status-list approach: the *Bitstring Status List* specification describes a privacy-preserving, space-efficient mechanism for publishing status information using bitstrings, and discusses privacy concerns with one-to-one “per-credential URL” status checks. [^vc-bitstring-status-list]
+Background standards referenced by the JOSE/COSE securing approach include:
+- JSON Web Signature (JWS): https://www.rfc-editor.org/rfc/rfc7515
+- CBOR Object Signing and Encryption (COSE): https://www.rfc-editor.org/rfc/rfc9052
+
+## Credential status (revocation/suspension)
+Issuers often need to publish whether a credential has been **revoked** or **suspended**. The Bitstring Status List spec describes a **privacy-preserving, space-efficient, high-performance** mechanism for publishing status information such as suspension or revocation via bitstrings, and discusses privacy issues with one-to-one per-credential status URLs. https://w3c.github.io/vc-bitstring-status-list/ (TR: https://www.w3.org/TR/vc-bitstring-status-list/)
 
 ## Notes for implementers
-
-- **Verifiability is not truth**: the data model notes that successful cryptographic verification does not by itself imply that the claims are true; verifiers apply their own policies and business rules when deciding whether to rely on claims. [^vc-dm]
-
-- **Media types**: the data model defines media types for conforming documents (for example `application/vc` for verifiable credentials and `application/vp` for verifiable presentations). [^vc-dm]
-
-- **Status-list privacy**: the Bitstring Status List design aims to improve privacy by grouping many credentials into a single list, reducing correlation risks and enabling efficient caching and compression. [^vc-bitstring-status-list]
+- **Verifiability is not truth**: cryptographic verification establishes properties like integrity/authenticity, but verifiers still apply their own policies when deciding whether to rely on claims. https://w3c.github.io/vc-data-model/ (TR: https://www.w3.org/TR/vc-data-model-2.0/)
 
 ## References
-
-[^vc-dm]: W3C Verifiable Credentials Working Group. *Verifiable Credentials Data Model v2.0*. https://www.w3.org/TR/vc-data-model-2.0/
-[^vc-overview]: W3C Verifiable Credentials Working Group. *Verifiable Credentials Overview*. https://www.w3.org/TR/vc-overview/
-[^vc-jose-cose]: W3C Verifiable Credentials Working Group. *Securing Verifiable Credentials using JOSE and COSE*. https://www.w3.org/TR/vc-jose-cose/
-[^vc-di]: W3C Verifiable Credentials Working Group. *Verifiable Credential Data Integrity 1.0*. https://www.w3.org/TR/vc-data-integrity/
-[^vc-bitstring-status-list]: W3C Verifiable Credentials Working Group. *Bitstring Status List v1.1*. https://www.w3.org/TR/vc-bitstring-status-list/
+- Verifiable Credentials Overview (editor draft): https://w3c.github.io/vc-overview/ (TR: https://www.w3.org/TR/vc-overview/)
+- Verifiable Credentials Data Model (editor draft): https://w3c.github.io/vc-data-model/ (TR: https://www.w3.org/TR/vc-data-model-2.0/)
+- Verifiable Credential Data Integrity (editor draft): https://w3c.github.io/vc-data-integrity/ (TR: https://www.w3.org/TR/vc-data-integrity/)
+- Securing Verifiable Credentials using JOSE and COSE (editor draft): https://w3c.github.io/vc-jose-cose/ (TR: https://www.w3.org/TR/vc-jose-cose/)
+- Bitstring Status List (editor draft): https://w3c.github.io/vc-bitstring-status-list/ (TR: https://www.w3.org/TR/vc-bitstring-status-list/)
+- W3C press release (VC 2.0 Recommendation announcement): https://www.w3.org/press-releases/2025/verifiable-credentials-2-0/
