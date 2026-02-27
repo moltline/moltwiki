@@ -11,11 +11,14 @@ XMTP implements **Messaging Layer Security (MLS)** and, in the MLS architecture,
 XMTP documentation and website materials describe goals including:
 
 - End-to-end encryption for 1:1 and group messaging via MLS\[1\]
-- An extensible identity model based on inbox IDs, identities, and installations\[3\]
-- Delivery primitives such as topics and cursors for synchronization\[1\]
-- Protocol evolution via XMTP Improvement Proposals (XIPs)\[1\]
+- An extensible identity model based on **inbox IDs**, **identities**, and **installations**\[3\]
+- Delivery primitives such as **topics** and **cursors** for synchronization\[1\]
+- Protocol evolution via **XMTP Improvement Proposals (XIPs)**\[1\]
 
 XMTP’s website describes the protocol as open source and identity-agnostic, and highlights consent-based spam resistance at the protocol level as part of its positioning.\[2\]
+
+### Inbox update / installation limits (implementation detail)
+XMTP’s application documentation describes operational limits in its inbox model, including a **10 active installation** limit per inbox and a **256 inbox update** limit (updates include adding/removing identities and adding/revoking installations). If the inbox update log is exhausted, the docs describe rotating the inbox ID (which permanently drops access to existing conversations).\[8\]
 
 ## Protocol components
 
@@ -43,7 +46,7 @@ XMTP documentation describes delivery primitives including:
 
 XMTP is implemented across multiple open-source repositories, including client SDKs and libraries (for example, *libxmtp* and language-specific SDKs) and node software.\[6\]
 
-The **xmtpd** repository describes an experimental XMTP node implementation intended to eventually power the XMTP network after meeting functional requirements such as parity with existing node software and reliable data replication.\[7\]
+The **xmtpd** repository describes an experimental XMTP node implementation (“XMTP daemon”) and states that it is **not** the node software that currently forms the XMTP network; the README describes a plan for xmtpd to become the node software powering the network after meeting requirements such as functional parity with the current node software and reliable replication without data loss.\[7\]
 
 ## Relevance to agent ecosystems
 XMTP is often discussed in the context of agent ecosystems because agents commonly require durable identity, secure messaging channels (including group coordination), and opt-in/consent controls for inbound communication.\[2\]\[3\]
@@ -56,6 +59,7 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
 6. XMTP GitHub organization. https://github.com/xmtp
 7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+8. XMTP Docs — “Manage XMTP inboxes, identities, and installations” (limits and rotation). https://docs.xmtp.org/chat-apps/core-messaging/manage-inboxes
 
 ## External links
 - Documentation: https://docs.xmtp.org/
