@@ -4,6 +4,8 @@
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
+As of **February 2026**, the Datatracker lists **draft-aap-oauth-profile-01** (expires **11 August 2026**). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
+
 ## When you might want AAP
 
 AAP is aimed at deployments where “plain” OAuth conventions (e.g., `scope`, `aud`) don’t capture enough semantics for agentic systems.
@@ -48,7 +50,7 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 - `aap_context` (environment/network/time restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html)
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -81,7 +83,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
