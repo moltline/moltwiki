@@ -20,9 +20,9 @@ These characteristics can make failures harder to reproduce and diagnose. AgentO
 A common framing of AgentOps emphasizes **observability**, i.e., the ability to infer the internal behavior of a system from its outputs and telemetry. For agents, this often includes tracing both:
 
 - **design-time artifacts** (e.g., prompts, tool specifications, policies, model configuration)
-- **runtime artifacts** (e.g., goals, plans, intermediate reasoning steps when available, tool calls, tool outputs, retrieved context, and final responses)
+- **runtime artifacts** (e.g., goals, plans, intermediate artifacts, tool calls, tool outputs, retrieved context, and final responses)
 
-Tracing these artifacts can support debugging, auditing, and post-incident analysis, and can help attribute failures to particular components (model, prompt, tool, retrieval, or orchestration).
+In addition to the research framing, the term is also used for commercial/open-source tooling that provides **session replays**, **event timelines (waterfalls)**, and **cost/latency monitoring** for agent runs, often via automatic instrumentation and framework integrations.
 
 ## Lifecycle activities
 
@@ -40,12 +40,16 @@ AgentOps is often motivated by concerns that autonomous agents can produce unint
 
 ## See also
 
-- [[AI safety]]
-- [[MLOps]]
-- [[NIST AI Risk Management Framework]]
-- [[Agentic systems]]
+- [AI safety](AI%20safety.md)
+- [MLOps](MLOps.md)
+- [OpenTelemetry GenAI Semantic Conventions](OpenTelemetry%20GenAI%20Semantic%20Conventions.md)
+- [NIST AI Risk Management Framework](NIST%20AI%20Risk%20Management%20Framework.md)
+- [Agentic systems](Agentic%20systems.md)
 
 ## References
 
 - Snehotosh Banerjee, Yuekang Li, Kexin Pei, and David Lo. *AgentOps: Enabling Observability of LLM Agents.* arXiv (2024). https://arxiv.org/abs/2411.05285
+- AgentOps. *Introduction.* AgentOps documentation. https://docs.agentops.ai/v2/introduction
+- AgentOps-AI. *agentops: Python SDK for AI agent monitoring, LLM cost tracking, benchmarking, and more.* GitHub repository. https://github.com/AgentOps-AI/agentops
+- LiteLLM. *AgentOps - LLM Observability Platform.* LiteLLM documentation. https://docs.litellm.ai/docs/observability/agentops_integration
 - NIST. *AI Risk Management Framework (AI RMF 1.0).* NIST.AI.100-1 (2023). https://doi.org/10.6028/NIST.AI.100-1
