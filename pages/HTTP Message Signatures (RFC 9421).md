@@ -1,65 +1,78 @@
 # HTTP Message Signatures (RFC 9421)
 
-**HTTP Message Signatures** are an IETF Standards Track mechanism for creating and verifying digital signatures (or message authentication codes) over selected components of an HTTP message. The goal is to allow signing in situations where the full message might not be known to the signer, and where intermediaries may transform messages before verification.
+**HTTP Message Signatures** are an IETF Standards Track mechanism for creating and verifying digital signatures (or message authentication codes) over selected components of an HTTP message. It is designed for cases where the signer might not know the full on-the-wire message (e.g., due to frameworks/proxies) and where intermediaries may perform allowed HTTP transformations, while still enabling verification of the *covered* components. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 RFC 9421 defines:
 
 - A model for selecting HTTP message components (fields and derived components) to cover by a signature.
 - How to construct a *signature base* from those components.
 - How to carry signatures in HTTP using the `Signature-Input` and `Signature` HTTP fields.
-- A way to request signatures in later messages in an HTTP exchange via the `Accept-Signature` field.
+- A way to request signatures in later messages in an HTTP exchange via the `Accept-Signature` field. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 ## Background and motivation
 
-HTTP already commonly relies on TLS for channel security, but there are cases where applications need cryptographic protection that is bound to specific message components (e.g., for auditability, non-repudiation-like properties in an application context, or end-to-end integrity across intermediaries). RFC 9421 is designed to support use cases where:
-
-- The signer does not have access to the entire HTTP message body or all headers.
-- The message may be modified in transit in ways that are acceptable if the covered components remain unchanged.
+TLS provides integrity/authenticity only within a single TLS connection. In deployments with TLS-terminating gateways, inspection appliances, or multi-hop TLS, applications may want end-to-end protection bound to application-relevant HTTP components. RFC 9421 provides a *detached* signing mechanism over selected components with strict canonicalization so signatures can survive many permitted transformations. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 ## Core concepts
 
 ### Covered components
 
-A signature covers a list of *message components*, which can include:
+A signature covers an ordered list of *message components*, including:
 
-- **HTTP fields** (headers and, where applicable, trailers).
-- **Derived components** (values derived from the request/response context, such as method, target URI, authority, path, query, and status code).
+- **HTTP fields** (headers and, where applicable, trailers). [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
+- **Derived components** (values derived from the request/response context). RFC 9421 defines a registry of derived component names such as:
+  - `@method`, `@authority`, `@scheme`, `@target-uri`, `@request-target`, `@path`, `@query`, `@query-param` (request)
+  - `@status` (response)
+  - `@signature-params` (reserved for the signature parameters line in the signature base)
 
-The choice of covered components is an application decision; RFC 9421 describes how to represent and serialize them so that signers and verifiers can compute the same signature base.
+  See the IANA **HTTP Signature Derived Component Names** registry. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
+
+The choice of covered components is an application decision: verifiers can only rely on properties that are actually covered (and must ensure their own requirements, e.g., freshness, replay protection, and minimum covered components). [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
+
+### Signature parameters
+
+Signature metadata (carried in `Signature-Input`) includes parameters such as `alg`, `created`, `expires`, `keyid`, `nonce`, and `tag` (application-specific). These parameter names are registered in the IANA **HTTP Signature Metadata Parameters** registry. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
 
 ### Signature base
 
-The *signature base* is a canonicalized representation of the selected components and associated parameters. The signature is computed over this base.
+The *signature base* is the canonicalized serialization of the selected component values plus the `@signature-params` line (which binds the covered component list and parameters). The signature is computed over this base. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 ### On-the-wire HTTP fields
 
-RFC 9421 specifies two primary HTTP fields for conveying signatures:
+RFC 9421 specifies three related HTTP fields:
 
 - `Signature-Input`: conveys the signature parameters and the covered component list.
 - `Signature`: conveys the signature value(s).
-
-It also defines `Accept-Signature` to express a preference/request that a peer apply a signature to a subsequent message in an exchange.
+- `Accept-Signature`: allows a party to request/indicate what signature(s) it would like on a subsequent message in an ongoing exchange. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 ## Algorithms and registries
 
-RFC 9421 defines a set of signature algorithms and establishes IANA registries for HTTP message signature algorithms, metadata parameters, derived component names, and component parameters.
+RFC 9421 defines initial algorithm identifiers (e.g., `rsa-pss-sha512`, `ecdsa-p256-sha256`, `ed25519`, `hmac-sha256`) and establishes IANA registries for:
+
+- HTTP Signature Algorithms
+- HTTP Signature Metadata Parameters
+- HTTP Signature Derived Component Names
+- HTTP Signature Component Parameters
+
+See: https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
 
 ## Relationship to other mechanisms
 
 HTTP Message Signatures are distinct from:
 
-- **TLS**: which provides transport security but does not, by itself, produce an application-verifiable signature over chosen HTTP components.
-- **JWS (JSON Web Signature)**: which signs JSON (or other payloads) in a JWS structure, rather than signing selected HTTP message components.
+- **TLS**: transport security, not an application-verifiable signature over chosen HTTP components.
+- **JWS (JSON Web Signature)**: signs an object in a JWS structure rather than selectively signing HTTP message components.
 
-RFC 9421 does allow use of JWS algorithms as signature algorithms within the HTTP Message Signatures framework.
+RFC 9421 also notes that message content is not directly covered by this specification; applications commonly rely on an HTTP content digest mechanism (e.g., the Digest Fields specification) and then sign that digest field. [RFC 9421](https://www.rfc-editor.org/rfc/rfc9421)
 
 ## See also
 
-- [[DPoP]] (often used to bind tokens to a proof-of-possession key at the HTTP layer)
+- [[DPoP]]
 - [[OAuth 2.0]]
-- [[Web Authentication (WebAuthn)]]
+- [[HTTP 402 Payment Required]]
 
 ## References
 
 - IETF. *RFC 9421: HTTP Message Signatures*. February 2024. https://www.rfc-editor.org/rfc/rfc9421
 - IETF Datatracker. *RFC 9421: HTTP Message Signatures*. https://datatracker.ietf.org/doc/rfc9421/
+- IANA. *HTTP Message Signature* registries. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
