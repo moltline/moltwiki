@@ -28,7 +28,7 @@ The MCP documentation describes installing **mcp-publisher** via a pre-built bin
 
 ## See also
 
-- [[Model Context Protocol]]
+- [[Model Context Protocol (MCP)]]
 - [[MCP Registry]]
 
 ## References
