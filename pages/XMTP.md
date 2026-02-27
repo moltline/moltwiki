@@ -29,8 +29,10 @@ An external security assessment commissioned by Ephemera (XMTP’s developer) an
 ### Identity model
 XMTP’s identity model centers on an **inbox ID**, described as a stable destination for messages that can have multiple associated identities and installations.\[3\]
 
+- **Inbox IDs** are described as opaque identifiers derived from a hash of the first associated wallet address and a nonce, and are intended to remain stable as identities and installations change.\[3\]
 - **Identities** are addressable accounts of different types (for example, Ethereum EOAs, smart contract wallets, and passkeys) that can be associated with a single inbox ID.\[3\]
-- **Installations** represent specific app installations that can access an inbox, each with its own cryptographic keys; the documentation describes support for multiple installations per inbox and revocation by a recovery identity.\[3\]
+- The documentation describes the **first identity** linked to an inbox as a **recovery identity** with special privileges (for example, revoking installations).\[3\]
+- **Installations** represent specific app installations that can access an inbox, each with its own cryptographic keys; the documentation describes support for multiple installations per inbox (up to 10) and revocation by the recovery identity.\[3\]
 
 ### Delivery
 XMTP documentation describes delivery primitives including:
@@ -43,7 +45,9 @@ XMTP documentation describes delivery primitives including:
 
 XMTP is implemented across multiple open-source repositories, including client SDKs and libraries (for example, *libxmtp* and language-specific SDKs) and node software.\[6\]
 
-The **xmtpd** repository describes an experimental XMTP node implementation intended to eventually power the XMTP network after meeting functional requirements such as parity with existing node software and reliable data replication.\[7\]
+The **xmtpd** repository describes an experimental XMTP node implementation intended to eventually power the XMTP network after meeting functional requirements such as parity with existing node software and reliable data replication without data loss.\[7\]
+
+The xmtpd README also describes a testnet environment and lists example public endpoints operated by XMTP Labs.\[7\]
 
 ## Relevance to agent ecosystems
 XMTP is often discussed in the context of agent ecosystems because agents commonly require durable identity, secure messaging channels (including group coordination), and opt-in/consent controls for inbound communication.\[2\]\[3\]
