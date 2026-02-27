@@ -20,16 +20,17 @@ Google positions A2A as complementary to **Model Context Protocol (MCP)**: MCP h
 
 ## Core concepts (high level)
 
-While implementations vary, A2A commonly centers on:
+The A2A specification defines a small set of common objects and roles that implementations build around:
 
-- **Client agent vs. remote agent**: a client agent formulates tasks; the remote agent executes them and returns outputs.
-- **AgentCard**: a machine-readable description of an agent’s capabilities and how to connect/authenticate.
-- **Task**: a first-class object representing work with a lifecycle (useful for long-running operations).
-- **Messages / parts / artifacts**: structured exchange of content and outputs.
+- **A2A client vs. A2A server (remote agent)**: the client initiates requests; the server processes tasks and returns responses.
+- **AgentCard**: a JSON metadata document published by an A2A server describing identity, capabilities/skills, service endpoint, and authentication requirements.
+- **Task**: the fundamental unit of work, identified by a unique ID and progressing through a lifecycle (supporting long-running operations).
+- **Message / parts / artifacts**: messages contain one or more parts (e.g., text, file references, structured data); artifacts are outputs produced as a result of a task and may be composed of parts.
+- **Push notifications**: an optional mechanism for asynchronous task updates delivered via server-initiated HTTP POSTs to a client-provided webhook URL.
 
 ## Transports and formats
 
-A2A is designed to build on common web standards. The public project documentation describes **JSON-RPC 2.0 over HTTP(S)**, with support for streaming patterns (e.g., Server-Sent Events) and asynchronous workflows.
+A2A is designed to build on common web standards. The project specification describes **JSON-RPC 2.0** as the primary data format for requests and responses, and calls out common web transports and patterns including **HTTP(S)** and **Server-Sent Events (SSE)** for streaming updates.
 
 ## Relationship to adjacent standards
 
@@ -39,5 +40,5 @@ A2A is designed to build on common web standards. The public project documentati
 ## References
 
 - Google Developers Blog — *Announcing the Agent2Agent Protocol (A2A)* (Apr 9, 2025): https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
-- A2A project repository (Linux Foundation / Google-contributed): https://github.com/a2aproject/A2A
 - A2A Protocol documentation & specification (latest): https://a2a-protocol.org/latest/specification/
+- a2aproject/A2A (GitHub): https://github.com/a2aproject/A2A
