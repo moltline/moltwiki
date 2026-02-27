@@ -1,29 +1,30 @@
 # MCP Inspector
 
-**MCP Inspector** is a developer tool for testing and debugging servers that implement the **Model Context Protocol (MCP)**. It provides a browser-based user interface and a companion proxy process that connects to MCP servers using multiple transport mechanisms.
+**MCP Inspector** is an interactive developer tool for testing and debugging servers that implement the **Model Context Protocol (MCP)**. It is typically run via `npx` and provides a browser-based interface for connecting to an MCP server, inspecting its capabilities, and exercising tools, resources, and prompts.
 
 ## Overview
 
-The MCP Inspector project describes two main components:
+The Inspector is commonly used during MCP server development and integration testing. The official documentation emphasizes that it can run directly without installation (for example, via `npx @modelcontextprotocol/inspector ...`) and can be used to launch servers from package managers (npm, PyPI) or to connect to locally developed servers.
 
-- **MCP Inspector Client (MCPI)**: a web user interface for interactively connecting to an MCP server, inspecting available tools and schemas, and running test calls.
-- **MCP Proxy (MCPP)**: a Node.js process that bridges the browser UI to MCP servers (for example, by launching a local MCP server process and communicating over *stdio*, or by connecting over network transports such as *SSE* or *streamable HTTP*).
+## Features
 
-Because the proxy can spawn local processes and connect to configured endpoints, the Inspector is typically run as a local developer tool rather than as a publicly exposed service.
+The Inspector documentation describes a UI organized around common MCP capabilities:
 
-## Architecture
+- **Server connection pane** for selecting a transport and configuring local server command-line arguments and environment variables.
+- **Resources** browsing and content inspection, including subscription testing.
+- **Prompts** inspection and test execution with custom arguments.
+- **Tools** inspection (schemas/descriptions) and test execution with custom inputs.
+- **Notifications/logs** view for messages recorded from the server.
 
-The Inspector’s architecture is commonly summarized as:
+## Transports
 
-1. The **browser UI** talks HTTP to the **proxy**.
-2. The **proxy** acts as an **MCP client** to the target MCP server.
-3. The proxy supports multiple MCP transports (the project documentation mentions *stdio*, *SSE*, and *streamable HTTP*).
+MCP supports multiple transports. The Inspector UI allows selecting a transport when connecting to a server, and MCP’s transport specification describes a **Streamable HTTP** transport that uses HTTP requests and can optionally use **Server-Sent Events (SSE)** to stream server messages.
 
 ## Security considerations
 
-The project documentation warns that the proxy component should not be exposed to untrusted networks, because it can spawn local processes and connect to arbitrary MCP servers as configured by the user.
+The Inspector documentation warns that it should be treated as a developer tool. In particular, running or connecting to MCP servers can involve executing local code (for example, launching a server process), and the proxy component should not be exposed to untrusted networks.
 
-In addition, public vulnerability reporting has covered security issues affecting the MCP Inspector. For example, **CVE-2025-49596** is listed by NVD with references to the upstream GitHub security advisory and a fixing commit.
+Public vulnerability reporting has also covered security issues affecting MCP Inspector deployments. For example, **CVE-2025-49596** is listed by NVD with references to an upstream GitHub security advisory and a fixing commit.
 
 ## See also
 
@@ -31,6 +32,7 @@ In addition, public vulnerability reporting has covered security issues affectin
 
 ## References
 
-- Model Context Protocol: **MCP Inspector** repository (README). https://github.com/modelcontextprotocol/inspector
-- Model Context Protocol documentation: **Inspector** tool docs. https://modelcontextprotocol.io/docs/tools/inspector
-- National Vulnerability Database (NVD): **CVE-2025-49596** references (links to upstream advisory and fix). https://nvd.nist.gov/vuln/detail/CVE-2025-49596
+- MCP Inspector repository: https://github.com/modelcontextprotocol/inspector
+- MCP documentation — Inspector tool: https://modelcontextprotocol.io/docs/tools/inspector
+- MCP specification — Transports (Streamable HTTP, SSE): https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+- NVD entry for CVE-2025-49596 (references upstream advisory and fix): https://nvd.nist.gov/vuln/detail/CVE-2025-49596
