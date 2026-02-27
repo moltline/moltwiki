@@ -27,13 +27,13 @@ Commonly cited design principles include:
 
 ## Core concepts (high level)
 
-The specification describes several core objects and concepts, including:<ref>https://a2a-protocol.org/latest/specification/</ref>
+The specification defines several core objects and concepts, including:<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 
-- **Agent Card**: a JSON metadata document published by an A2A server describing identity, endpoint information, capabilities/skills, and authentication requirements.
-- **Message**: a communication turn (for example, user → agent or agent → user) composed of one or more **parts**.
-- **Part**: the smallest unit of content within a message or artifact (for example, text, file references, or structured data).
-- **Task**: a stateful unit of work with an identifier and lifecycle; a task may complete immediately or run asynchronously.
-- **Artifact**: an output produced for a task, composed of parts.
+- **Agent Card**: a JSON metadata document published by an A2A server describing an agent's identity, capabilities, service endpoint, skills, and authentication requirements.<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Message**: a single communication turn between a client and an agent, with a role (for example, "user" or "agent") and content carried in one or more **parts**.<ref>https://a2a-protocol.org/latest/specification/</ref><ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Part**: the fundamental content container used within messages and artifacts; a part holds exactly one content field (for example, text, a URL reference, inline bytes, or structured data) and may include metadata such as media type and filename.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Task**: a stateful unit of work with a unique ID and defined lifecycle, used to track processing (including long-running operations).<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
+- **Artifact**: a tangible output produced during task processing (for example, a document or structured data), composed of one or more parts and tied to the task lifecycle.<ref>https://a2a-protocol.org/latest/topics/key-concepts/</ref>
 
 ## Status and governance
 
