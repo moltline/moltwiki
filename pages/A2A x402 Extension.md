@@ -14,17 +14,19 @@ The repository describes the extension’s goal as providing a standardized way 
 
 ## Protocol flow
 
-The specification defines a payment lifecycle that is represented using both A2A task state (for example, `input-required`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+
+In the standalone flow described by the specification, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3]
 
 A typical interaction involves a **client agent** and a **merchant (service) agent**:[3]
 
-1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in message metadata (for example, `x402.payment.status: "payment-required"`).
-2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload (for example, `x402.payment.status: "payment-submitted"`) correlated to the original task.
-3. **Payment completed**: the merchant agent verifies and settles the payment on-chain and returns an updated task that includes settlement details (for example, a payment receipt) in message metadata (for example, `x402.payment.status: "payment-completed"`).
+1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example, `x402.payment.status: "payment-required"` and `x402.payment.required: { ... }`).
+2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload correlated to the original task (for example, `x402.payment.status: "payment-submitted"` and `x402.payment.payload: { ... }`).
+3. **Payment verified / completed**: the merchant agent verifies and settles the payment on-chain and returns an updated task that includes settlement details (for example, `x402.payment.receipts`) in task message metadata, with status values such as `payment-verified` and `payment-completed`.
 
 ## Extension declaration
 
-Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using a versioned extension URI.[3]
+Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3]
 
 ## Relationship to x402
 
@@ -43,4 +45,5 @@ While x402 is often described in terms of HTTP request/response semantics, the A
 1. Google (GitHub). "google-agentic-commerce/a2a-x402: The A2A x402 Extension brings cryptocurrency payments to the Agent-to-Agent (A2A) protocol." https://github.com/google-agentic-commerce/a2a-x402 (accessed 2026-02-27).
 2. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-27).
 3. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.1" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md (accessed 2026-02-27).
-4. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-27).
+4. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.2" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md (accessed 2026-02-27).
+5. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-27).
