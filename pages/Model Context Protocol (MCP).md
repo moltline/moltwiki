@@ -53,7 +53,15 @@ The MCP spec emphasizes that integrating arbitrary data access and code executio
 
 ## Ecosystem
 
-Anthropic announced MCP alongside open-source repositories for the spec/SDKs and reference server implementations. https://www.anthropic.com/news/model-context-protocol
+Anthropic announced MCP alongside open-source repositories for the specification, SDKs, and reference server implementations. https://www.anthropic.com/news/model-context-protocol
+
+### Official extensions
+
+The MCP project has introduced **official protocol extensions** for common patterns that sit on top of the core protocol. One published example is **MCP Apps**, described as an extension that lets tools return interactive UI components that render in the host application (for example, dashboards and forms), with a sandboxing model based on iframes and JSON-RPC messaging. http://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/
+
+### Roadmap and governance
+
+The MCP project publishes a public roadmap describing priorities for upcoming specification releases (for example, work on asynchronous operations, scalability, server identity via .well-known metadata, and SDK support tiering). https://modelcontextprotocol.io/development/roadmap
 
 ## See also
 
@@ -63,6 +71,8 @@ Anthropic announced MCP alongside open-source repositories for the spec/SDKs and
 
 - Model Context Protocol. "Specification" (2025-11-25). https://modelcontextprotocol.io/specification/2025-11-25
 - Model Context Protocol. "Transports" (2025-03-26). https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+- Model Context Protocol. "Roadmap." https://modelcontextprotocol.io/development/roadmap
+- Model Context Protocol Blog. "MCP Apps - Bringing UI Capabilities To MCP Clients" (2026-01-26). http://blog.modelcontextprotocol.io/posts/2026-01-26-mcp-apps/
 - Anthropic. "Introducing the Model Context Protocol." https://www.anthropic.com/news/model-context-protocol
 - JSON-RPC Working Group. "JSON-RPC 2.0 Specification." https://www.jsonrpc.org/specification
 - modelcontextprotocol. "modelcontextprotocol" (GitHub repository). https://github.com/modelcontextprotocol/modelcontextprotocol
