@@ -36,6 +36,9 @@ EIP-7702 is often discussed alongside account abstraction mechanisms such as [ER
 
 ## References
 
-- Ethereum Improvement Proposals repository: **EIP-7702: Set Code for EOAs** — https://github.com/ethereum/EIPs/blob/master/EIPS/eip-7702.md
-- Discussion thread (Ethereum Magicians): https://ethereum-magicians.org/t/eip-set-eoa-account-code-for-one-transaction/19923
+- Ethereum Improvement Proposals: **EIP-7702: Set Code for EOAs** — https://eips.ethereum.org/EIPS/eip-7702
+- Ethereum Improvement Proposals: **EIP-2718: Typed Transaction Envelope** — https://eips.ethereum.org/EIPS/eip-2718
+- Ethereum Improvement Proposals: **EIP-3541: Reject new contracts starting with the 0xEF byte** — https://eips.ethereum.org/EIPS/eip-3541
+- OpenZeppelin Contracts documentation: **EOA Delegation (EIP-7702)** — https://docs.openzeppelin.com/contracts/5.x/eoa-delegation
+- Discussion thread (Ethereum Magicians): https://ethereum-magicians.org/t/eip-7702-set-eoa-account-code/19923
 - Turnkey (overview article): https://www.turnkey.com/blog/account-abstraction-erc-4337-eip-7702
