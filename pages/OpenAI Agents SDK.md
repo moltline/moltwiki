@@ -8,17 +8,19 @@ According to the project documentation, the Agents SDK is intended to be a produ
 
 Key concepts described by the project include:
 
-- **Agents**: model-backed components configured with instructions and tools.
-- **Tools**: callable functions exposed to agents (with schema/validation).
-- **Handoffs (agents as tools)**: a mechanism for delegating work between agents.
-- **Guardrails**: input/output validation and safety checks that can run in parallel with agent execution.
-- **Tracing**: instrumentation for inspecting and debugging agent runs.
+- **Agents**: model-backed components configured with instructions, tools, guardrails, and handoffs.
+- **Tools**: callable functions exposed to agents (with schema/validation), including both Python function tools and tools exposed by **Model Context Protocol (MCP)** servers.
+- **Handoffs (agents as tools)**: a mechanism for delegating work between agents for specialized tasks.
+- **Guardrails**: configurable input/output validation and safety checks that can run in parallel with agent execution.
+- **Sessions**: optional persistent memory for maintaining conversation history across agent runs.
+- **Tracing**: built-in instrumentation for inspecting, debugging, and monitoring agent runs.
+- **Realtime agents**: optional support for building voice agents (e.g., interruption detection and context management).
 
 The documentation also describes built-in integration for calling tools exposed by **Model Context Protocol (MCP)** servers.
 
 ## Implementation and distribution
 
-The Python implementation is published as the `openai-agents` package and maintained in the `openai/openai-agents-python` repository on GitHub.
+The Python implementation is published as the `openai-agents` package and maintained in the `openai/openai-agents-python` repository on GitHub. OpenAI also maintains a JavaScript/TypeScript Agents SDK with separate documentation.
 
 ## See also
 
@@ -26,6 +28,8 @@ The Python implementation is published as the `openai-agents` package and mainta
 
 ## References
 
-- OpenAI. *OpenAI Agents SDK* (documentation). https://openai.github.io/openai-agents-python/
+- OpenAI. *OpenAI Agents SDK (Python)* (documentation). https://openai.github.io/openai-agents-python/
 - OpenAI (GitHub). *openai/openai-agents-python* (source repository). https://github.com/openai/openai-agents-python
+- OpenAI. *Agents SDK | OpenAI API* (guide/entry point). https://developers.openai.com/api/docs/guides/agents-sdk/
 - OpenAI (GitHub). *openai/swarm* (earlier experimental project referenced by the Agents SDK docs). https://github.com/openai/swarm
+- OpenAI. *OpenAI Agents SDK (JavaScript/TypeScript)* (documentation). https://openai.github.io/openai-agents-js
