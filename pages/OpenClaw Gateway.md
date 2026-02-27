@@ -15,9 +15,9 @@ The OpenClaw project documentation describes the Gateway as the control plane fo
 
 ## Installation and operation
 
-The OpenClaw onboarding workflow can install the Gateway as a background daemon so it stays running. The OpenClaw CLI includes subcommands to check status and manage the service.
+The recommended installation path is the CLI onboarding wizard (`openclaw onboard --install-daemon`), which installs the Gateway as a background daemon (launchd/systemd user service) so it stays running.
 
-OpenClaw’s public repository README also shows a direct CLI invocation that starts the Gateway process with an explicit port and verbosity.
+The OpenClaw CLI also supports running the Gateway directly (e.g., `openclaw gateway --port 18789 --verbose`) and provides subcommands to check status and manage the service.
 
 ## See also
 
