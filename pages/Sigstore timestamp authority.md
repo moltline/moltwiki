@@ -24,13 +24,22 @@ In public key infrastructure (PKI) systems, timestamps are commonly used to show
 
 Sigstore commonly uses **short-lived certificates** for signing. During verification, a verifier typically needs a reliable time source to decide whether a certificate was valid at the signing time.
 
-Sigstore documentation notes that, by default, clients can use **Rekor’s inclusion time** (an `integratedTime` field) and that this time is signed over in Rekor’s response (`signedEntryTimestamp`). It also notes a limitation: Rekor’s internal clock is not externally verifiable, and the timestamp is not part of the Merkle leaf hash computation, meaning the timestamp could be mutated without detection.\[2\]
+Sigstore documentation notes that clients can use **Rekor’s inclusion time** from the `integratedTime` field, which is signed over by Rekor’s `signedEntryTimestamp`. It also notes a limitation: Rekor’s internal clock is not externally verifiable, and the timestamp is not part of the append-only structure backing Rekor, meaning the timestamp is mutable in Rekor without detection.\[2\]
 
-To address this, Sigstore also supports **signed timestamps** from a trusted timestamp authority following RFC 3161. Because the timestamp is signed, the time becomes verifiable and tamper-evident (relative to the TSA’s trust model), and trust can be distributed by allowing different ecosystems to operate their own TSAs.\[2\]
+Sigstore also supports **signed timestamps** from a trusted timestamp authority following RFC 3161. Because the timestamps are signed, the time becomes immutable and verifiable (relative to the TSA’s trust model), and operating TSAs can distribute trust by letting ecosystems control part of the trust root.\[2\]
+
+### Using signed timestamps in cosign
+
+Sigstore documents flags for fetching and verifying RFC 3161 timestamps:
+
+- Signing with a TSA: `cosign sign --timestamp-server-url <TSA_URL> <artifact>`\[2\]
+- Verifying with a TSA certificate chain: `cosign verify --timestamp-certificate-chain <chain.pem> <artifact>`\[2\]
 
 ### Countersigning (what is timestamped)
 
-For Sigstore usage, the `sigstore/timestamp-authority` project recommends **timestamping a value associated with a signature**, and specifically notes that cosign “countersigns” by signing over the **raw signature bytes** (rather than the artifact itself) so that the timestamp binds to the signing event.\[3\]
+Sigstore recommends binding the timestamp to the signing event by **timestamping a signature** (“countersigning”), rather than timestamping the artifact itself.\[2\]
+
+For Sigstore usage, the `sigstore/timestamp-authority` project also recommends timestamping a value associated with a signature, and notes that cosign “countersigns” by signing over the **raw signature bytes** so that the timestamp binds to the signing event.\[3\]
 
 ## Reference implementation
 
