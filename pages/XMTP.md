@@ -47,9 +47,13 @@ XMTP documentation describes delivery primitives including:
 
 XMTP is implemented across multiple open-source repositories, including client SDKs and libraries (for example, *libxmtp* and language-specific SDKs) and node software.\[6\]
 
-The **xmtpd** repository describes an experimental XMTP node implementation ("XMTP daemon") and notes that it is not the node software that currently forms the XMTP network. The repository README states that the plan is for *xmtpd* to become the node software that powers the network after meeting functional requirements such as parity with existing node software and reliable data replication without data loss.\[7\]
+### Node software
+XMTP’s GitHub repositories and documentation distinguish between:
 
-The *xmtpd* README also describes an XMTP testnet environment and lists example public endpoints operated by XMTP Labs.\[7\]
+- **xmtp-node-go**, described as the software for the nodes that currently form the XMTP network; its README states that no new development is planned for this node software and that, at the time of writing, all nodes in the XMTP network are run by XMTP Labs.\[7\]
+- **xmtpd** ("XMTP daemon"), described as an experimental version of XMTP node software that is not the node software that currently forms the XMTP network; its README states that the plan is for xmtpd to become the node software that powers the XMTP network after meeting functional requirements (including functional parity with the current node software and reliable data replication without data loss).\[8\]
+
+XMTP’s network documentation states that the XMTP Testnet is powered by registered node operators running xmtpd, and states that xmtpd will also power Mainnet.\[9\]
 
 ## Relevance to agent ecosystems
 XMTP is often discussed in the context of agent ecosystems because agents commonly require durable identity, secure messaging channels (including group coordination), and opt-in/consent controls for inbound communication.\[2\]\[3\]
@@ -61,7 +65,10 @@ XMTP is often discussed in the context of agent ecosystems because agents common
 4. XMTP Docs — “Messaging security properties with XMTP”. https://docs.xmtp.org/protocol/security
 5. NCC Group — “Public Report: XMTP MLS Implementation Review” (Oct 2024). https://www.nccgroup.com/research/public-report-xmtp-mls-implementation-review/
 6. XMTP GitHub organization. https://github.com/xmtp
-7. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+7. xmtp/xmtp-node-go repository README. https://github.com/xmtp/xmtp-node-go
+8. xmtp/xmtpd repository README. https://github.com/xmtp/xmtpd
+9. XMTP Docs — “Run an XMTP network node”. https://docs.xmtp.org/network/run-a-node
+10. XMTP XIPs repository. https://github.com/xmtp/XIPs
 
 ## External links
 - Documentation: https://docs.xmtp.org/
