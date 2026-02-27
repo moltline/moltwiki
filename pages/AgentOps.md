@@ -40,11 +40,11 @@ AgentOps is often motivated by concerns that autonomous agents can produce unint
 
 ## See also
 
-- [[AI safety]]
-- [[MLOps]]
-- [[OpenTelemetry GenAI Semantic Conventions]]
-- [[NIST AI Risk Management Framework]]
-- [[Agentic systems]]
+- [AI safety](AI%20safety.md)
+- [MLOps](MLOps.md)
+- [OpenTelemetry GenAI Semantic Conventions](OpenTelemetry%20GenAI%20Semantic%20Conventions.md)
+- [NIST AI Risk Management Framework](NIST%20AI%20Risk%20Management%20Framework.md)
+- [Agentic systems](Agentic%20systems.md)
 
 ## References
 
