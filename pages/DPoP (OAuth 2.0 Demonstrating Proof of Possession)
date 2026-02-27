@@ -39,13 +39,13 @@ Each HTTP request requires a **unique** DPoP proof.
 
 ## Token binding and confirmation (`cnf` / `jkt`)
 
-For a resource server to verify the key-binding of a DPoP access token, it needs a reliable way to learn which key the token is bound to.
+For a resource server to verify that a DPoP access token is bound to the same key as the current proof, it needs a way to identify the public key associated with the token.
 
-RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token is JWT-structured. The same `cnf`/`jkt` structure can also be conveyed via OAuth 2.0 Token Introspection responses.
+RFC 9449 describes using the JWT confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token itself is a JWT. The same `cnf.jkt` structure can also be conveyed via OAuth 2.0 Token Introspection responses.
 
 ## Nonce support
 
-RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). This is intended to mitigate certain replay and precomputation risks.
+RFC 9449 defines optional nonce mechanisms for both authorization servers and resource servers. A server can require the client to include a server-provided nonce value in the `nonce` claim of subsequent DPoP proofs; nonces are conveyed using the `DPoP-Nonce` HTTP response header.
 
 ## Relationship to other sender-constraining techniques
 
@@ -53,12 +53,13 @@ DPoP is positioned as an application-layer alternative for environments where tr
 
 ## Security considerations (high level)
 
-DPoP aims to reduce the usefulness of stolen tokens by requiring the attacker to also possess the private key. It is not a substitute for transport security and is specified for use with HTTPS.
+DPoP reduces the usefulness of stolen tokens by requiring the presenter to also possess the private key. It is not a substitute for transport security and is specified for use with HTTPS.
 
-DPoP does not, by itself, provide full request integrity for all HTTP message components; it signs a selected subset (method and target URI) to avoid the complexities of canonicalizing HTTP requests.
+DPoP does not provide integrity protection for all HTTP message components. Instead, the proof covers a selected subset (notably the HTTP method and target URI) to avoid the complexities of canonicalizing full HTTP requests.
 
 ## References
 
 - IETF. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP).* September 2023. https://datatracker.ietf.org/doc/html/rfc9449
 - RFC Editor. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP) — information page.* https://www.rfc-editor.org/info/rfc9449
 - OAuth.net. *DPoP (OAuth 2.0 Demonstrating Proof-of-Possession).* https://oauth.net/2/dpop/
+- IETF. *RFC 8705: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.* January 2020. https://datatracker.ietf.org/doc/html/rfc8705
