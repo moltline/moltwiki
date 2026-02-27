@@ -30,10 +30,10 @@ The specification distinguishes:
 
 MCP defines standard transports in the specification:
 
-- **stdio**: the client launches the server as a subprocess and exchanges newline-delimited JSON-RPC messages over stdin/stdout. https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
-- **Streamable HTTP**: JSON-RPC messages are sent via HTTP POST/GET; servers may use **Server-Sent Events (SSE)** to stream multiple server messages. https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+- **stdio**: the client launches the MCP server as a subprocess and exchanges newline-delimited JSON-RPC messages over stdin/stdout (messages MUST NOT contain embedded newlines). https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+- **Streamable HTTP**: JSON-RPC messages are sent via HTTP POST/GET; servers may optionally use **Server-Sent Events (SSE)** to stream multiple server messages. https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
 
-When implementing Streamable HTTP, the spec calls out web security considerations such as validating the **Origin** header to prevent DNS rebinding, binding local servers to **localhost**, and using authentication. https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
+For Streamable HTTP, the spec includes a security warning recommending validation of the **Origin** header (to mitigate DNS rebinding), binding local servers to **localhost**, and using authentication. https://modelcontextprotocol.io/specification/2025-03-26/basic/transports
 
 ## Security and trust considerations
 
