@@ -1,34 +1,41 @@
 # Agent Communication Protocol (ACP)
 
-The **Agent Communication Protocol** (**ACP**) is an open protocol intended to enable interoperability between AI agents, applications, and humans. Public ACP materials describe it as a standardized, REST-based API for exchanging multimodal messages and coordinating both synchronous and asynchronous interactions, including streaming and long-running tasks.
+The **Agent Communication Protocol (ACP)** is an open protocol for interoperability between AI agents, applications, and humans. It defines a **RESTful HTTP API** for **agent discovery** and for creating and managing **agent runs** that can be **synchronous**, **asynchronous**, or **streamed**. https://agentcommunicationprotocol.dev/introduction/welcome
 
-ACP is developed in the open and is associated with the BeeAI ecosystem, including an open-source reference implementation and SDKs.
+ACP is developed in the open and is associated with the BeeAI ecosystem. The reference implementation and SDKs live in the `i-am-bee/acp` repository. https://github.com/i-am-bee/acp
 
-## Overview
+## What ACP standardizes
 
-Modern agent systems are often built in isolation across different frameworks and infrastructures. ACP’s stated goal is to reduce fragmentation by providing a shared communication surface that does not require agents to share internal implementation details.
+ACP aims to reduce fragmentation by providing a shared “communication surface” that does not require agents to share internal implementation details. https://agentcommunicationprotocol.dev/introduction/welcome
 
-According to ACP documentation, the protocol is designed to support:
+Key ideas you’ll see in ACP docs and spec:
 
-- **RESTful communication** over HTTP
-- **Multimodal messages** identified by MIME types
-- **Synchronous and asynchronous** interaction patterns
-- **Streaming** responses
-- **Stateful and stateless** operation
-- **Agent discovery**, including “offline discovery” patterns
+- **REST-based communication over HTTP** (no special transport required). https://agentcommunicationprotocol.dev/introduction/welcome
+- **Multimodal messages** where parts are identified by **MIME types** (e.g., `text/plain`, images, JSON, etc.). https://agentcommunicationprotocol.dev/introduction/welcome
+- **Async-first execution** (long-running tasks) while still supporting sync calls. https://agentcommunicationprotocol.dev/introduction/welcome
+- **Streaming interactions** via `text/event-stream` (Server-Sent Events) for incremental output. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- **Agent discovery** via a standard endpoint. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
 
-## Protocol surface (high level)
+## Protocol surface (concrete)
 
-ACP’s public repository includes an **OpenAPI specification** that defines HTTP endpoints and data models for the protocol.
+ACP publishes an **OpenAPI specification** describing endpoints and data models. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
 
-The ACP project also publishes SDKs (for example, Python and TypeScript) intended to simplify building ACP-compatible agents and clients.
+At a high level, the spec includes:
+
+- `GET /agents` — list available agents (discovery). https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `GET /agents/{name}` — fetch an agent manifest. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `POST /runs` — create a run for an agent. The response may be immediate JSON or a streamed `text/event-stream`. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `GET /runs/{run_id}` — poll run status/results. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `POST /runs/{run_id}` — resume a run (e.g., after it enters an awaiting state). https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `POST /runs/{run_id}/cancel` — request cancellation. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- `GET /runs/{run_id}/events` — list events emitted by a run. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
 
 ## Relationship to other agent interoperability efforts
 
-ACP is one of several efforts aimed at agent interoperability. In contrast to protocols that use JSON-RPC as a base message format, ACP materials emphasize a **REST-based** approach and integration via familiar HTTP patterns.
+ACP is one of several efforts aimed at agent interoperability. Compared with protocols that use JSON-RPC as a base message format, ACP emphasizes **REST-based** integration via familiar HTTP patterns. https://agentcommunicationprotocol.dev/introduction/welcome
 
 ## References
 
-- Agent Communication Protocol documentation (welcome/overview): https://agentcommunicationprotocol.dev/introduction/welcome
-- i-am-bee/acp (GitHub repository): https://github.com/i-am-bee/acp
-- ACP OpenAPI specification (in repository): https://github.com/i-am-bee/acp/blob/main/docs/spec/openapi.yaml
+- ACP docs (overview): https://agentcommunicationprotocol.dev/introduction/welcome
+- ACP repository: https://github.com/i-am-bee/acp
+- ACP OpenAPI spec (raw): https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
