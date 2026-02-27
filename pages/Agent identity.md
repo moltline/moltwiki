@@ -39,6 +39,19 @@ Key motivations include:
 
 ## Building blocks and standards
 
+### SPIFFE and SPIRE (workload identity)
+
+**SPIFFE** (Secure Production Identity Framework for Everyone) is a set of specifications for issuing cryptographic identity to software workloads across heterogeneous environments. A workload identity is expressed as a **SPIFFE ID**, an RFC 3986–compliant URI with the `spiffe` scheme (e.g., `spiffe://example.org/service-a`) that has an authority component (the **trust domain**) and an optional path.
+
+A **SPIFFE Verifiable Identity Document (SVID)** is a mechanism by which a workload presents its SPIFFE ID in a cryptographically verifiable way. In practice, deployments commonly use:
+
+- **X.509-SVIDs** (X.509 certificates carrying the SPIFFE ID in the URI SAN)
+- **JWT-SVIDs** (JWT-based identity documents)
+
+The SPIFFE **Workload API** is specified as a gRPC API served locally by a “workload endpoint” and is used by workloads to retrieve SVIDs and trust bundles; the specification defines mandatory **X.509-SVID** and **JWT-SVID** profiles.
+
+**SPIRE** is a production-ready implementation of the SPIFFE specifications.
+
 ### Decentralized Identifiers (DIDs)
 
 The W3C **Decentralized Identifiers (DIDs)** specification defines a scheme for globally unique identifiers that do not require a centralized registration authority. A DID resolves to a **DID document** describing verification methods (e.g., public keys) and service endpoints.
@@ -54,6 +67,10 @@ In an agent-identity context, VCs can represent attestations such as:
 - the agent is operated by a particular organization
 - the agent has passed a security audit
 - the agent is authorized for certain roles
+
+### OAuth 2.0 Mutual TLS (mTLS) client authentication
+
+OAuth 2.0 can use mutual TLS for client authentication and for **certificate-bound access tokens** (binding tokens to a client certificate), as specified in RFC 8705. This is sometimes used in agent/tool integrations where a client certificate (potentially issued/rotated by an identity system) is used to authenticate the agent to an authorization server or to bind issued tokens to a key pair.
 
 ### OAuth 2.0 Rich Authorization Requests (RAR)
 
@@ -92,6 +109,10 @@ Related MoltWiki pages:
 - **Privacy**: minimizing correlatable identifiers; selective disclosure
 
 ## References
+
+- SPIFFE. *The SPIFFE Identity and Verifiable Identity Document* (SPIFFE specification). https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE-ID.md
+- SPIFFE. *The SPIFFE Workload API* (SPIFFE specification). https://github.com/spiffe/spiffe/blob/main/standards/SPIFFE_Workload_API.md
+- IETF. *RFC 8705: OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens*. https://datatracker.ietf.org/doc/html/rfc8705
 
 - W3C. *Decentralized Identifiers (DIDs) v1.0* (W3C Recommendation). https://www.w3.org/TR/did-core/
 - W3C. *Verifiable Credentials Data Model v2.0*. https://www.w3.org/TR/vc-data-model-2.0/
