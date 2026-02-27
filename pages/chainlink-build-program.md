@@ -1,41 +1,47 @@
 # Chainlink Build program
 
-Chainlink Build is a long-term ecosystem program run by Chainlink Labs to support early- and mid-stage Web3 projects with technical support, ecosystem connections, and co-marketing.
+**Chainlink Build** is a long-term ecosystem program run by Chainlink Labs to support early- and mid-stage Web3 projects with technical support, ecosystem connections, and co-marketing/go-to-market resources.[1]
 
-Build is part of the broader “Chainlink Economics” initiative; in exchange for program support, participating projects commit a percentage of their total token supply (or other incentives) to Chainlink ecosystem service providers (for example, eligible LINK stakers).
+Build is described as part of the broader **Chainlink Economics** initiative. Chainlink states that, in exchange for program support, participating projects commit a percentage of their total token supply to service providers in the Chainlink ecosystem (for example, eligible LINK stakers).[2]
 
-**Type:** Ecosystem program
-**Operated by:** Chainlink Labs
-**Website:** https://chain.link/build-program
+**Type:** Ecosystem program  
+**Operated by:** Chainlink Labs  
+**Website:** https://chain.link/build-program  
 **Related:** Chainlink Economics (https://chain.link/economics)
 
 ## Overview
 
-The Build program positions itself as ongoing, stage-aligned support (as opposed to a fixed-duration accelerator). It offers participating teams access to Chainlink technical experts, early access to select Chainlink products, ecosystem introductions, and co-marketing/community amplification.
+Chainlink characterizes Build as ongoing, stage-aligned support (as opposed to a fixed-duration accelerator), spanning technology, ecosystem/network connections, marketing, and go-to-market support.[1]
 
-Chainlink’s Economics page describes Build as a mechanism to accelerate project growth by providing enhanced access to Chainlink services and technical support, in exchange for projects committing a percentage of their total token supply to service providers in the Chainlink ecosystem.
+In Chainlink’s Economics overview, Build is presented as a mechanism intended to accelerate project growth by providing enhanced access to Chainlink services and technical support, in exchange for projects committing a percentage of their token supply to Chainlink ecosystem service providers.[2]
 
-## How it works
+## How the program works
 
-Chainlink’s Build program page describes a staged model:
+The Build program page describes a staged model:[1]
 
-- **Foundation:** Build with Chainlink infrastructure, hands-on guidance, and early access to core products.
-- **Activation:** Connect with founders, partners, and ecosystem resources as a project prepares to launch.
-- **Growth:** Expand adoption and visibility through ecosystem initiatives and co-marketing.
-- **Long-term support:** Continued support as a project aims to become a leading protocol.
+- **Foundation: build with Chainlink** — establish a technical foundation with Chainlink infrastructure, hands-on guidance, and early access to select products.
+- **Activation: connect to the ecosystem** — introductions to founders, partners, and ecosystem resources as a project prepares to launch.
+- **Growth: expand adoption and visibility** — co-marketing and ecosystem initiatives aligned to a project’s growth stage.
+- **Become a leading protocol** — longer-term support across technology, ecosystem, and go-to-market as a project scales.
 
-## Relationship to Chainlink Rewards
+## Relationship to Chainlink Economics and Rewards
 
-Chainlink’s Build program page describes “Chainlink Rewards” as a community engagement and rewards program that enables Chainlink Build projects to make their native tokens claimable by Chainlink ecosystem participants, including eligible LINK stakers.
+Chainlink’s Economics page describes Build alongside other initiatives (e.g., Chainlink Rewards, Chainlink Scale, and Payment Abstraction) under the “Chainlink Economics” umbrella.[2]
+
+Chainlink describes **Chainlink Rewards** as a community engagement and rewards program that enables Chainlink Build projects to make their native tokens claimable by Chainlink ecosystem participants, including eligible LINK stakers.[1][2]
+
+In its post introducing **Chainlink Rewards Season 1**, Chainlink states that Season 1 starts on **November 11, 2025**, features **nine** Build projects, and uses a mechanism in which eligible LINK stakers receive “Cubes” (a non-transferable unit of account) that can be allocated to projects and later redeemed for token rewards.[4]
 
 ## References
 
 1. https://chain.link/build-program
 2. https://chain.link/economics
 3. https://blog.chain.link/chainlink-build-program/
+4. https://blog.chain.link/chainlink-rewards-season-1/
 
 ## External links
 
 - Chainlink Build: https://chain.link/build-program
 - Chainlink Economics: https://chain.link/economics
-- Blog post: https://blog.chain.link/chainlink-build-program/
+- Introducing Chainlink Build (blog): https://blog.chain.link/chainlink-build-program/
+- Introducing Chainlink Rewards Season 1 (blog): https://blog.chain.link/chainlink-rewards-season-1/
