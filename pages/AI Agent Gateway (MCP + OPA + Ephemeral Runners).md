@@ -24,15 +24,15 @@ One reference implementation describes a design where agents never interact with
 
 ### 1) Tool interface / discovery layer (MCP)
 
-The **Model Context Protocol (MCP)** is an open protocol for integrating LLM applications with external context and tools. The MCP specification describes a JSON-RPC 2.0 protocol with the roles **hosts**, **clients**, and **servers**, and a feature model including **tools**, **resources**, and **prompts**. https://modelcontextprotocol.io/specification/2025-11-25
+The **Model Context Protocol (MCP)** is an open protocol for integrating LLM applications with external data sources and tools. MCP uses **JSON-RPC 2.0** messages to communicate between **hosts**, **clients**, and **servers**, and defines features such as **tools**, **resources**, and **prompts**. https://modelcontextprotocol.io/specification/2025-11-25
 
 In a gateway architecture, MCP can be used as the **front door** for tool calls: the agent discovers tools and invokes them through a consistent interface, while the gateway controls what actually runs.
 
 ### 2) Authorization as policy (OPA)
 
-**Open Policy Agent (OPA)** is a general-purpose policy engine that **decouples policy decision-making from policy enforcement**: applications query OPA with structured input and OPA returns a decision (not limited to allow/deny). https://www.openpolicyagent.org/docs/latest/
+**Open Policy Agent (OPA)** is a general-purpose policy engine that **decouples policy decision-making from policy enforcement**: applications query OPA with structured input (often JSON) and OPA returns a decision (not limited to allow/deny). https://www.openpolicyagent.org/docs
 
-In an agent gateway, OPA commonly acts as a **policy decision point (PDP)**. The gateway (or tool handler) is the **policy enforcement point (PEP)** that blocks, allows, or constrains the request based on OPA’s decision.
+In an agent gateway, OPA commonly acts as a **policy decision point (PDP)** (it evaluates policy). The gateway (or tool handler) is the **policy enforcement point (PEP)** (it blocks, allows, or constrains the request based on OPA’s decision).
 
 ### 3) Ephemeral runners (isolated execution)
 
@@ -43,11 +43,13 @@ Instead of executing approved actions inside a long-lived, privileged service, t
 - execute the action,
 - and are destroyed immediately after completion.
 
-"Ephemeral runner" is a general pattern, not a single product. Concrete examples:
+"Ephemeral runner" is a general pattern, not a single product.
+
+Concrete examples / related concepts:
 
 - **GitHub-hosted runners**: for most runner types, each job runs on a fresh VM provided by GitHub. https://docs.github.com/en/actions/concepts/runners/github-hosted-runners
-- **Ephemeral self-hosted GitHub Actions runners**: you can register a self-hosted runner as ephemeral so it is automatically unregistered after a single job. https://github.blog/changelog/2021-09-20-github-actions-ephemeral-self-hosted-runners-new-webhooks-for-auto-scaling/
-- **Kubernetes ephemeral containers**: a different concept (debugging), but a good reminder that “ephemeral” can mean "temporary container added to an existing pod" and is not automatically restarted. https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/
+- **Ephemeral self-hosted GitHub Actions runners**: GitHub documents that ephemeral self-hosted runners are automatically removed if they have not connected for more than 1 day (and contrasts them with “just-in-time (JIT) runners”, which can only run a single job). https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/remove-runners
+- **Kubernetes ephemeral containers**: a different concept (debugging) used to run a temporary container inside an existing Pod; Kubernetes notes they are not automatically restarted. https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/
 
 ## Typical request flow
 
@@ -97,7 +99,7 @@ OpenClaw-style agent tool calling often involves powerful capabilities (code exe
 
 - https://www.infoq.com/articles/building-ai-agent-gateway-mcp/
 - https://modelcontextprotocol.io/specification/2025-11-25
-- https://www.openpolicyagent.org/docs/latest/
+- https://www.openpolicyagent.org/docs
 - https://docs.github.com/en/actions/concepts/runners/github-hosted-runners
-- https://github.blog/changelog/2021-09-20-github-actions-ephemeral-self-hosted-runners-new-webhooks-for-auto-scaling/
+- https://docs.github.com/en/actions/how-tos/manage-runners/self-hosted-runners/remove-runners
 - https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/
