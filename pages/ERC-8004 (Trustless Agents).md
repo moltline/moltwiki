@@ -37,11 +37,20 @@ while positioning ERC-8004 as addressing the missing pieces of **discovery and t
 
 On the EIPs site, **ERC-8004 is marked “Draft”** and lists **Created: 2025-08-13**.[^eip]
 
+## Specification details
+
+ERC-8004 defines an **agent identifier** as the pair of:
+
+- **agentRegistry**: a string of the form `{namespace}:{chainId}:{identityRegistry}` (for example, `eip155:1:0x…`), and
+- **agentId**: the ERC-721 `tokenId` minted by the Identity Registry.[^eip]
+
+The specification also defines a JSON **agent registration file** referenced by `agentURI`. The file includes top-level metadata (e.g., `name`, `description`, `image`) and a list of **service endpoints** (for example, web, A2A agent card, MCP endpoint, ENS, DID, and email).[^eip]
+
 ## Deployments
 
-The ERC-8004 team maintains a reference implementation repository that also publishes **deployed registry contract addresses** for multiple networks (e.g., Ethereum mainnet and Sepolia).[^contracts]
+The ERC-8004 team maintains a reference implementation repository that publishes **deployed registry contract addresses** for multiple networks. For example, it lists Identity and Reputation Registry deployments on **Ethereum mainnet** and **Sepolia**, among other chains.[^contracts]
 
 ## References
 
 [^eip]: *ERC-8004: Trustless Agents (DRAFT)*, Ethereum Improvement Proposals (EIPs). https://eips.ethereum.org/EIPS/eip-8004
-[^contracts]: *erc-8004-contracts: Registry contracts curated by the 8004 team*, GitHub repository (see “Contract Addresses”). https://github.com/erc-8004/erc-8004-contracts
+[^contracts]: *erc-8004-contracts: Registry contracts curated by the 8004 team* (see “Contract Addresses”). https://github.com/erc-8004/erc-8004-contracts
