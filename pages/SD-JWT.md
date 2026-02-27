@@ -8,13 +8,15 @@ SD-JWT is commonly discussed in the context of privacy-preserving digital creden
 
 The SD-JWT specification defines:
 
-- **A data format and processing model** for producing an issuer-signed JWT that includes digests of selectively-disclosable claims.
+- **A data format and processing model** for producing an issuer-signed JWT (a JWS) that includes digests of selectively disclosable claims.
 - **Disclosures** (separately conveyed values) that can be presented to a verifier to reveal chosen claims.
-- **Optional key binding**, which can be used to bind a presentation to a holder-controlled key.
+- **Optional key binding**, in which a holder presents a separate **Key Binding JWT** to prove control of a key and bind the presentation to that key (often written as **SD-JWT+KB**).
 
 ## Publication and status
 
-SD-JWT was published as **RFC 9901** in November 2025 and is on the IETF Standards Track.
+SD-JWT was published as **RFC 9901** in **November 2025** as an IETF **Proposed Standard**.
+
+The RFC Editor errata database listed **no errata records** for RFC 9901 at the time of writing.
 
 ## See also
 
@@ -23,5 +25,6 @@ SD-JWT was published as **RFC 9901** in November 2025 and is on the IETF Standar
 
 ## References
 
-- D. Fett; K. Yasuda; B. Campbell. *Selective Disclosure for JSON Web Tokens*. IETF RFC 9901 (Standards Track), November 2025. https://datatracker.ietf.org/doc/rfc9901/
-- RFC Editor. *RFC 9901: Selective Disclosure for JSON Web Tokens*. https://www.rfc-editor.org/info/rfc9901
+- D. Fett; K. Yasuda; B. Campbell. *Selective Disclosure for JSON Web Tokens*. RFC 9901 (Proposed Standard), November 2025. https://www.rfc-editor.org/rfc/rfc9901
+- RFC Editor. *Information on RFC 9901*. https://www.rfc-editor.org/info/rfc9901
+- RFC Editor. *RFC Errata Report: RFC 9901*. https://www.rfc-editor.org/errata_search.php?rfc=9901
