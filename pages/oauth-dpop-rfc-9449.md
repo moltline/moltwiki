@@ -34,28 +34,41 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
 
-Common proof claims include:
+A proof JWT is bound to a specific HTTP request via claims such as:
 
-- `htm`: the HTTP method of the request being proven
-- `htu`: the HTTP URI of the request being proven
-- `iat`: issued-at time
+- `htm`: the HTTP method of the request
+- `htu`: the HTTP URI of the request
+- `iat`: issued-at timestamp
 - `jti`: unique identifier for the proof (supports replay detection)
 
-For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
+For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token, allowing the proof to be tied to a particular token. https://www.rfc-editor.org/rfc/rfc9449
 
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+When generating `htu`, implementations commonly follow the RFC guidance to use the HTTP URI without fragment and (in many guides) without query parameters; vendor documentation often calls this out explicitly. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+
+### Proof validation (resource server)
+
+At a high level, validating a DPoP proof involves:
+
+- verifying the JWT signature and that the embedded public key is acceptable
+- checking that `htm`/`htu` match the actual request
+- enforcing freshness (`iat`) and replay controls (`jti`), per local policy
+- if an access token is presented, checking `ath` against that token
+
+Normative processing requirements are specified in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
 
 ### Public key confirmation (`cnf` / `jkt`)
 
 DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC 9449 describes expressing the binding using a confirmation claim (`cnf`) with a JWK thumbprint (`jkt`) of the DPoP public key. https://www.rfc-editor.org/rfc/rfc9449
 
+Resource servers that accept DPoP-bound tokens need to verify that the access token they received is bound to the same public key used to sign the DPoP proof. https://www.rfc-editor.org/rfc/rfc9449
+
 ### Nonce support (`DPoP-Nonce` / `use_dpop_nonce`)
 
 RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
 
-Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps). For example, Auth0 documents returning `use_dpop_nonce` and a `DPoP-Nonce` header when a nonce is required. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ## Relationship to adjacent standards
 
@@ -66,10 +79,12 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 ## Practical notes
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
-- DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
+- DPoP can sender-constrain **access tokens and refresh tokens**. https://www.rfc-editor.org/rfc/rfc9449
+- DPoP is often discussed as an alternative when transport-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Auth0 documentation (example deployment notes): https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
