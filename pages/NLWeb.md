@@ -19,6 +19,10 @@ The NLWeb project documentation states that each NLWeb instance acts as an MCP s
 
 A public NLWeb repository provides a reference implementation and documentation, including guides for local development and deployment.[^nlweb-repo]
 
+## PostgreSQL and pgvector support
+
+Microsoft has described NLWeb as modular and retrieval-provider-agnostic, and has published guidance for using PostgreSQL as a retrieval backend via the pgvector extension.[^ms-pg]
+
 ## See also
 
 - [Model Context Protocol (MCP)](Model%20Context%20Protocol%20(MCP).md)
@@ -31,3 +35,5 @@ A public NLWeb repository provides a reference implementation and documentation,
 [^ms-intro]: Microsoft News Center. "Microsoft Introduces NLWeb: An Open Project to Simplify Natural Language Interfaces for Websites". https://news.microsoft.com/source/features/company-news/introducing-nlweb-bringing-conversational-interfaces-directly-to-the-web/
 
 [^nlweb-repo]: NLWeb project. "nlweb-ai/NLWeb" (GitHub repository). https://github.com/nlweb-ai/NLWeb
+
+[^ms-pg]: Microsoft Tech Community. "Fueling the Agentic Web Revolution with NLWeb and PostgreSQL". https://techcommunity.microsoft.com/blog/adforpostgresql/fueling-the-agentic-web-revolution-with-nlweb-and-postgresql/4437439
