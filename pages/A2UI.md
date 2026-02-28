@@ -14,15 +14,17 @@ A2UI provides a structured way for an agent to present information and simple in
 ### Where it runs
 The macOS Canvas panel can load local Canvas content via the `openclaw-canvas:///` custom URL scheme and can also navigate to HTTP(S) URLs. https://docs.openclaw.ai/platforms/mac/canvas
 
-For A2UI specifically, OpenClaw documents a default host page served by the Gateway Canvas host:
+For A2UI specifically, OpenClaw documents a default host page served by the Gateway canvas host:
 
-- `http://<gateway-host>:18793/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
+- `http://<gateway-host>:18789/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
 
-When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
+When the Gateway advertises a canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
 
 ## Protocol and versions
 
 OpenClaw’s Canvas documentation states that Canvas currently accepts **A2UI v0.8** server→client messages and does **not** support the v0.9 `createSurface` message. https://docs.openclaw.ai/platforms/mac/canvas
+
+The Nodes documentation repeats this constraint in the context of the CLI helpers: only A2UI v0.8 JSONL is supported, and v0.9/`createSurface` is rejected. https://docs.openclaw.ai/nodes
 
 ### Message types (v0.8 in Canvas)
 Canvas accepts the following A2UI v0.8 server→client message types:
