@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldn’t be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -30,11 +30,19 @@ DPoP is particularly relevant when transport-layer sender-constraining (e.g., mu
 
 Normative details and processing requirements are in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
 
+## When you should (and shouldn’t) use it
+
+DPoP helps most when your threat model includes **token exfiltration** (logs, browser storage, proxies, crash dumps, compromised dependency) and you want to reduce the value of a stolen access token by requiring a matching private key at presentation time. https://www.rfc-editor.org/rfc/rfc9449
+
+DPoP does **not** prevent misuse if an attacker can also steal or use the client’s private key (e.g., device compromise or malicious code running in the client context). RFC 9449 calls out risks from **untrusted code in the client context** and other considerations. https://www.rfc-editor.org/rfc/rfc9449
+
 ## Key concepts and terms
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+
+(Separately, the IANA JOSE registry tracks registered `typ` values and related JOSE parameters.) https://www.iana.org/assignments/jose/jose.xhtml
 
 Common proof claims include:
 
@@ -61,7 +69,7 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Practical notes
 
@@ -69,7 +77,15 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
+## Related specs to know
+
+- **OAuth 2.0 Bearer Token Usage (RFC 6750)**: baseline bearer token presentation that DPoP augments with proof-of-possession. https://www.rfc-editor.org/rfc/rfc6750
+- **OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens (RFC 8705)**: TLS-layer sender-constraining alternative to DPoP. https://www.rfc-editor.org/rfc/rfc8705
+
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- IANA JOSE registry: https://www.iana.org/assignments/jose/jose.xhtml
+- RFC 6750 (Bearer tokens): https://www.rfc-editor.org/rfc/rfc6750
+- RFC 8705 (mTLS sender-constrained tokens): https://www.rfc-editor.org/rfc/rfc8705
