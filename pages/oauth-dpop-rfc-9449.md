@@ -66,7 +66,14 @@ In practice, some deployments require a nonce for public clients (e.g., SPAs or 
 ## Practical notes
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
+- DPoP does **not** provide confidentiality for the token; it primarily adds sender-constraining so a leaked token is harder to replay without the private key. https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
+
+### Common implementation pitfalls
+
+- **Reusing `jti` across retries**: DPoP proofs are intended to be unique per request; retry logic that replays the same proof can trigger server-side replay detection. https://www.rfc-editor.org/rfc/rfc9449
+- **Normalizing `htu`**: servers compare the `htu` claim against the request URI; differences in normalization (scheme/host casing, default ports, trailing slashes, etc.) can cause verification failures. https://www.rfc-editor.org/rfc/rfc9449
+- **Nonce-required deployments**: some providers require a nonce and respond with `use_dpop_nonce` plus a `DPoP-Nonce` header; clients should be prepared to retry with a fresh proof including the returned nonce. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ## Sources
 
