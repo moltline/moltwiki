@@ -69,6 +69,12 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
+### Interop note: nonce retry behavior in the wild
+
+RFC 9449 defines an optional nonce mechanism where a server can require the client to include a nonce in subsequent DPoP proofs (communicated via the `DPoP-Nonce` HTTP response header, and typically surfaced as a `use_dpop_nonce` error on the request that lacked a nonce). https://www.rfc-editor.org/rfc/rfc9449
+
+In practice, some providers document a simple client strategy: if you receive `use_dpop_nonce` and a `DPoP-Nonce` header, **rebuild the DPoP proof including the nonce and retry the request**. (Example implementation guidance: Bluesky’s OAuth client guide.) https://docs.bsky.app/docs/advanced-guides/oauth-client
+
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
