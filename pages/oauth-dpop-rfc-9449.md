@@ -66,10 +66,23 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 ## Practical notes
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
-- DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
+- DPoP is an application-layer alternative to TLS-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) when TLS binding isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
-## Sources
+### What implementers typically validate
+
+RFC 9449 defines the normative processing rules, but most implementations end up validating the same core fields on each request:
+
+- the DPoP proof JWT signature against the public key in the JWT header (`jwk`)
+- `htm` and `htu` match the HTTP method and target URI
+- `iat` is recent (with some clock-skew allowance)
+- `jti` is unique (to detect replay)
+- when an access token is presented, `ath` matches the access token (SHA-256, base64url-encoded)
+
+A concise checklist appears in vendor docs such as Auth0’s DPoP guide. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+
+## References
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Auth0: “Demonstrating Proof-of-Possession (DPoP)” (implementation overview + common validation checks): https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
