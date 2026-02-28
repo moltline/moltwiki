@@ -69,7 +69,14 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
+## Notes
+
+### RFC errata
+
+RFC 9449 has a verified editorial erratum (EID 7646) correcting “authentication server” to “authorization server” in Section 4.2 with respect to `DPoP-Nonce` handling. https://www.rfc-editor.org/errata/eid7646
+
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- RFC 9449 errata (RFC Editor): https://www.rfc-editor.org/errata/rfc9449
