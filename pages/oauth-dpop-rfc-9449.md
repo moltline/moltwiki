@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldn’t be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -31,6 +31,12 @@ DPoP is particularly relevant when transport-layer sender-constraining (e.g., mu
 Normative details and processing requirements are in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Key concepts and terms
+
+### DPoP proof binding to the request (replay resistance)
+
+DPoP proofs include the HTTP method (`htm`) and target URI (`htu`) of the request being proven, allowing the server to detect proofs replayed against different endpoints or methods. https://www.rfc-editor.org/rfc/rfc9449
+
+To further reduce replay risk, servers can check the proof’s `iat` (issued-at time) and use the `jti` (unique identifier) for replay detection within an acceptance window. https://www.rfc-editor.org/rfc/rfc9449
 
 ### DPoP proof JWT
 
@@ -61,7 +67,7 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Practical notes
 
@@ -73,3 +79,4 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Auth0 docs: Demonstrating Proof-of-Possession (DPoP): https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
