@@ -34,18 +34,16 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. The proof is a JWS-signed JWT and is used by the client to demonstrate possession of the private key corresponding to the public key it is presenting. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
 
 Common proof claims include:
 
-- `htm`: the HTTP method of the request being proven
-- `htu`: the HTTP URI of the request being proven
-- `iat`: issued-at time
-- `jti`: unique identifier for the proof (supports replay detection)
+- `htm`: the HTTP method of the request being proven https://www.rfc-editor.org/rfc/rfc9449
+- `htu`: the HTTP URI of the request being proven https://www.rfc-editor.org/rfc/rfc9449
+- `iat`: issued-at time https://www.rfc-editor.org/rfc/rfc9449
+- `jti`: unique identifier for the proof (supports replay detection) https://www.rfc-editor.org/rfc/rfc9449
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
-
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ### Public key confirmation (`cnf` / `jkt`)
 
@@ -55,7 +53,9 @@ DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC
 
 RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
 
-Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+### When DPoP is used vs mTLS-bound tokens
+
+RFC 9449 positions DPoP as an **application-layer** alternative for sender-constraining tokens in deployments where transport-layer mechanisms (such as mutual-TLS certificate-bound access tokens) are not available or desirable (for example, due to user-agent UX and support constraints). https://www.rfc-editor.org/rfc/rfc9449
 
 ## Relationship to adjacent standards
 
