@@ -67,9 +67,28 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
-- Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
+
+### Replay detection and proof uniqueness
+
+Resource servers are expected to treat the DPoP proof’s `jti` as a **single-use identifier** (within an acceptance window) to help detect replay of the same proof. https://datatracker.ietf.org/doc/html/rfc9449
+
+In practice, this means you need an operational plan for:
+
+- **clock skew / acceptance window** (how far from `iat` you accept proofs)
+- **`jti` storage** (in-memory cache vs. shared store) and eviction strategy
+- **key rotation** (how you scope `jti` uniqueness; e.g., per key thumbprint)
+
+Okta’s DPoP guide explicitly calls out tracking `jti` and rejecting reuse of a `jti` value as part of replay prevention. https://developer.okta.com/docs/guides/dpop/nonoktaresourceserver/main/
+
+### Nonce support (freshness)
+
+RFC 9449 defines an optional nonce mechanism where servers can require a `nonce` claim in the DPoP proof JWT, and instruct clients to retry after returning a nonce value in a response header. https://datatracker.ietf.org/doc/html/rfc9449
+
+Some vendors operationalize this with concrete retry behavior and rotation schedules. For example, Okta describes returning a nonce value and requiring the client to retry with that value included as the `nonce` claim. https://developer.okta.com/docs/guides/dpop/nonoktaresourceserver/main/
 
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Okta DPoP guide: https://developer.okta.com/docs/guides/dpop/nonoktaresourceserver/main/
+- Auth0 DPoP docs: https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
