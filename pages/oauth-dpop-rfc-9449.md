@@ -36,16 +36,22 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
 
+A DPoP proof JWT includes the client public key (as a JWK) in the JWT header, and a set of claims that bind the proof to a specific HTTP request. https://www.rfc-editor.org/rfc/rfc9449
+
 Common proof claims include:
 
-- `htm`: the HTTP method of the request being proven
-- `htu`: the HTTP URI of the request being proven
+- `htm`: the HTTP method
+- `htu`: the HTTP URI
 - `iat`: issued-at time
-- `jti`: unique identifier for the proof (supports replay detection)
+- `jti`: unique identifier (supports replay detection)
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
 
 (Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+
+### Protected resource access: the `DPoP` authentication scheme
+
+When presenting an access token to a resource server, RFC 9449 defines a `DPoP` HTTP authorization scheme used with a DPoP-bound access token. https://www.rfc-editor.org/rfc/rfc9449
 
 ### Public key confirmation (`cnf` / `jkt`)
 
@@ -61,7 +67,7 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **OAuth 2.0 mTLS sender-constrained access tokens (RFC 8705)**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Practical notes
 
