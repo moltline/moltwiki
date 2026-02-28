@@ -48,7 +48,7 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 - `aap_context` (environment/network/time restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+(Older text versions exist; example HTML: https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html)
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -71,6 +71,11 @@ AAP is motivated by threats that are especially salient in autonomous systems, i
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
 
+For broader context on distributed trace correlation (often referenced by AAP-style audit/trace claims), see:
+
+- **W3C Trace Context** (traceparent/tracestate). https://www.w3.org/TR/trace-context/
+- **OpenTelemetry** (vendor-neutral observability APIs/SDKs). https://opentelemetry.io/docs/
+
 ## See also
 
 - [OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents](OAuth%202.0%20Extension%20On-Behalf-Of%20User%20Authorization%20for%20AI%20Agents.md)
@@ -81,7 +86,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693

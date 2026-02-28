@@ -26,16 +26,16 @@ The Payment Request API is commonly discussed alongside related specifications i
 
 The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] The specification was later republished as a W3C Candidate Recommendation Snapshot in 2024.[^w3c-cr-2024] The W3C Web Payments Working Group has continued work on the specification in its GitHub-hosted drafts, including efforts to realign the text with interoperable implementations.[^w3c-ed]
 
-Earlier in the standardization process, the Working Group recorded that it removed API support for shipping address, billing address, and contact information in response to privacy and internationalization review feedback.[^w3c-transitions-346]
+In a W3C transition request describing substantive changes for a CR snapshot update, the Working Group reported removing API support for shipping address, billing address, and contact information, citing privacy and internationalization review feedback. The same transition request also notes clarifications around language (recommending the payment UI match the document language) and around currency codes and symbols.[^w3c-transitions-346]
 
 - **User agent–mediated payment UI:** The browser mediates the user experience for selecting and authorizing payment, rather than the merchant building a bespoke checkout UI.[^mdn]
 - **Payment method identifiers:** The API uses payment method identifiers to indicate which payment methods a merchant supports and which method the user selected.[^w3c-payment-method-id]
 - **Extensibility via payment handlers:** Payment handlers allow payment apps (including web-based ones) to integrate with the Payment Request flow.[^w3c-payment-handler]
-- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform guidance points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface, and W3C discussions have considered deprecating `allowpaymentrequest`.[^mdn][^w3c-allowpaymentrequest-thread]
+- **Embedded contexts:** MDN notes that the API is available inside cross-origin iframes only if the iframe has the `allowpaymentrequest` attribute set. Separately, the Payment Request API integrates with Permissions Policy via the `payment` policy-controlled feature.[^mdn][^mdn-permissions-policy-payment]
 
 ## Security and permissions
 
-The Payment Request API is subject to the Permissions Policy mechanism. In particular, the `payment` policy-controlled feature can be used to restrict whether a document is allowed to use the API; MDN notes that the default allowlist for `payment` is `self`.[^mdn-permissions-policy-payment]
+The Payment Request API integrates with the Permissions Policy mechanism via the `payment` policy-controlled feature. MDN notes that the default allowlist for `payment` is `self`.[^mdn-permissions-policy-payment]
 
 ## Implementations
 
@@ -55,7 +55,6 @@ Browser support has varied by vendor and payment method. For example, WebKit ann
 [^w3c-news-cr-2024]: W3C News. “W3C Invites Implementations of Payment Request API.” https://www.w3.org/news/2024/w3c-invites-implementations-of-payment-request-api/
 [^w3c-transitions-346]: W3C Transitions (GitHub). “CR Snapshot Update Request for Payment Request API #346.” https://github.com/w3c/transitions/issues/346
 [^w3c-pr-info-faq]: W3C payment-request-info (GitHub wiki). “FAQ.” https://github.com/w3c/payment-request-info/wiki/FAQ
-[^w3c-allowpaymentrequest-thread]: W3C public-webpayments-specs mailing list. “Re: [w3c/payment-request] Deprecate allowpaymentrequest attribute (#928).” https://lists.w3.org/Archives/Public/public-webpayments-specs/2023Jun/0011.html
 [^w3c-payment-handler]: W3C. “Payment Handler API.” https://www.w3.org/TR/payment-handler/
 [^mdn-permissions-policy-payment]: MDN Web Docs. “Permissions-Policy: payment directive.” https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Headers/Permissions-Policy/payment (last modified 2025-07-04).
 [^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/

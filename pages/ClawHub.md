@@ -1,6 +1,6 @@
 # ClawHub
 
-ClawHub is OpenClaw’s public registry for **skills**: versioned bundles (a folder containing a `SKILL.md` plus any supporting files) that extend what an OpenClaw agent can do. It provides a web UI and a CLI-oriented interface for publishing, versioning, searching, and installing skills.
+ClawHub is OpenClaw’s public registry for **skills**: versioned bundles (a folder containing a `SKILL.md` plus any supporting files) that extend what an OpenClaw agent can do. It provides a web UI and a CLI-oriented interface for searching, installing, updating, and publishing skills.
 
 ## What it is
 
@@ -10,46 +10,53 @@ According to the OpenClaw documentation, ClawHub is:
 - a versioned store of skill bundles and metadata
 - a discovery surface for search, tags, and usage signals
 
-The docs also describe the service as free and public by default: skills are visible to everyone for sharing and reuse.
+The OpenClaw docs describe the service as free and public by default: skills are visible to everyone for sharing and reuse.
 
 ## How it works (high level)
 
 - Authors publish a skill bundle (files + metadata).
 - ClawHub stores the bundle, parses metadata, and assigns a version.
-- The registry indexes skills for discovery, including embedding/vector search.
-- Users browse or install skills via the ClawHub web app or the ClawHub CLI.
+- The registry indexes skills for discovery.
+- Users browse, download, and install skills via the ClawHub web app or the ClawHub CLI.
 
 ## CLI and common workflows
 
-The OpenClaw docs describe a dedicated CLI (`clawhub`) for searching and installing skills, publishing new versions, and syncing local skill folders to the registry.
+The OpenClaw docs describe a dedicated CLI (`clawhub`) for searching and installing skills, updating installed skills, and publishing new versions.
 
-Examples from the docs include:
+Common commands shown in the docs include:
 
 - Search:
 
   `clawhub search "calendar"`
 
-- Install:
+- Install a skill into the current workspace:
 
   `clawhub install`
 
-- Update installed skills:
+- Update all installed skills:
 
   `clawhub update --all`
 
-- Publish a skill folder (example flags shown in docs):
+- Sync (scan + publish updates):
 
-  `clawhub publish ./my-skill --slug my-skill --name "My Skill" --version 1.0.0 --tags latest`
+  `clawhub sync --all`
+
+The docs also describe how the CLI chooses an install location: by default it installs into `./skills` under the current working directory, but will fall back to the configured OpenClaw workspace unless overridden (for example via `--workdir` or `CLAWHUB_WORKDIR`).
 
 ## Security and moderation
 
-Because skills are third-party code installed locally, they can interact with the local file system and network once installed and enabled. The OpenClaw docs describe reporting and moderation features (including auto-hiding skills after a threshold of unique reports), and note an account-age requirement for publishing.
+Because skills are third-party code installed locally, they should be treated as untrusted until reviewed.
 
-Separately, security reporting has described malicious skills being uploaded to ClawHub and presented as wallet or trading tools, reinforcing the need to review a skill’s contents and provenance before installing.
+The OpenClaw docs describe several platform controls intended to slow abuse and support moderation, including:
+
+- a minimum GitHub account age requirement to publish
+- user reporting with required reasons and rate limits
+- automatic hiding of a skill after more than three unique reports
+- moderator actions such as hiding/unhiding, deleting, and banning
 
 ## References
 
 - OpenClaw docs: “ClawHub” — https://docs.openclaw.ai/tools/clawhub
+- OpenClaw docs: “Skills” — https://docs.openclaw.ai/tools/skills
 - ClawHub site — https://clawhub.ai/
 - GitHub: openclaw/clawhub — https://github.com/openclaw/clawhub
-- Tom’s Hardware: “Malicious OpenClaw ‘skill’ targets crypto users on ClawHub” — https://www.tomshardware.com/tech-industry/cyber-security/malicious-moltbot-skill-targets-crypto-users-on-clawhub
