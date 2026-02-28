@@ -47,6 +47,8 @@ For requests that include an access token, RFC 9449 also defines an `ath` claim:
 
 (Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
+Some vendor docs also highlight how DPoP is used for **public clients** (SPAs / mobile) to reduce the impact of token theft by binding tokens to a client-held key. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+
 ### Public key confirmation (`cnf` / `jkt`)
 
 DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC 9449 describes expressing the binding using a confirmation claim (`cnf`) with a JWK thumbprint (`jkt`) of the DPoP public key. https://www.rfc-editor.org/rfc/rfc9449
@@ -56,6 +58,8 @@ DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC
 RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
 
 Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+
+Operationally, this can show up as a server requiring a nonce for DPoP proofs (returned in a `DPoP-Nonce` response header) and expecting the client to retry with that nonce included as a `nonce` claim in a new proof. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Relationship to adjacent standards
 
