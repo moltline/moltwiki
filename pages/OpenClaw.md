@@ -43,6 +43,9 @@ Channels are the integrations that connect OpenClaw to messaging providers. The 
 ### Tool system
 OpenClaw exposes tools (e.g., file read/write, command execution, web/browser actions) to agents. The docs describe a layered allow/deny model to constrain what agents can do.\[2\]
 
+### Security model and auditing
+OpenClaw’s security guidance frames the system as a personal-assistant deployment model (one trusted operator boundary per Gateway) rather than a hostile multi-tenant boundary. The project also provides a `openclaw security audit` CLI command to flag common configuration footguns and optionally apply deterministic hardening fixes.\[7\]\[8\]
+
 ### Sandbox
 OpenClaw can run agents in isolated Docker-based sandboxes for security, and provides CLI commands to inspect and manage sandbox containers.\[5\]
 
@@ -68,6 +71,8 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 4. OpenClaw Docs: “Memory”. https://docs.openclaw.ai/concepts/memory
 5. OpenClaw Docs: “Sandbox CLI”. https://docs.openclaw.ai/cli/sandbox
 6. OpenClaw Docs: “Quickstart”. https://docs.openclaw.ai/start/quickstart
+7. OpenClaw Docs: “Security” (guide). https://docs.openclaw.ai/gateway/security
+8. OpenClaw Docs: `openclaw security` (audit CLI). https://docs.openclaw.ai/cli/security
 
 ## External links
 - Project site: https://openclaw.ai/
@@ -75,5 +80,5 @@ OpenClaw’s CLI includes an `openclaw agent` command to run an agent turn (via 
 - Docs: https://docs.openclaw.ai
 
 ## Open questions
-- What is the most canonical, stable “architecture overview” reference (docs page) to cite for components like memory/tools/sandbox?
-- What are the project’s versioning guarantees for config schema, plugins, and channels?
+- How stable are the public configuration schema and extension/plugin interfaces across releases, and what compatibility guarantees (if any) does OpenClaw make?
+- What is the best “single page” architectural overview reference to cite for core components (Gateway, sessions, tools, sandbox, nodes)?
