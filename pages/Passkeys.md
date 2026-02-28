@@ -13,18 +13,20 @@ Passkeys are typically based on public-key cryptography:
 
 When authenticating, the user agent and authenticator produce a cryptographic assertion that can be verified by the relying party, rather than transmitting a reusable secret such as a password.[^passkey-central-intro]
 
-## Relationship to WebAuthn and FIDO2
+## Relationship to WebAuthn, CTAP, and FIDO2
 
-Passkeys are closely associated with the WebAuthn ecosystem:
+Passkeys are commonly implemented using the FIDO2 ecosystem, which combines:
 
-- The W3C WebAuthn specification defines a browser API for creating and using public key credentials, and it describes registration and authentication "ceremonies" involving a user, a user agent, and an authenticator.[^webauthn]
-- FIDO Alliance materials describe passkeys as FIDO credentials intended to replace passwords and reduce susceptibility to phishing and credential stuffing.[^fido-passkeys]
+- **WebAuthn** (a W3C specification) for browser and platform APIs that create and use public key credentials.[^webauthn]
+- **CTAP** (Client to Authenticator Protocol, published by the FIDO Alliance) for communication between a client platform and an authenticator, including external authenticators such as security keys over transports like USB, NFC, or Bluetooth.[^fido-specs][^ctap]
+
+FIDO Alliance materials describe passkeys as a password replacement that is phishing-resistant by design, and emphasize that passkeys are cryptographic credentials tied to a user account on a website or application.[^fido-passkeys]
 
 ## Single-device and multi-device passkeys
 
 Some sources distinguish between passkeys that are bound to a particular authenticator and passkeys that can be synchronized across a user's devices:
 
-- **Single-device credentials (SDC)** are passkeys bound to a single device or authenticator.
+- **Single-device credentials (SDC)** are passkeys bound to a single device, meaning the credential can only be validated using the device that created it.[^yubico-sdc-mdc]
 - **Multi-device credentials (MDC)** are passkeys that can be moved and synchronized between devices, enabling sign-in from multiple devices without separately enrolling each one.[^yubico-sdc-mdc]
 
 ## Use in agentic systems
@@ -41,6 +43,8 @@ For example, an agent operating through a browser automation layer may still rel
 ## References
 
 [^fido-passkeys]: FIDO Alliance. "FIDO Passkeys: Passwordless Authentication". https://fidoalliance.org/passkeys/
+[^fido-specs]: FIDO Alliance. "FIDO User Authentication Specifications". https://fidoalliance.org/specifications/
+[^ctap]: FIDO Alliance. "Client to Authenticator Protocol (CTAP)" (CTAP 2.1, errata 2022-06-21). https://fidoalliance.org/specs/fido-v2.1-ps-20210615/fido-client-to-authenticator-protocol-v2.1-ps-errata-20220621.html
 [^passkey-central-intro]: Passkey Central. "Introduction to Passkeys". https://www.passkeycentral.org/introduction-to-passkeys/
-[^webauthn]: W3C Web Authentication Working Group. "Web Authentication: An API for accessing Public Key Credentials" (Editor’s Draft; TR points to https://www.w3.org/TR/webauthn-3/). https://w3c.github.io/webauthn/
+[^webauthn]: W3C Web Authentication Working Group. "Web Authentication: An API for accessing Public Key Credentials" (Editor’s Draft). https://w3c.github.io/webauthn/
 [^yubico-sdc-mdc]: Yubico Developers. "Single device vs multi device credentials". https://developers.yubico.com/Passkeys/Passkey_concepts/Single_device_vs_multi_device_credentials.html
