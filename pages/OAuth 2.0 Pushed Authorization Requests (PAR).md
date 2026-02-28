@@ -1,50 +1,54 @@
 # OAuth 2.0 Pushed Authorization Requests (PAR)
 
-**OAuth 2.0 Pushed Authorization Requests** (**PAR**) is an OAuth 2.0 extension that adds a *back-channel* way for clients to submit the parameters of an authorization request to an authorization server. Instead of placing the full authorization request in the front-channel authorization endpoint URL, the client sends the request parameters to a dedicated **pushed authorization request endpoint** and receives a short-lived **request URI** that is then used at the authorization endpoint.
+**OAuth 2.0 Pushed Authorization Requests** (**PAR**) is an OAuth 2.0 extension that lets a client send the parameters of an authorization request to the authorization server over a **direct, back-channel** call (the **PAR endpoint**). The authorization server returns a short-lived **`request_uri`** reference, which the client then supplies at the normal authorization endpoint (front-channel redirect) to continue the flow. (RFC 9126) https://www.rfc-editor.org/rfc/rfc9126.html
 
-PAR is standardized by the IETF as **RFC 9126** (September 2021). It complements **JWT-Secured Authorization Request (JAR)** (RFC 9101) by defining an interoperable way to push an authorization request payload to the authorization server and receive a `request_uri` reference for use at the authorization endpoint.
+PAR is most often discussed alongside **JWT-Secured Authorization Request (JAR)**, which defines how to package authorization request parameters into a signed (and optionally encrypted) JWT “request object”. (RFC 9101) https://www.rfc-editor.org/rfc/rfc9101.html
 
-## Overview
+## Why PAR exists
 
-In a conventional OAuth 2.0 authorization code flow, the client constructs an authorization request and redirects the user agent to the authorization endpoint with request parameters in the URL query (or, for some response modes, in the fragment or form post). PAR changes this by moving most request parameters to a server-to-server call.
+In classic OAuth 2.0, authorization request parameters are commonly sent in the browser redirect URL. That is easy to implement, but it creates practical and security issues:
 
-A typical PAR-based sequence is:
+- **Integrity/authenticity**: request parameters in the front channel can be modified unless additional protections are used. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
+- **Confidentiality / leakage**: even when HTTPS is used, parameters can leak via referrers, browser history, screenshots, logs, etc. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
+- **Size limits**: fine-grained authorization data can make URLs too large for some intermediaries. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
 
-1. The client sends the authorization request parameters to the authorization server’s **PAR endpoint**.
-2. The authorization server validates the request and returns a `request_uri` value (and an expiration time).
-3. The client redirects the user agent to the authorization endpoint, including the returned `request_uri` (and typically `client_id`).
-4. The authorization server retrieves the pushed request parameters associated with that `request_uri` and continues processing the authorization request.
+PAR mitigates these by moving the *payload* of the authorization request to a server-to-server request, and keeping the front-channel redirect small.
 
-## Request URI
+## High-level flow
 
-The `request_uri` returned from the PAR endpoint is a reference to the stored authorization request parameters on the authorization server.
+A typical PAR-based authorization code flow looks like:
 
-RFC 9126 specifies that:
+1. **Client → PAR endpoint (back channel):** send authorization request parameters to the authorization server.
+2. **Authorization server → Client:** validate the pushed request and return a `request_uri` (plus an expiration time). (RFC 9126 §2.2) https://www.rfc-editor.org/rfc/rfc9126.html
+3. **Client → Authorization endpoint (front channel):** redirect the user agent to the authorization endpoint including `request_uri`.
+4. **Authorization server:** resolves `request_uri` to the stored parameters and processes the authorization request.
 
-- The client uses the `request_uri` parameter at the authorization endpoint.
-- The `request_uri` value is intended to be **single-use** and **short-lived**.
-- The authorization server controls the format and meaning of the `request_uri` value.
+## The `request_uri`
 
-PAR builds on the earlier concept of OAuth 2.0 **request objects** (JWT-encoded authorization requests) and can be used with request objects as well.
+The `request_uri` returned from the PAR endpoint is an authorization-server-defined reference to the stored request parameters.
 
-## Motivations and security considerations
+Key properties called out by RFC 9126 include:
 
-PAR is commonly used to reduce exposure and manipulation of authorization request parameters in the front channel. RFC 9126 highlights challenges with front-channel authorization request parameters (e.g., lack of integrity protection, potential leakage via user agent/referrers, and URL size limits) and positions PAR as a way to push the request payload directly to the authorization server before redirecting the user agent.
+- **Short-lived**: the response includes an expiration (`expires_in`) and the server is expected to enforce it. (RFC 9126 §2.2) https://www.rfc-editor.org/rfc/rfc9126.html
+- **Single-use**: the `request_uri` is intended to be usable only once. (RFC 9126 §1.1) https://www.rfc-editor.org/rfc/rfc9126.html
+- **Opaque / server-controlled**: clients treat it as an opaque value; the authorization server defines its structure and semantics. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
 
-Common motivations include:
+Conceptually, this is similar to JAR’s “request by reference” approach, but PAR standardizes the endpoint and exchange used to obtain the reference. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
 
-- **Reduced URL size and leakage**: large request parameters (for example, rich authorization details or request objects) are not placed in the browser URL, which can be logged or leaked via referrers.
-- **Server-side validation before redirect**: the authorization server can validate pushed parameters early and reject invalid or unauthorized requests before involving the user agent.
-- **Stronger binding to the client**: PAR allows the authorization server to authenticate the client before user interaction, enabling earlier rejection of illegitimate requests.
+## Relationship to JAR (RFC 9101)
 
-PAR does not remove the need for TLS; it is specified for use with HTTPS.
+- **JAR** defines *how to represent* an authorization request as a JWT request object, enabling signing (JWS) and optional encryption (JWE). (RFC 9101 Abstract) https://www.rfc-editor.org/rfc/rfc9101.html
+- **PAR** defines *how to deliver* the authorization request payload to the authorization server via a direct call and get back a `request_uri` reference. (RFC 9126 Abstract) https://www.rfc-editor.org/rfc/rfc9126.html
 
-## Relationship to other specifications
+They can be used independently, but they are commonly used together: a client can push a request object (from JAR) via PAR to avoid front-channel size/leakage issues while still getting cryptographic protection.
 
-PAR is often discussed alongside other OAuth and OpenID Connect extensions that harden the authorization request and response:
+## Security considerations (practical takeaways)
 
-- **JWT Secured Authorization Response Mode (JARM)**, which encodes authorization responses as signed (and optionally encrypted) JWTs.
-- **Demonstrating Proof of Possession (DPoP)**, which can sender-constrain access tokens.
+PAR is a building block, not a complete security solution on its own. Some common takeaways from the RFC’s security discussion:
+
+- **Client authentication can happen before user interaction**, which can let the authorization server reject unauthorized clients earlier in the flow. (RFC 9126 §1) https://www.rfc-editor.org/rfc/rfc9126.html
+- **TLS is still required**: PAR is specified for use with HTTPS endpoints. (RFC 9126 §2) https://www.rfc-editor.org/rfc/rfc9126.html
+- **Treat `request_uri` as a secret reference**: it points to stored request parameters; implementations should prevent guessing/swapping/replay as discussed in the RFC’s security considerations section. (RFC 9126 §7) https://www.rfc-editor.org/rfc/rfc9126.html
 
 ## References
 
