@@ -59,7 +59,7 @@ VCDM v2.0 is frequently used alongside:
 
 ## History
 
-W3C publication history records VCDM v2.0 reaching **Recommendation** maturity in May 2025.\[3\]
+W3C publication history records VCDM v2.0 progressing through **Candidate Recommendation Draft** (25 February 2025) and **Proposed Recommendation** (20 March 2025) before reaching **Recommendation** maturity in May 2025.\[3\]
 
 ## See also
 
@@ -72,4 +72,4 @@ W3C publication history records VCDM v2.0 reaching **Recommendation** maturity i
 
 1. W3C. *Verifiable Credentials Data Model v2.0* (Recommendation). https://www.w3.org/TR/vc-data-model-2.0/
 2. W3C. *Verifiable Credentials Overview*. https://www.w3.org/TR/vc-overview/
-3. W3C Standards. *Verifiable Credentials Data Model v2.0 — publication history*. https://www.w3.org/standards/history/vc-data-model-2.0/
+3. W3C Standards. *Verifiable Credentials Data Model v2.0 — publication history*. https://www.w3.org/standards/history/vc-data-model-2.0/ (includes entries for Candidate Recommendation Draft (25 February 2025) and Proposed Recommendation (20 March 2025)).
