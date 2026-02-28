@@ -1,38 +1,52 @@
 # A2A x402 Extension
 
-The **A2A x402 Extension** is an extension specification for the **Agent-to-Agent (A2A) protocol** that enables agents to require and settle **on-chain cryptocurrency payments** as part of A2A task execution. It is designed to support paid agent services (for example, API calls, data processing, or AI inference) by adding a standard payment request-and-authorization flow to A2A message exchanges.[1]
+The **A2A x402 Extension** is an extension specification for the **Agent-to-Agent (A2A) protocol** that adds an on-chain payment handshake to A2A task execution. It standardizes how a service-providing ("merchant") agent can require payment, how a client agent submits a signed payment authorization, and how the merchant returns receipts once the payment is verified and/or settled. (Spec: v0.2) https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-## Overview
+## What it is (and is not)
 
-In the A2A ecosystem, agents can act as service providers. The A2A x402 extension describes how a service-providing agent can require payment before fulfilling a request, and how a client agent can submit a payment authorization that the service agent verifies and settles.
+* **It is an A2A extension**, declared in an agent’s `AgentCard` under `capabilities.extensions`, using a canonical extension URI for a particular version. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+* **It is not the same thing as HTTP x402**, though it borrows the "402 Payment Required" idea and maps it into A2A task/message semantics.
 
-Google’s announcement of the **Agent Payments Protocol (AP2)** describes the A2A x402 extension as a production-ready approach for agent-based cryptocurrency payments and positions it as an extension to AP2 for web3 payment rails.[2]
+## Core objects and fields
 
-## Design goals
+The extension defines (at minimum) these named objects and metadata keys (names as in the spec):
 
-The repository describes the extension’s goal as providing a standardized way for agents to charge for services and receive payments on-chain, effectively turning an A2A agent into a commercial service endpoint.[1]
+* `x402PaymentRequiredResponse`  the merchant’s description of acceptable payment options, including an `accepts` array of `PaymentRequirements`. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+* `PaymentRequirements`  one concrete way to pay (e.g., scheme + network + asset + recipient + amount bounds). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+* `PaymentPayload`  the client’s signed authorization corresponding to one selected `PaymentRequirements` option. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
 
-## Protocol flow
+During the flow, A2A messages carry an `x402.payment.status` string plus additional x402 keys such as:
 
-The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+* `x402.payment.required` (merchant  client, in the standalone flow)
+* `x402.payment.payload` (client  merchant)
+* `x402.payment.receipts` (merchant  client)
 
-In the standalone flow described by the specification, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3]
+(Standalone placement and flow detection are described in v0.2.) https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-A typical interaction involves a **client agent** and a **merchant (service) agent**:[3]
+## Flows
 
-1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example, `x402.payment.status: "payment-required"` and `x402.payment.required: { ... }`).
-2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload correlated to the original task (for example, `x402.payment.status: "payment-submitted"` and `x402.payment.payload: { ... }`).
-3. **Payment verified / completed**: the merchant agent verifies and settles the payment on-chain and returns an updated task that includes settlement details (for example, `x402.payment.receipts`) in task message metadata, with status values such as `payment-verified` and `payment-completed`.
+### Standalone flow (x402-only)
 
-## Extension declaration
+In the **standalone flow**, the merchant communicates payment requirements directly in the `Task` status message metadata, and the client replies with a signed payload:
 
-Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3]
+1. **Merchant requires payment**: merchant returns a `Task` in `input-required` and sets `task.status.message.metadata["x402.payment.status"] = "payment-required"`. In the standalone flow, the merchant also includes `task.status.message.metadata["x402.payment.required"] = <x402PaymentRequiredResponse>`. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+2. **Client submits payment authorization**: client chooses one `PaymentRequirements` option from `accepts`, has it signed by a wallet or signing service, and sends a message with `message.metadata["x402.payment.status"] = "payment-submitted"` and `message.metadata["x402.payment.payload"] = <PaymentPayload>`. (The spec examples also show correlating with the original `taskId`.) https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+3. **Merchant verifies/settles and returns receipts**: merchant verifies and settles, and includes receipts under `x402.payment.receipts` while updating `x402.payment.status` (e.g., `payment-verified`, `payment-completed`). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
 
-## Relationship to x402
+### Embedded (composable) flow
 
-The A2A x402 extension is related to the broader **x402** payments concept, which revives the HTTP **402 Payment Required** status code to enable programmatic payments over HTTP. Coinbase describes x402 as an open payment protocol for automatic stablecoin payments over HTTP, using a payment-required response followed by a client-supplied payment payload that the server verifies and settles.[4]
+v0.2 also defines an **embedded flow**, where x402 objects are nested inside a higher-level commerce protocol (the spec calls out AP2 as an example). In this mode:
 
-While x402 is often described in terms of HTTP request/response semantics, the A2A x402 extension adapts similar ideas to A2A task and message flows, using A2A-defined task states and message metadata to negotiate and prove payment.[3]
+* the `x402PaymentRequiredResponse` is embedded in a higher-level object (e.g., in `task.artifacts`), rather than being present at `x402.payment.required` in metadata
+* the `PaymentPayload` is embedded in a higher-level object (e.g., in `message.parts`)
+
+The spec describes a detection rule: if `x402.payment.status == "payment-required"` and `x402.payment.required` is present, treat it as standalone; otherwise treat it as embedded and scan the task artifacts for the higher-level container. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+
+## Relationship to HTTP x402 (Coinbase)
+
+The A2A x402 extension is conceptually related to the broader **x402** payments protocol for HTTP: a resource server can respond with **402 Payment Required** plus payment instructions, and the client can retry with a payment payload (e.g., via `PAYMENT-SIGNATURE`) that the server verifies and settles. https://github.com/coinbase/x402 https://docs.cdp.coinbase.com/x402/welcome
+
+HTTP status code **402 (Payment Required)** is reserved for future use in the HTTP status code registry (i.e., it is defined but not standardized for a specific payment mechanism). RFC 9110 defines the status code and notes its reserved nature. https://datatracker.ietf.org/doc/html/rfc9110
 
 ## See also
 
@@ -42,8 +56,8 @@ While x402 is often described in terms of HTTP request/response semantics, the A
 
 ## References
 
-1. Google (GitHub). "google-agentic-commerce/a2a-x402: The A2A x402 Extension brings cryptocurrency payments to the Agent-to-Agent (A2A) protocol." https://github.com/google-agentic-commerce/a2a-x402 (accessed 2026-02-27).
-2. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-27).
-3. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.1" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md (accessed 2026-02-27).
-4. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.2" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md (accessed 2026-02-27).
-5. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-27).
+* A2A Protocol: x402 Payments Extension v0.2 (spec): https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+* A2A Protocol: x402 Payments Extension v0.1 (spec): https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+* Coinbase x402 repository: https://github.com/coinbase/x402
+* Coinbase Developer Docs  Welcome to x402: https://docs.cdp.coinbase.com/x402/welcome
+* IETF RFC 9110  HTTP Semantics (status code registry, incl. 402): https://datatracker.ietf.org/doc/html/rfc9110

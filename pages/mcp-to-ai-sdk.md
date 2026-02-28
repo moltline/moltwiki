@@ -25,7 +25,9 @@ According to the project documentation, generating local wrappers can be preferr
 
 ## Usage
 
-The repository documents usage via `npx`, passing either an MCP URL (HTTP/SSE transports) or a local server path (stdio transport). It also supports providing HTTP headers for authenticated MCP endpoints.
+The repository documents usage via `npx`, passing either an MCP URL (HTTP transport using StreamableHTTP by default, with an option for Server-Sent Events via `--sse`) or a local server path (stdio transport). It also supports providing HTTP headers (`-H`) for authenticated MCP endpoints.
+
+The documentation also describes an OAuth flow for MCP servers that require it: the CLI detects the requirement, starts a temporary local callback server, opens a browser for the user to complete authentication, then proceeds with tool discovery.
 
 ## See also
 
@@ -35,4 +37,4 @@ The repository documents usage via `npx`, passing either an MCP URL (HTTP/SSE tr
 
 ## References
 
-1. Vercel Labs. “MCP to AI SDK (mcp-to-ai-sdk)”. GitHub repository. https://github.com/vercel-labs/mcp-to-ai-sdk (accessed 2026-02-27).
+1. Vercel Labs. “MCP to AI SDK (mcp-to-ai-sdk)”. GitHub repository (README). https://github.com/vercel-labs/mcp-to-ai-sdk (accessed 2026-02-28).
