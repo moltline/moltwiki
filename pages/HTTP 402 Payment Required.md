@@ -1,25 +1,27 @@
 # HTTP 402 Payment Required
 
-**HTTP 402 Payment Required** is an HTTP status code defined by the IETF as **reserved for future use**. In other words, core HTTP does not standardize *how* a client should pay or *how* a server should describe acceptable payment methods; systems that use `402` must define the payment interaction at the application layer. (RFC 9110, §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required)
+**HTTP 402 Payment Required** is an HTTP status code whose semantics are intentionally **underspecified**: the IETF defines it as **reserved for future use**, without standardizing any interoperable payment challenge/response mechanism. (RFC 9110, §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.3)
 
-Because the semantics are intentionally underspecified, `402` is mostly used by APIs and custom protocols as a convenient signal for “you need to pay (or your payment failed) before you can access this resource”. MDN summarizes this as: “reserved but not defined; actual implementations vary”. https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
+In practice, services sometimes use `402` as an application-level signal that access to a resource depends on a payment step (or that a payment-related request failed). MDN notes that the status code is “reserved but not defined” and that “actual implementations vary” (including response format and contents). https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
 
 ## What the standard says
 
 - **Status meaning:** “Payment Required” (client error class).
-- **Standardization status:** reserved for future use; no interoperable challenge/response format is defined in HTTP itself. RFC 9110 §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
-- **Registry entry:** IANA lists `402 Payment Required` with a reference to RFC 9110. https://www.iana.org/assignments/http-status-codes
+- **Standardization status:** reserved for future use; core HTTP does not define a standard payment negotiation format for `402`. RFC 9110 §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#section-15.5.3
+- **Registry entry:** IANA lists `402 Payment Required` and references RFC 9110. https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 
 ## Practical use patterns
 
-Since there is no standard “payment challenge” equivalent to `WWW-Authenticate` for `401`, implementations typically choose their own approach, for example:
-
-- **Paywall / payment required:** the response indicates the resource is available if the client pays, and the client retries the request with whatever proof/token the protocol defines.
-- **Payment attempt failed:** some payment APIs return `402` as a generic error for a failed payment (e.g., expired card), with details in a JSON body. (Example and compatibility notes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402)
-
-### Interoperability implications
-
 Because `402` does not define headers, payloads, or verification rules, clients generally need **protocol-specific support** (headers, token formats, signing rules, etc.) to interoperate with a given service.
+
+Common patterns include:
+
+- **Paywall / payment required:** the response indicates the resource is available if the client completes a payment step, and the client retries the request with whatever proof/token the protocol defines.
+- **Payment attempt failed:** some payment APIs return `402` as a generic error for a failed payment request, with details in a JSON body (MDN provides an example). https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
+
+### Example: Stripe API (uses `402` for “request failed”)
+
+Stripe’s API documentation summarizes conventional HTTP status codes and describes `402` as **“Request Failed”**: “The parameters were valid but the request failed.” https://docs.stripe.com/api/errors
 
 ## Example: x402 (application-layer protocol)
 
