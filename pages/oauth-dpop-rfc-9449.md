@@ -25,25 +25,32 @@ DPoP is particularly relevant when transport-layer sender-constraining (e.g., mu
 
 1. **Key generation**: the client generates a public/private key pair.
 2. **Proof on requests**: the client sends an HTTP `DPoP` header whose value is a **JWT** signed with the private key (the DPoP proof).
-3. **Token binding**: the authorization server can issue an access token that is bound to the public key (often represented via a confirmation claim when the token is a JWT).
+3. **Token binding**: the authorization server can issue an access token that is bound to the public key (e.g., via a confirmation claim when the token is a JWT).
 4. **Verification**: the resource server verifies the DPoP proof and checks that the presented access token is bound to the same key.
 
 Normative details and processing requirements are in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
+
+## When you need to send a DPoP proof
+
+DPoP can be used both when **requesting tokens** and when **calling protected resources**:
+
+- **Token endpoint**: a client includes a `DPoP` header in the token request so the authorization server can bind the issued token(s) to the public key in the proof. https://www.rfc-editor.org/rfc/rfc9449
+- **Resource requests**: when presenting a DPoP-bound access token, the client includes a fresh `DPoP` proof for the specific HTTP method and URI being called. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Key concepts and terms
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated JWT type value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
 
-Common proof claims include:
+The proof JWT includes (among other things) the **HTTP method** and **HTTP URI** it is authorizing, plus anti-replay data:
 
 - `htm`: the HTTP method of the request being proven
 - `htu`: the HTTP URI of the request being proven
 - `iat`: issued-at time
 - `jti`: unique identifier for the proof (supports replay detection)
 
-For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
+When a request presents an access token, the proof can include `ath`, which is defined as a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
 
 (Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
@@ -53,7 +60,9 @@ DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC
 
 ### Nonce support (`DPoP-Nonce` / `use_dpop_nonce`)
 
-RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
+RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require freshness. A server can return a nonce in a `DPoP-Nonce` HTTP response header and instruct the client to retry the request with a new proof including that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
+
+RFC 9449 also defines a **resource-server-provided nonce** variant, so nonce challenges are not limited to the authorization server. https://www.rfc-editor.org/rfc/rfc9449
 
 Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
