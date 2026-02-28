@@ -1,6 +1,8 @@
 # Agent Name Service (ANS)
 
-**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
+**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**.
+
+ANS is currently specified as an IETF Internet-Draft (work in progress):
 
 - https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
@@ -15,36 +17,41 @@ Classic DNS primarily maps names to network locations (e.g., IP addresses). In a
 
 Background on DNS: https://datatracker.ietf.org/doc/html/rfc1035
 
-## Overview
+## Key concepts and terminology (draft)
+
+- **Agent registry record**: a protocol-agnostic structured document describing an agent’s identity, endpoints, capabilities, and protocol-specific extensions (the draft describes these structures using JSON Schema). https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- **Registration authority (RA)**: validates registration/renewal requests, enforces registry policy, and (in the draft’s model) interacts with a certificate authority (CA) as part of PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- **Certificate authority (CA)**: issues and manages X.509 certificates used as a root of trust for identity verification in the PKI model. https://datatracker.ietf.org/doc/html/rfc5280
+- **Protocol Adapter Layer**: maps the protocol-agnostic registry record to protocol-specific representations (e.g., for A2A, MCP, ACP) so different agent protocols can interoperate via the same discovery substrate. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+
+## Overview (draft)
 
 At a high level, ANS proposes:
 
-- A **protocol-agnostic registry record** (described using JSON Schema) that can carry agent metadata and be extended for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft mentions A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- A **protocol-agnostic registry record** (described using JSON Schema) that can carry agent metadata and be extended for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity and authenticated resolution. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
 
 ## Architecture and roles (draft)
 
 The draft describes a registry architecture with roles such as:
 
 - **Requesting agent / operator**: submits registration and renewal requests.
-- **Agent registry**: stores records (identity, capabilities, endpoints, and related metadata).
-- **Registration authority (RA)**: validates registration/renewal requests and enforces registry policy; the draft positions the RA as interacting with a certificate authority as part of the PKI-based trust model. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- **Certificate authority (CA)**: issues and manages certificates used in the PKI trust model.
-
-Background on X.509 PKI profiles: https://datatracker.ietf.org/doc/html/rfc5280
+- **Agent registry**: stores records (identity, capabilities, endpoints, protocol-specific metadata via extensions, and lifecycle timestamps). https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- **Registration authority (RA)**: validates registration/renewal requests, enforces registry policy, and may validate the legal entity operating the agent; the draft positions the RA as interacting with a CA to issue certificates from CSRs. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
+- **Certificate authority (CA)**: issues and manages certificates used in the PKI trust model. https://datatracker.ietf.org/doc/html/rfc5280
 
 ## Relationship to DNS and DNS-SD
 
 ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 - **DNS-SD** defines how to use DNS record types and queries to discover named instances of a service type within a domain. https://datatracker.ietf.org/doc/html/rfc6763
-- **ANS** proposes a separate registry and resolution protocol oriented around agent discovery, where the resolved record can include identity and capability metadata and can be adapted to multiple agent communication protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- **ANS** proposes a separate registry and resolution protocol oriented around agent discovery, where the resolved record can include identity and capability metadata and can be adapted to multiple agent communication protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
 
 ## Security considerations (draft)
 
-The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.html
 
 ## Notes and cautions
 
