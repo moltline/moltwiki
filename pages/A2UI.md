@@ -16,7 +16,7 @@ The macOS Canvas panel can load local Canvas content via the `openclaw-canvas://
 
 For A2UI specifically, OpenClaw documents a default host page served by the Gateway Canvas host:
 
-- `http://<gateway-host>:18793/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
+- `http://<gateway-host>:18789/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
 
 When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
 
@@ -39,10 +39,28 @@ https://docs.openclaw.ai/platforms/mac/canvas
 ### Transport / API surface
 Canvas is exposed via the Gateway WebSocket API, so an agent can show/hide the panel, navigate, evaluate JavaScript, capture snapshots, and push A2UI updates. https://docs.openclaw.ai/platforms/mac/canvas
 
+### Canvas panel behavior (macOS app)
+OpenClaw’s Canvas documentation notes several macOS panel behaviors, including:
+
+- the panel is borderless and resizable
+- it remembers size/position per session
+- it auto-reloads when local canvas files change
+- only one Canvas panel is visible at a time (the session switches as needed)
+
+https://docs.openclaw.ai/platforms/mac/canvas
+
+Canvas can also be disabled in **Settings → Allow Canvas**; when disabled, canvas node commands return `CANVAS_DISABLED`. https://docs.openclaw.ai/platforms/mac/canvas
+
+### Local canvas storage and URL scheme (macOS)
+OpenClaw documents that Canvas state is stored under `~/Library/Application Support/OpenClaw/canvas/` and is served into the Canvas panel via the `openclaw-canvas:///` custom URL scheme. https://docs.openclaw.ai/platforms/mac/canvas
+
 The documentation notes that `canvas.navigate` accepts local canvas paths (including `/` for the scaffold or `index.html`), HTTP(S) URLs, and `file://` URLs. https://docs.openclaw.ai/platforms/mac/canvas
 
 ### CLI example (A2UI v0.8)
 OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a node via the CLI (and a quick “smoke” push that sends a text string). https://docs.openclaw.ai/platforms/mac/canvas
+
+### Triggering agent runs from Canvas
+OpenClaw documents that Canvas can trigger new agent runs via deep links like `openclaw://agent?...`. The app prompts for confirmation unless a valid key is provided. https://docs.openclaw.ai/platforms/mac/canvas
 
 ## See also
 - [OpenClaw](./OpenClaw.md)
@@ -50,7 +68,7 @@ OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a 
 - [OpenClaw Gateway](./OpenClaw%20Gateway.md)
 
 ## References
-- OpenClaw Docs: “Canvas (macOS app)” (includes local canvas paths, `openclaw-canvas:///`, A2UI hosting, and the v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
+- OpenClaw Docs: “Canvas (macOS app)” (includes local canvas paths, `openclaw-canvas:///`, deep links, A2UI hosting, and the v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
 - OpenClaw Docs mirror (same content; includes the default A2UI host URL and v0.8 message list). https://beaverslab.mintlify.app/en/platforms/mac/canvas
 
 ## External links
