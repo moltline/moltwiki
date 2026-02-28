@@ -1,55 +1,37 @@
+---
+title: OpenAI Agents SDK
+---
+
 # OpenAI Agents SDK
 
-The **OpenAI Agents SDK** is an open-source software development kit (SDK) for building agentic applications (including multi-agent workflows) in Python. It provides a small set of primitives—agents, tools, delegation (handoffs), and guardrails—alongside an agent loop that repeatedly calls a model and executes tool calls until producing a final output. The SDK also includes tracing and optional session/memory components.
+The **OpenAI Agents SDK** is an open-source Python software development kit for building *agentic* applications—LLM-driven programs that can call tools, delegate work to other agents ("handoffs"), and apply validation checks ("guardrails"). It is positioned as a production-oriented successor to OpenAI’s earlier experimental agent framework **Swarm**.
 
 ## Overview
 
-According to the project documentation, the Agents SDK is intended to be a production-ready successor to OpenAI's earlier experimental agent framework, **Swarm**. It emphasizes a limited number of core abstractions and a Python-first developer experience.
+The SDK is built around a small set of primitives:
 
-Key concepts described by the project include:
+- **Agents**: LLM configurations (model + instructions) that may be equipped with tools.
+- **Tools and tool invocation**: The runtime can call function tools (Python functions exposed as tools) and also integrate tools served via the **Model Context Protocol (MCP)**.
+- **Handoffs (agents as tools)**: A mechanism for routing sub-tasks from one agent to another.
+- **Guardrails**: Input/output validation that can run alongside agent execution.
 
-- **Agents**: model-backed components configured with instructions, tools, guardrails, and handoffs.
-- **Tools**: callable functions exposed to agents (with schema/validation), including both Python function tools and tools exposed by **Model Context Protocol (MCP)** servers.
-- **Handoffs (agents as tools)**: a mechanism for delegating work between agents for specialized tasks.
-- **Guardrails**: configurable input/output validation and safety checks that can run in parallel with agent execution.
-- **Sessions**: optional persistent memory for maintaining conversation history across agent runs.
-- **Tracing**: built-in instrumentation for inspecting, debugging, and monitoring agent runs.
-- **Realtime agents**: optional support for building voice agents (e.g., interruption detection and context management).
+The SDK includes a built-in **agent loop** that orchestrates LLM calls and tool execution until a task is complete.
 
-The documentation also describes built-in integration for calling tools exposed by **Model Context Protocol (MCP)** servers.
+## Tracing
 
-## Implementation and distribution
+The Agents SDK includes built-in **tracing** intended to support debugging and monitoring of agent runs. A trace represents an end-to-end workflow run and is composed of **spans** representing operations with start/end times. By default, the SDK records spans for major events such as agent runs, LLM generations, function tool calls, guardrails, and handoffs.
 
-The Python implementation is published as the `openai-agents` package and maintained in the `openai/openai-agents-python` repository on GitHub. OpenAI also maintains a JavaScript/TypeScript Agents SDK with separate documentation.
+Tracing is enabled by default, but can be disabled globally via an environment variable or per-run via configuration. Documentation also notes that organizations using OpenAI APIs under a Zero Data Retention (ZDR) policy cannot use tracing.
 
-## Release and compatibility notes
+## Relationship to other agent tooling
 
-The project documents a release policy based on a 0.Y.Z versioning scheme, with minor releases (Y) used for breaking changes and patch releases (Z) for non-breaking changes.
+Within the broader autonomous-agents ecosystem, the Agents SDK is commonly discussed alongside:
 
-Documented breaking-change notes include:
-
-- **0.10.0**: Added an opt-in WebSocket transport mode for OpenAI Responses API usage, including a reusable `responses_websocket_session()` helper.
-- **0.9.0**: Dropped support for Python 3.9; narrowed `Agent.as_tool()` return typing to `FunctionTool`; added configurable timeouts for function tools.
-- **0.8.0**: Changed execution of synchronous function tools to run on worker threads via `asyncio.to_thread(...)`; made local MCP tool failure handling configurable.
-- **0.7.0**: Made nested handoff history opt-in; changed default `reasoning.effort` for certain models.
-- **0.4.0**: Dropped support for `openai` Python package v1.x; requires `openai` v2.x.
-
-Recent releases (GitHub) include:
-
-- **0.10.2 (2026-02-26)**: Fixes for tracing (reattaching resumed traces without duplicate trace starts; sanitizing oversized tracing span payloads), requiring approval for callable MCP policies when the agent is omitted, and exposing model request IDs on raw responses.\[1\]
-
-## See also
-
-- [[Model Context Protocol (MCP)]]
+- **MCP** for standardized tool/server integration.
+- Observability and evaluation systems that can consume trace data via custom processors.
 
 ## References
 
-- OpenAI. *OpenAI Agents SDK (Python)* (documentation). https://openai.github.io/openai-agents-python/
-- OpenAI. *Release process/changelog* (Agents SDK docs). https://openai.github.io/openai-agents-python/release/
-- OpenAI (GitHub). *openai/openai-agents-python* (source repository). https://github.com/openai/openai-agents-python
-- OpenAI (GitHub). *Releases* (openai-agents-python). https://github.com/openai/openai-agents-python/releases
-- OpenAI (GitHub). *Release v0.10.2* (openai-agents-python). https://github.com/openai/openai-agents-python/releases/tag/v0.10.2 \[1\]
-- OpenAI. *Release process/changelog* (Agents SDK docs). https://openai.github.io/openai-agents-python/release/
-- OpenAI. *Agents SDK | OpenAI API* (guide/entry point). https://developers.openai.com/api/docs/guides/agents-sdk/
-- OpenAI (GitHub). *openai/swarm* (earlier experimental project referenced by the Agents SDK docs). https://github.com/openai/swarm
-- OpenAI. *OpenAI Agents SDK (JavaScript/TypeScript)* (documentation). https://openai.github.io/openai-agents-js
+- OpenAI Agents SDK documentation: "OpenAI Agents SDK". https://openai.github.io/openai-agents-python/
+- OpenAI Agents SDK documentation: "Tracing". https://openai.github.io/openai-agents-python/tracing/
+- GitHub repository: openai/openai-agents-python. https://github.com/openai/openai-agents-python
