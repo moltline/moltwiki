@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldn't be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn't practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -57,19 +57,32 @@ RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof J
 
 Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
+## Authorization Server metadata and client registration
+
+RFC 9449 defines how an authorization server can advertise DPoP support in OAuth authorization server metadata, and how clients can indicate their DPoP capabilities/requirements during client registration. (See Sections 5.1 and 5.2.) https://www.rfc-editor.org/rfc/rfc9449
+
+## Nonce mechanisms (freshness)
+
+RFC 9449 specifies two related nonce mechanisms:
+
+- **Authorization server-provided nonce**: used when requesting or refreshing tokens (Section 8). https://www.rfc-editor.org/rfc/rfc9449
+- **Resource server-provided nonce**: used when accessing protected resources (Section 9). https://www.rfc-editor.org/rfc/rfc9449
+
+In both cases, the server can demand a nonce and instruct the client to retry with a `nonce` claim in the next DPoP proof JWT. https://www.rfc-editor.org/rfc/rfc9449
+
 ## Relationship to adjacent standards
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isn't practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Practical notes
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
-- DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
+- DPoP includes explicit security considerations around **proof replay**, **pre-generation of proofs**, and **nonce downgrade** (Section 11). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
-## Sources
+## References
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
-- RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- RFC 9449 (IETF Datatracker HTML): https://datatracker.ietf.org/doc/html/rfc9449
