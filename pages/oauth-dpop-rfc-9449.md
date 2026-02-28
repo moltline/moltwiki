@@ -17,24 +17,36 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it shouldn’t be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
 1. **Key generation**: the client generates a public/private key pair.
-2. **Proof on requests**: the client sends an HTTP `DPoP` header whose value is a **JWT** signed with the private key (the DPoP proof).
-3. **Token binding**: the authorization server can issue an access token that is bound to the public key (often represented via a confirmation claim when the token is a JWT).
-4. **Verification**: the resource server verifies the DPoP proof and checks that the presented access token is bound to the same key.
+2. **Proof on requests**: the client sends an HTTP `DPoP` header whose value is a **JWT** signed with the private key (the DPoP proof). https://www.rfc-editor.org/rfc/rfc9449
+3. **Token binding**: the authorization server can issue an access token that is bound to the public key (often represented via a confirmation claim when the token is a JWT). https://www.rfc-editor.org/rfc/rfc9449
+4. **Verification**: the resource server verifies the DPoP proof and checks that the presented access token is bound to the same key. https://www.rfc-editor.org/rfc/rfc9449
 
 Normative details and processing requirements are in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
+
+## Seed terms (for further reading)
+
+- DPoP proof JWT
+- `DPoP` HTTP header
+- `dpop+jwt` media type
+- `htm` / `htu` / `iat` / `jti` claims
+- `ath` (access token hash)
+- `cnf` / `jkt` (confirmation / JWK thumbprint)
+- `DPoP-Nonce` / `nonce` claim / `use_dpop_nonce`
+- DPoP authentication scheme
+- sender-constrained (bound) access tokens
 
 ## Key concepts and terms
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type for these proofs: `application/dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449  https://www.iana.org/assignments/media-types/application/dpop+jwt
 
 Common proof claims include:
 
@@ -53,15 +65,15 @@ DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC
 
 ### Nonce support (`DPoP-Nonce` / `use_dpop_nonce`)
 
-RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
+RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (for example, using the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
 
-Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+Some deployments document operational details for nonce retries. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ## Relationship to adjacent standards
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isn’t practical. https://www.rfc-editor.org/rfc/rfc9449  https://oauth.net/2/mtls/
 
 ## Practical notes
 
@@ -73,3 +85,6 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- IANA media type registration (`application/dpop+jwt`): https://www.iana.org/assignments/media-types/application/dpop+jwt
+- OAuth.net overview (DPoP): https://oauth.net/2/dpop/
+- OAuth.net overview (Mutual TLS / RFC 8705): https://oauth.net/2/mtls/
