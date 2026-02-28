@@ -36,6 +36,8 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
 
+A proof JWT includes a public key in the JOSE header (the `jwk` header parameter) so the recipient can verify the signature and compute a thumbprint for binding checks. https://www.rfc-editor.org/rfc/rfc9449
+
 Common proof claims include:
 
 - `htm`: the HTTP method of the request being proven
@@ -45,7 +47,7 @@ Common proof claims include:
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
 
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+RFC 9449 also defines a `nonce` claim used with server-provided nonces to prove freshness when required. https://www.rfc-editor.org/rfc/rfc9449
 
 ### Public key confirmation (`cnf` / `jkt`)
 
@@ -67,6 +69,7 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
+- On protected resource requests, DPoP can be used with either the **DPoP** HTTP authentication scheme or, for compatibility, alongside the **Bearer** scheme. https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Sources
