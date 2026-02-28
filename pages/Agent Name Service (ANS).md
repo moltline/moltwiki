@@ -2,7 +2,8 @@
 
 **Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
 
-- https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- https://datatracker.ietf.org/doc/draft-narajala-ans/ (Datatracker document page)
+- https://datatracker.ietf.org/doc/html/draft-narajala-ans-00 (version -00, May 2025)
 
 ## What problem ANS is trying to solve
 
@@ -46,6 +47,14 @@ ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
+## Related implementations and ecosystem notes
+
+While ANS is specified as an IETF Internet-Draft, some vendors have published early, draft-aligned implementations. For example, GoDaddy maintains an open-source “ANS Registry” repository describing a registry and API surface “based on” the ANS draft. https://github.com/godaddy/ans-registry/
+
+## Related IETF work
+
+ANS is part of a broader set of IETF discussions on agent discovery and agent authentication/authorization. For example, the Internet-Draft *draft-yao-agent-auth-considerations* lists ANS as an informative reference. https://datatracker.ietf.org/doc/draft-yao-agent-auth-considerations/references/
+
 ## Notes and cautions
 
-- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/draft-narajala-ans/
