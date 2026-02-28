@@ -7,8 +7,8 @@ Because the semantics are intentionally underspecified, `402` is mostly used by 
 ## What the standard says
 
 - **Status meaning:** “Payment Required” (client error class).
-- **Standardization status:** reserved for future use; no interoperable challenge/response format is defined in HTTP itself. RFC 9110 §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
-- **Registry entry:** IANA lists `402 Payment Required` with a reference to RFC 9110. https://www.iana.org/assignments/http-status-codes
+- **Standardization status:** reserved for future use; no interoperable challenge/response format is defined in HTTP itself. (RFC 9110, §15.5.3) https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
+- **Registry entry:** IANA lists `402 Payment Required` with a reference to RFC 9110. https://www.iana.org/assignments/http-status-codes/http-status-codes.xhtml
 
 ## Practical use patterns
 
@@ -23,14 +23,18 @@ Because `402` does not define headers, payloads, or verification rules, clients 
 
 ## Example: x402 (application-layer protocol)
 
-One modern example is **x402**, which uses HTTP requests/responses and `402` to drive payment negotiation and retry:
+One modern example is **x402**, which uses HTTP requests/responses and `402` to drive a payment challenge and retry at the application layer.
 
-- The server responds with `402 Payment Required` and includes protocol-defined metadata describing acceptable payment options.
-- The client selects an option, pays, and retries the request with protocol-defined payment information that the server (or a delegated component) can verify.
+A typical x402 flow is:
+
+- The client makes a request for a paid resource.
+- The resource server responds with `402 Payment Required` and includes payment requirements in a **`PAYMENT-REQUIRED`** header. (x402 docs)
+- The client constructs a payment payload for one of the offered requirements and retries the request with a **`PAYMENT-SIGNATURE`** header containing that payload. (x402 docs)
+- If payment is verified and settled, the server returns `200 OK` and may include settlement details in a **`PAYMENT-RESPONSE`** header. (x402 docs)
 
 Project overview and docs:
-- GitHub repository: https://github.com/coinbase/x402
-- Coinbase developer docs: https://docs.cdp.coinbase.com/x402/welcome
+- GitHub repository (includes a “Typical x402 flow” description): https://github.com/coinbase/x402
+- Coinbase developer docs (“How x402 Works”): https://docs.cdp.coinbase.com/x402/core-concepts/how-it-works
 
 ## See also
 
