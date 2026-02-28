@@ -1,8 +1,17 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more explicit, auditable, and context-aware. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, where autonomous or semi-autonomous agents act on behalf of an operator/principal. It extends common OAuth/JWT deployments with **structured claims** and **resource-server validation expectations** so relying parties can make authorization decisions that are more explicit, auditable, and context-aware. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
+## Quick definitions
+
+- **Authorization Server (AS)**: issues access tokens (OAuth 2.0). https://www.rfc-editor.org/rfc/rfc6749
+- **Resource Server (RS)**: API that validates tokens and enforces authorization (OAuth 2.0). https://www.rfc-editor.org/rfc/rfc6749
+- **Agent**: an autonomous software client acting on behalf of an operator (AAP draft terminology). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+- **Capability**: a permitted action together with constraints (AAP draft terminology). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+- **Task binding**: binding a token to a specific unit of work/purpose (AAP goal). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+- **Proof-of-possession (PoP)**: sender-constraining mechanisms such as mTLS-bound tokens or DPoP, used to reduce bearer-token replay. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 
 ## What problem AAP is trying to solve
 
@@ -11,7 +20,7 @@ In many OAuth deployments, authorization is communicated primarily through coars
 - **Task/purpose binding** (what the token is intended to be used for). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 - **Fine-grained capabilities + constraints** (more structured than scopes). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 - **Delegation chain clarity** across hops (who is acting, and on whose behalf). Token Exchange defines relevant semantics and the `act` (actor) claim. https://www.rfc-editor.org/rfc/rfc8693
-- **Operational constraints** (time windows, domain/network restrictions, rate limits). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- **Operational constraints** (time windows, domain/network restrictions, rate limits). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - **Oversight requirements** (signals that some actions require approval/supervision; enforcement is deployment-specific). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## Relationship to OAuth 2.0, JWT, and proof-of-possession
@@ -35,7 +44,7 @@ AAP standardizes a JWT claim schema and validation expectations so resource serv
 - **Oversight requirements** (policy signals about required approvals/supervision)
 - **Audit/trace correlation** (identifiers for logging and incident response)
 
-(See the draft’s “JWT Claim Schema (AAP Profile)” and “Resource Server Validation Rules” sections.) https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+(See the draft’s “JWT Claim Schema (AAP Profile)” section.) https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 
 ## AAP structured claim sections (high-level)
 
@@ -49,7 +58,11 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 - `aap_context` — environment/network/time restrictions
 - `aap_audit` — trace/session identifiers for logging correlation
 
-(Claim name list and schemas: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+(Claim name list and overview: https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html)
+
+### Notes on claim naming
+
+The draft’s examples sometimes show shortened keys (e.g. `agent`, `task`, `capabilities`) inside example JSON, while the **normative top-level claim names** are listed as `aap_agent`, `aap_task`, `aap_capabilities`, etc. Always follow the draft’s normative claim names and schema for interoperability. https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -75,7 +88,7 @@ In addition to standard JWT/OAuth validation (issuer, audience, expiry, signatur
 - contextual restrictions enforcement
 - audit/trace propagation
 
-(Resource server validation rules: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+The AAP draft describes these additional checks as “Resource Server Validation Rules”; refer to the current draft text for the normative requirements. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## Security notes
 
@@ -97,7 +110,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
