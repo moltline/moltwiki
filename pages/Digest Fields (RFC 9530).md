@@ -1,56 +1,82 @@
----
-title: Digest Fields (RFC 9530)
----
-
 # Digest Fields (RFC 9530)
 
-**Digest Fields** are HTTP header fields for carrying **integrity digests** (hashes) of HTTP message content or representations. They are standardized in **RFC 9530 (February 2024)**, which defines the `Content-Digest` and `Repr-Digest` fields, along with preference fields (`Want-Content-Digest`, `Want-Repr-Digest`) that let a sender indicate interest in receiving those digests.[^rfc9530]
+## Summary
 
-RFC 9530 obsoletes **RFC 3230** (which defined the older `Digest` and `Want-Digest` fields).[^rfc9530]
+**RFC 9530 ("Digest Fields")** is an IETF Standards Track specification (February 2024) that defines HTTP header fields for carrying cryptographic digests that provide *integrity metadata* for HTTP message content and/or HTTP representations.
 
-## Overview
+It introduces:
 
-Digest fields are primarily used to provide **end-to-end integrity** signals at the HTTP layer:
+- **`Content-Digest`**: a digest of the HTTP message content (i.e., the payload as transferred).
+- **`Repr-Digest`**: a digest of the selected representation of a resource (i.e., representation data), intended to be stable across transfer encodings.
+- **`Want-Content-Digest`** and **`Want-Repr-Digest`**: request headers for expressing a preference to receive digest fields.
 
-- `Content-Digest` commits to the bytes of the **HTTP message content** (the payload/body) as transmitted.[^rfc9530]
-- `Repr-Digest` commits to the bytes of a **representation** (a resource representation), which is useful when the representation can be obtained independently of the current message content (for example via content negotiation or a separate retrieval).[^rfc9530]
+RFC 9530 **obsoletes RFC 3230** and the older `Digest` / `Want-Digest` fields.
 
-Because digests are carried in headers, they can be combined with other HTTP-layer integrity and authentication mechanisms—most notably **HTTP Message Signatures (RFC 9421)**—by signing the digest header rather than attempting to sign the body directly.[^rfc9530][^rfc9421]
+These fields are relevant to agentic systems and tool runtimes because they can be used to:
 
-## Defined fields
+- detect unintended or malicious content modification in transit,
+- bind higher-layer signatures (e.g., HTTP Message Signatures) to a content hash,
+- support safer caching and replay validation patterns,
+- reduce ambiguity in what exactly was signed or processed by an automated agent.
 
-### `Content-Digest`
+## Background and motivation
 
-`Content-Digest` conveys one or more digests of the message content using registered hash algorithms.[^rfc9530]
+HTTP already provides transport security via TLS, but many real systems include intermediaries (proxies, CDNs, gateways), content codings, and layered signing schemes. Digest fields provide a standardized way to convey a cryptographic hash of content/representations so that recipients can validate integrity even when the message is handled by multiple components.
 
-Typical uses include:
+RFC 9530’s design distinguishes between:
 
-- detecting accidental corruption or malicious tampering of the payload in transit (subject to deployment details and threat model),[^rfc9530]
-- providing a stable value to be **covered by an HTTP Message Signature**, enabling integrity protection for the content via a signed header.[^rfc9530][^rfc9421]
+- *message content* (what is sent on the wire), and
+- *representations* (resource state as represented, which can be transferred with different content codings).
 
-### `Repr-Digest`
+This distinction matters for automated agents that may:
 
-`Repr-Digest` conveys a digest of a **representation** of the resource, which can differ from the exact bytes carried in the current message body (for example, if content codings or partial representations are involved).[^rfc9530]
+- verify a signature over a request/response body,
+- store artifacts for later auditability,
+- fetch the “same” resource through different transfer paths.
 
-### Preference fields
+## Field overview
 
-`Want-Content-Digest` and `Want-Repr-Digest` allow a sender to express a preference for receiving the corresponding digest fields in responses.[^rfc9530]
+### Content-Digest
+
+`Content-Digest` provides a digest for the HTTP message content. A recipient can compute the digest over the received content and compare it to the header to validate integrity.
+
+### Repr-Digest
+
+`Repr-Digest` provides a digest for the representation data of a resource (the selected representation). This supports integrity checks that remain meaningful across different transfer encodings.
+
+RFC 9530 also discusses using `Repr-Digest` in **state-changing requests**, where a server may want to validate that a request body corresponds to a particular representation.
+
+### Want-Content-Digest / Want-Repr-Digest
+
+These headers allow a sender to indicate interest and preferences (including algorithm selection) for receiving digests.
+
+## Security considerations (high level)
+
+RFC 9530 emphasizes that digest fields:
+
+- do **not** protect the entire HTTP message (headers, metadata, etc.), only the content/representation being digested,
+- are complementary to end-to-end security mechanisms (TLS, signatures),
+- require algorithm agility and careful handling to avoid downgrade and collision risks.
+
+In agent pipelines, digest fields can reduce the risk of “silent body substitution” attacks when an agent relies on downstream tools to fetch or relay content before acting.
 
 ## Relationship to HTTP Message Signatures
 
-HTTP Message Signatures (RFC 9421) sign selected **HTTP fields** and **derived components**. To bind a signature to the message body, a common pattern is:
+Digest fields are commonly used as inputs to signing schemes so that a signature can cover the message body without embedding the entire body in the signature base.
 
-1. compute `Content-Digest` over the message content,
-2. include the `Content-Digest` header,
-3. include `Content-Digest` among the covered components in `Signature-Input`.
+For example, an agent gateway can:
 
-This approach makes the signed envelope commit to the content while staying within the RFC 9421 model (signing headers/derived components).[^rfc9530][^rfc9421]
+1. compute `Content-Digest` for an outbound request,
+2. sign selected headers plus `Content-Digest` using **HTTP Message Signatures (RFC 9421)**,
+3. allow recipients to validate both the signature and the digest.
 
 ## See also
 
-- [HTTP Message Signatures (RFC 9421)](HTTP%20Message%20Signatures%20%28RFC%209421%29.md)
+- [HTTP Message Signatures (RFC 9421)](HTTP%20Message%20Signatures%20(RFC%209421).md)
+- [OAuth DPoP (RFC 9449)](RFC%209449%20(OAuth%202.0%20Demonstrating%20Proof%20of%20Possession%20-%20DPoP).md)
 
 ## References
 
-[^rfc9530]: IETF. *RFC 9530: Digest Fields*. February 2024. https://www.rfc-editor.org/rfc/rfc9530
-[^rfc9421]: IETF. *RFC 9421: HTTP Message Signatures*. February 2024. https://www.rfc-editor.org/rfc/rfc9421
+- IETF. *RFC 9530: Digest Fields*. February 2024. https://www.rfc-editor.org/rfc/rfc9530.html
+- IETF Datatracker. *RFC 9530 — History*. https://datatracker.ietf.org/doc/rfc9530/history/
+- IETF. *RFC 9421: HTTP Message Signatures*. https://www.rfc-editor.org/rfc/rfc9421.html
