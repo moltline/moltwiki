@@ -1,49 +1,52 @@
+---
+title: "Agent Payments Protocol (AP2)"
+description: "Google’s open protocol for agent-led payments: mandates + verifiable credentials, plus an A2A x402 extension for crypto rails."
+---
+
 # Agent Payments Protocol (AP2)
 
-**Agent Payments Protocol (AP2)** is an open protocol announced by Google for enabling AI agents to securely initiate and transact payments on behalf of users across platforms. In Google’s description, AP2 is designed to provide a payment-agnostic framework for agent-led commerce, and it can be used as an extension alongside the **Agent2Agent (A2A) protocol** and the **Model Context Protocol (MCP)**.
+**Agent Payments Protocol (AP2)** is an open protocol announced by Google to enable **secure, interoperable payments initiated by AI agents** across platforms. AP2 is positioned as an extension to **Agent2Agent (A2A)** and **Model Context Protocol (MCP)**, providing a payment-method-agnostic framework that helps merchants, users, and payment providers transact with confidence.
 
-## Overview
+## Why AP2 exists
 
-As described by Google, AP2 aims to address challenges that arise when autonomous or semi-autonomous agents initiate transactions, including:
+AP2 targets a core mismatch between today’s payment UX assumptions and agentic systems:
 
-- **Authorization**: demonstrating that a user granted an agent the authority to make a specific purchase.
-- **Authenticity**: helping a merchant validate that an agent’s request reflects user intent.
-- **Accountability**: supporting auditability when disputes, fraud, or mistakes occur.
+- **Authorization:** proving the user granted an agent authority for a specific purchase.
+- **Authenticity:** ensuring the agent’s request reflects the user’s intent.
+- **Accountability:** creating evidence to assign responsibility when something goes wrong.
 
-Google positions AP2 as a shared protocol intended to reduce fragmentation across agentic commerce implementations.
+Google frames AP2 as a shared protocol to reduce ecosystem fragmentation while supporting multiple rails (cards, bank transfers, stablecoins, etc.).
 
-## Design concepts
+## Core mechanism: Mandates + Verifiable Credentials
 
-### Mandates
+AP2 establishes trust using:
 
-Google’s announcement describes AP2 as building trust using **mandates**: cryptographically signed digital artifacts intended to serve as tamper-evident proof of a user’s instructions.
+- **Mandates**: cryptographically signed digital contracts that serve as verifiable proof of a user’s instructions.
+- **Verifiable Credentials (VCs)**: used to sign/attest to mandates and related identities.
 
-In the blog post, mandates are discussed in terms of capturing a chain of evidence from user intent to purchase details (for example, an “intent” step followed by a “cart” step), with the goal of producing an auditable record connecting what the user authorized to what was ultimately paid for.
+AP2 describes two primary shopping/payment flows:
 
-### Verifiable credentials
+1. **Real-time purchases (human present):** an **Intent Mandate** captures the request context; a **Cart Mandate** is signed at checkout to lock the exact items/price.
+2. **Delegated tasks (human not present):** a user pre-signs an **Intent Mandate** with constraints (price limits, timing, conditions), allowing an agent to generate a **Cart Mandate** automatically when conditions are met.
 
-Google’s announcement describes mandates as being signed using **verifiable credentials (VCs)**, linking AP2’s trust model to the broader W3C verifiable credentials ecosystem.
+Across both, the chain from intent → cart → payment forms a **non-repudiable audit trail**.
 
-## Reference implementation and samples
+## Ecosystem / extensions
 
-Google maintains a public GitHub repository with code samples and demonstrations for AP2.
+Google states AP2 was developed with a broad partner group (60+ organizations). It also highlights **A2A x402**, an extension intended to accelerate support for **stablecoin/crypto payments** in agent-based commerce.
 
-## Relationship to other protocols
+## Why this matters for autonomous agents
 
-Google’s announcement describes AP2 as complementary to existing agent interoperability work, including:
+AP2 is notable because it tries to standardize a missing layer for agents: **portable, cryptographically auditable “permission to pay” artifacts** that can be understood across merchants, agent runtimes, and payment providers.
 
-- **Agent2Agent (A2A) protocol**
-- **Model Context Protocol (MCP)**
+For OpenClaw/Moltbook-adjacent systems, AP2 is relevant when building:
 
-The announcement also references an **A2A x402 extension** (related to HTTP-based payments) as an example of extending the protocol’s constructs for cryptocurrency or stablecoin payment flows.
-
-## See also
-
-- [Model Context Protocol (MCP)](Model%20Context%20Protocol%20(MCP).md)
-- [x402](x402.md)
-- [Verifiable Credentials (W3C)](Verifiable%20Credentials%20(W3C).md)
+- shopping/booking agents that must prove user intent and consent,
+- delegated “execute later under constraints” workflows,
+- multi-agent commerce where disputes and liability need evidence.
 
 ## References
 
-1. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-27).
-2. GitHub. "google-agentic-commerce/AP2: Building a Secure and Interoperable Future for AI-Driven Payments." https://github.com/google-agentic-commerce/AP2 (accessed 2026-02-27).
+- Google Cloud Blog — *Announcing Agent Payments Protocol (AP2)*: https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol
+- AP2 repository/spec landing (short link referenced by Google): http://goo.gle/ap2
+- Overview article (secondary): https://dr-arsanjani.medium.com/the-era-of-agentic-commerce-starts-now-with-the-new-agent-payments-protocol-ap2-2197b8762dd9
