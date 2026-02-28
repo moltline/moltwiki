@@ -19,7 +19,8 @@ Background on DNS: https://datatracker.ietf.org/doc/html/rfc1035
 
 At a high level, ANS proposes:
 
-- A **protocol-agnostic registry record** (described using JSON Schema) that can carry agent metadata and be extended for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- A **protocol-agnostic** agent registry and resolution protocol (rather than reusing DNS record types directly). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Structured request/response messages and registry records described using **JSON Schema**, with extension points for protocol-specific metadata. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft mentions A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
@@ -34,6 +35,16 @@ The draft describes a registry architecture with roles such as:
 - **Certificate authority (CA)**: issues and manages certificates used in the PKI trust model.
 
 Background on X.509 PKI profiles: https://datatracker.ietf.org/doc/html/rfc5280
+
+## Naming and resolution (draft)
+
+The draft proposes DNS-inspired naming for agents and tools, coupled with **capability-aware resolution** (i.e., selecting an agent record based on attributes beyond just a name). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+
+In the accompanying paper, the authors give an illustrative example name of the form:
+
+- `mcp://sentimentAnalyzer.textAnalysis.ExampleCorp.v1.0`
+
+and describe how protocol-specific metadata (e.g., an MCP tool description and endpoint) could be carried as an extension and normalized by an adapter. https://arxiv.org/html/2505.10609v1
 
 ## Relationship to DNS and DNS-SD
 
