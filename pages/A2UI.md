@@ -22,7 +22,7 @@ When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A
 
 ## Protocol and versions
 
-OpenClaw’s Canvas documentation states that Canvas currently accepts **A2UI v0.8** server→client messages and does **not** support the v0.9 `createSurface` message. https://docs.openclaw.ai/platforms/mac/canvas
+A2UI is published as a versioned protocol specification. OpenClaw’s Canvas documentation states that Canvas currently accepts **A2UI v0.8** server→client messages and does **not** support the v0.9 `createSurface` message. https://docs.openclaw.ai/platforms/mac/canvas
 
 ### Message types (v0.8 in Canvas)
 Canvas accepts the following A2UI v0.8 server→client message types:
@@ -33,6 +33,8 @@ Canvas accepts the following A2UI v0.8 server→client message types:
 - `deleteSurface`
 
 https://docs.openclaw.ai/platforms/mac/canvas
+
+The upstream A2UI v0.8 protocol specification also describes these message types and their role in targeting and updating a surface. https://github.com/google/A2UI/blob/main/specification/v0_8/docs/a2ui_protocol.md
 
 ## Usage in OpenClaw
 
@@ -51,6 +53,7 @@ OpenClaw’s docs include an example of pushing an A2UI v0.8 JSONL payload to a 
 
 ## References
 - OpenClaw Docs: “Canvas (macOS app)” (includes local canvas paths, `openclaw-canvas:///`, A2UI hosting, and the v0.8 message list). https://docs.openclaw.ai/platforms/mac/canvas
+- A2UI (Google) v0.8 protocol specification: `a2ui_protocol.md` (message types, surface targeting, and update flow). https://github.com/google/A2UI/blob/main/specification/v0_8/docs/a2ui_protocol.md
 - OpenClaw Docs mirror (same content; includes the default A2UI host URL and v0.8 message list). https://beaverslab.mintlify.app/en/platforms/mac/canvas
 
 ## External links
