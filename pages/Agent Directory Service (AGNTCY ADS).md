@@ -6,23 +6,27 @@ ADS is designed to support *capability-based discovery* (finding agents by skill
 
 ## Overview
 
-According to the AGNTCY documentation, ADS stores agent metadata as **directory records** and interconnects distributed directories using a **content-routing protocol**. Records are identified by globally unique names that are routable in a Distributed Hash Table (DHT), and the system uses a skill taxonomy to map capabilities to record identifiers and to locate servers hosting those records.
+The AGNTCY documentation describes ADS as a distributed directory service that stores metadata about AI agent applications as **directory records** and supports discovery of agents with particular skills. Distributed directories interconnect via a **content-routing protocol** that maps advertised skills to record identifiers and tracks which directory servers host those records. Records are identified by globally unique names that are routable in a **Distributed Hash Table (DHT)**, and only skills (from a defined taxonomy) are used for content routing in the distributed network.
 
-The ADS Internet-Draft describes ADS as a directory infrastructure for the agentic AI ecosystem, intended to help developers discover and compose compatible agents and to attach structured metadata (including skills and other attributes) to published agent records.
+The ADS Internet-Draft similarly positions ADS as directory infrastructure intended to support capability-based discovery, verifiable integrity/provenance properties, and distributed operation across a network of directory servers. The draft notes that multi-agent systems may use tool-calling infrastructure such as **Model Context Protocol (MCP)** servers, but ADS focuses on metadata storage and discovery rather than defining multi-agent architectures.
 
 ## Architecture
 
 ### Content-addressed identifiers
 
-ADS uses **content-addressed identifiers** for records. The AGNTCY documentation states that ADS leverages **Content Identifiers (CIDs)** (from the multiformats ecosystem) to name directory records, providing a collision-resistant naming scheme where identifiers are derived from record content.
+ADS uses **content-addressed identifiers** for records. The AGNTCY documentation states that ADS leverages **Content Identifiers (CIDs)** from the multiformats ecosystem to name directory records, providing a self-describing, collision-resistant naming scheme where identifiers are derived from record content.
 
-### Distributed discovery
+### Content routing and discovery
 
-AGNTCY documentation describes ADS as using a DHT-based approach for content routing and discovery. The documentation specifically references **libp2p Kademlia DHT** specifications for server and content discovery.
+ADS implements capability-based discovery using a hierarchical **skill taxonomy**. The AGNTCY documentation describes a two-phase discovery process: (1) match queried skills against the taxonomy to identify relevant record identifiers, then (2) identify the server nodes storing those records for retrieval.
+
+The documentation references the **libp2p Kademlia DHT** specifications as the basis for server and content discovery.
 
 ### Storage layer and OCI artifacts
 
-The AGNTCY documentation and the ADS Internet-Draft describe an architecture that uses **OCI registries** as an object storage and distribution layer. In this model, records are packaged and transferred as OCI artifacts using OCI distribution protocols, enabling interoperability with existing registry tooling.
+The ADS Internet-Draft describes ADS as integrating with **OCI (Open Container Initiative)** specifications to store and distribute directory records as OCI artifacts via OCI distribution protocols, aiming to leverage existing registry tooling and infrastructure.
+
+The AGNTCY documentation describes the reference implementation as using **ORAS** (OCI Registry As Storage) for record storage and **zot** as a reference OCI registry implementation, while noting that ADS can work with any server implementing the OCI distribution specification.
 
 ## Standards status
 
@@ -32,12 +36,14 @@ ADS is published as an **Internet-Draft** (work in progress) on the IETF Datatra
 
 ## Relationship to other agent ecosystem components
 
-The ADS Internet-Draft mentions **Model Context Protocol (MCP)** servers as an example of tool-calling infrastructure used in multi-agent systems, and the AGNTCY documentation describes ADS as using the **Open Agentic Schema Framework (OASF)** as a modeling framework for agent record data.
+The AGNTCY documentation describes ADS records as modeled using the **Open Agentic Schema Framework (OASF)** and requiring skills drawn from an OASF-defined taxonomy. The ADS Internet-Draft also references OASF as the modeling framework and discusses modular record components (for example, MCP server definitions) as a way to support composition and reuse.
 
 ## References
 
-- AGNTCY documentation — Agent Directory overview: https://docs.agntcy.org/dir/overview/
-- IETF Datatracker — *Agent Directory Service* (Internet-Draft): https://datatracker.ietf.org/doc/draft-mp-agntcy-ads/
+- Muscariello, L.; Polic, R. *Agent Directory Service* (Internet-Draft, work in progress): https://datatracker.ietf.org/doc/draft-mp-agntcy-ads/
+- AGNTCY documentation — *Agent Directory Service (ADS) overview*: https://docs.agntcy.org/dir/overview/
 - AGNTCY dir-spec preview site (HTML/txt + Datatracker links): https://spec.dir.agntcy.org/
 - multiformats — Content Identifiers (CID): https://github.com/multiformats/cid
 - libp2p specs — Kademlia DHT: https://github.com/libp2p/specs/tree/master/kad-dht
+- ORAS — OCI Registry As Storage: https://oras.land/
+- zot — OCI registry implementation: https://zotregistry.dev/
