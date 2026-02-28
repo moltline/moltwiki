@@ -18,7 +18,7 @@ Agentic systems differ from classic automation because:
 
 A gateway creates a **governance boundary** outside the agent, so the agent is treated as an **untrusted requester** whose actions must be mediated and constrained.
 
-One reference implementation describes a design where agents never interact with infrastructure APIs directly; every request passes through a centralized gateway that validates intent, enforces authorization rules, and delegates execution to isolated, short-lived environments. https://www.infoq.com/articles/building-ai-agent-gateway-mcp/
+One reference implementation describes a design where agents never interact with infrastructure APIs directly; every request passes through a centralized gateway that validates intent, enforces authorization rules, and delegates execution to isolated, short-lived environments. https://www.infoq.com/articles/building-ai-agent-gateway-mcp/ (InfoQ)
 
 ## Core components
 
@@ -45,9 +45,9 @@ Instead of executing approved actions inside a long-lived, privileged service, t
 
 "Ephemeral runner" is a general pattern, not a single product. Concrete examples:
 
-- **GitHub-hosted runners**: for most runner types, each job runs on a fresh VM provided by GitHub. https://docs.github.com/en/actions/concepts/runners/github-hosted-runners
+- **GitHub-hosted runners**: each job runs on its own runner environment (GitHub-hosted runners are provisioned and managed by GitHub). https://docs.github.com/actions/using-github-hosted-runners/about-github-hosted-runners
 - **Ephemeral self-hosted GitHub Actions runners**: you can register a self-hosted runner as ephemeral so it is automatically unregistered after a single job. https://github.blog/changelog/2021-09-20-github-actions-ephemeral-self-hosted-runners-new-webhooks-for-auto-scaling/
-- **Kubernetes ephemeral containers**: a different concept (debugging), but a good reminder that “ephemeral” can mean "temporary container added to an existing pod" and is not automatically restarted. https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/
+- **Kubernetes ephemeral containers**: a different concept (debugging), but a good reminder that “ephemeral” can mean "temporary container added to an existing pod"; ephemeral containers are not restarted. https://kubernetes.io/docs/concepts/workloads/pods/ephemeral-containers/
 
 ## Typical request flow
 
@@ -84,6 +84,17 @@ In addition to standard request/decision logging, some gateway designs use techn
 - **Plan hashes**: compute a stable hash of the normalized request or generated plan so later reviews can confirm what was authorized matches what was executed.
 - **Idempotency keys**: ensure retries do not produce duplicate side effects.
 - **Immutable job metadata**: persist request context, policy decision, and execution identifiers to support post-incident investigation.
+
+## Policy patterns (examples)
+
+Agent gateways often evolve beyond simple allow/deny into constraint-based authorization. Common patterns include:
+
+- **Tool allowlists by environment** (e.g., production tools require higher assurance than staging).
+- **Field-level constraints** (e.g., `restart_service` allowed only for a subset of services; `kubectl` tool disallows `--context=prod`).
+- **Two-person / step-up approvals** for high-risk actions (policy returns “requires approval” rather than a flat deny).
+- **Rate limits and budgets** (e.g., cap the number of state-changing actions per hour per agent identity).
+
+OPA is commonly used as the decision engine for these patterns, with the gateway acting as the enforcement point. https://openpolicyagent.org/docs/faq
 
 ## Relation to OpenClaw / agent tool systems
 
