@@ -72,18 +72,24 @@ In practice, some providers require a nonce and document “retry with `DPoP-Non
 
 ### When to consider DPoP
 
-DPoP is most useful when bearer tokens might be copied out of the legitimate client context (logs, proxies, crash reports, XSS in a SPA, etc.) and you want the resource server to reject token replay from elsewhere. It is also a common choice when you can’t rely on mutual TLS sender-constrained tokens (RFC 8705) because the client is a browser-based app or otherwise can’t present a stable client certificate. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is most useful when bearer tokens might be copied out of the legitimate client context (logs, proxies, crash reports, XSS in a SPA, etc.) and you want the resource server to reject token replay from elsewhere. It is also a common choice when you can’t rely on mutual TLS sender-constrained tokens (RFC 8705) because the client is a browser-based app or otherwise can’t present a stable client certificate. https://www.rfc-editor.org/rfc/rfc9449  https://www.rfc-editor.org/rfc/rfc8705
 
 ### Common implementation pitfalls
 
 - **Reusing `jti` across retries**: DPoP proofs are intended to be unique per request; retry logic that replays the same proof can trigger server-side replay detection. https://www.rfc-editor.org/rfc/rfc9449
-- **Normalizing `htu`**: servers compare the `htu` claim against the request URI; differences in normalization (scheme/host casing, default ports, trailing slashes, etc.) can cause verification failures. https://www.rfc-editor.org/rfc/rfc9449
-- **Nonce-required deployments**: some providers require a nonce and respond with `use_dpop_nonce` plus a `DPoP-Nonce` header; clients should be prepared to retry with a fresh proof including the returned nonce. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+- **`htu` mismatches**: servers compare the `htu` claim against the request URI; differences in URI normalization (scheme/host casing, default ports, trailing slashes, etc.) can cause verification failures. https://www.rfc-editor.org/rfc/rfc9449
+- **Nonce-required deployments**: RFC 9449 defines optional server-provided nonce mechanisms (authorization server- and resource server-provided). Clients should be prepared to retry with a fresh proof JWT that includes the `nonce` claim when a server indicates nonce use. https://www.rfc-editor.org/rfc/rfc9449
+
+## Related standards
+
+- **RFC 8705 (OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens)**: a TLS-layer approach to sender-constraining access and refresh tokens by binding them to a client certificate. https://www.rfc-editor.org/rfc/rfc8705
+- **RFC 7800 (Proof-of-Possession Key Semantics for JWTs)**: defines the `cnf` claim used by DPoP to express proof-of-possession key confirmation. https://www.rfc-editor.org/rfc/rfc7800
 
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
 - RFC 7800 (JWT `cnf` claim / proof-of-possession semantics): https://www.rfc-editor.org/rfc/rfc7800
+- RFC 8705 (OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens): https://www.rfc-editor.org/rfc/rfc8705
 - OAuth.net DPoP overview: https://oauth.net/2/dpop/
 - Auth0 DPoP documentation (implementation notes/examples): https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
