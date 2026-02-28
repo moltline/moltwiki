@@ -50,6 +50,10 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 
 (Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
 
+## Current draft status (as of Feb 2026)
+
+The IETF Datatracker lists **draft-aap-oauth-profile-01** with publication date **February 2026** and an expiration date of **11 August 2026**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
 ## Delegation vs. impersonation (why it matters for agents)
 
 Many agent systems need to distinguish:
