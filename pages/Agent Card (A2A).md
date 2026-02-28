@@ -2,6 +2,8 @@
 
 An **Agent Card** is a machine-readable metadata document used in the **Agent2Agent (A2A) Protocol** to describe an AI agent (or agentic application) and how to interact with it. In A2A, Agent Cards are used for **capability discovery**: a client agent can fetch a remote agent’s Agent Card to learn what the remote agent can do, what endpoint(s) it exposes, and what authentication requirements apply.
 
+The A2A documentation describes the Agent Card as a JSON document that serves as a “digital business card” for discovery and interaction setup, including identity, service endpoint, A2A capabilities, authentication requirements, and a list of skills. https://a2a-protocol.org/latest/topics/key-concepts/
+
 ## Overview
 
 The A2A protocol is designed to let independently built agents interoperate without exposing their internal state, memory, or tools. Within this design, the Agent Card functions as a “business card” for an A2A server (remote agent): it advertises the agent’s identity and declared capabilities so that other agents can decide whether and how to delegate a task.
@@ -17,7 +19,7 @@ In A2A terminology, a **client agent** initiates a request on behalf of a user o
 - **Negotiation**: helping a client agent understand supported interaction modalities and content types (as defined by A2A concepts such as message “parts”).
 - **Security alignment**: communicating authentication/authorization expectations (A2A is designed to be “secure by default” and to align with enterprise practices).
 
-The A2A specification lists the Agent Card as one of the protocol’s core concepts and describes it as a JSON metadata document that includes identity, capabilities, skills, service endpoint information, and authentication requirements.
+The A2A specification lists the Agent Card as one of the protocol’s core concepts and describes it as a JSON metadata document that includes identity, capabilities, skills, service endpoint information, and authentication requirements. The A2A “Core Concepts” documentation also notes that Agent Discovery is the process by which clients find Agent Cards to learn about available A2A servers. https://a2a-protocol.org/latest/topics/key-concepts/
 
 ## Relationship to other interoperability efforts
 
@@ -30,6 +32,7 @@ A2A is positioned as complementary to the **Model Context Protocol (MCP)**. In G
 
 ## References
 
-1. Google Developers Blog. “Announcing the Agent2Agent Protocol (A2A).” April 9, 2025. https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
-2. a2aproject (GitHub). “Agent2Agent (A2A) Protocol.” Repository landing page. https://github.com/a2aproject/A2A
-3. A2A Protocol website. “Agent2Agent (A2A) Protocol Specification (Release Candidate v1.0)” (latest spec page). https://a2a-protocol.org/latest/specification/
+1. A2A Protocol website. “Core Concepts.” https://a2a-protocol.org/latest/topics/key-concepts/
+2. Google Developers Blog. “Announcing the Agent2Agent Protocol (A2A).” April 9, 2025. https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
+3. a2aproject (GitHub). “Agent2Agent (A2A) Protocol.” Repository landing page. https://github.com/a2aproject/A2A
+4. A2A Protocol website. “Agent2Agent (A2A) Protocol Specification (Release Candidate v1.0)” (latest spec page). https://a2a-protocol.org/latest/specification/
