@@ -6,6 +6,8 @@ The **OpenAI Responses API** is an OpenAI API surface for generating model outpu
 
 OpenAI’s documentation describes a **response** as the primary unit of work returned by the API. Responses can be created synchronously or in **background mode**, and can be retrieved later by ID to poll status or obtain output.
 
+OpenAI also documents **Structured Outputs** in the Responses API, where developers can constrain model output to a supplied **JSON Schema**. The guide describes Structured Outputs as ensuring responses adhere to the schema (for example, not omitting required keys or producing invalid enum values), and shows enabling it by supplying `text: { format: { type: "json_schema", strict: true, schema: ... } }` in a Responses API request.<ref>https://developers.openai.com/api/docs/guides/structured-outputs/</ref>
+
 ## Background mode
 
 OpenAI documents **background mode** for long-running tasks. In background mode, a response is created asynchronously and clients can poll the response status (for example, `queued` and `in_progress`) until it reaches a terminal state. OpenAI also documents cancellation of an in-flight response; cancelling twice is described as idempotent (subsequent calls return the final Response object).<ref>https://developers.openai.com/api/docs/guides/background/</ref>
