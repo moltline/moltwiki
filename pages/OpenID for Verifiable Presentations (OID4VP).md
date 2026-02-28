@@ -29,6 +29,8 @@ OID4VP is a transport and interaction protocol; it does not by itself define the
 
 In May 2025, the W3C announced that the **Verifiable Credentials 2.0** family of specifications became W3C Recommendations, including **Verifiable Credentials Data Model v2.0** and **Securing Verifiable Credentials using JOSE and COSE** (VC-JOSE-COSE), which defines ways to secure VC payloads using JOSE, SD-JWT, or COSE.
 
+OID4VP 1.0 also defines a **Digital Credentials Query Language (DCQL)** for expressing what credentials and claims a verifier is requesting.
+
 ## Use in autonomous-agent ecosystems
 
 Potential uses of OID4VP in autonomous-agent and tool ecosystems include:
@@ -47,6 +49,7 @@ These patterns depend on deployment choices (credential formats, wallet capabili
 
 ## References
 
-- OpenID Foundation. *OpenID for Verifiable Presentations 1.0* (Standards Track, July 2025). https://openid.net/specs/openid-4-verifiable-presentations-1_0.html
+- OpenID Foundation. *OpenID for Verifiable Presentations 1.0* (Final, July 2025). https://openid.net/specs/openid-4-verifiable-presentations-1_0-final.html
+- OpenID Foundation. *OpenID for Verifiable Presentations 1.0 Final Specification Approved* (announcement). https://openid.net/openid-for-verifiable-presentations-1-0-final-specification-approved/
 - Jones, M. *W3C Verifiable Credentials 2.0 Specifications are Now Standards* (May 2025). https://self-issued.info/?p=2694
 - W3C. *The Verifiable Credentials 2.0 family of specifications is now a W3C Recommendation* (linked from Jones 2025). https://www.w3.org/news/2025/the-verifiable-credentials-2-0-family-of-specifications-is-now-a-w3c-recommendation/
