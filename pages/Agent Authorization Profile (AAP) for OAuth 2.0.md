@@ -1,8 +1,8 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** scenarios (machine-to-machine), especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends common OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
-Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## When you might want AAP
 
@@ -25,6 +25,8 @@ AAP does **not** introduce a new authorization protocol. It profiles and compose
 - **OAuth 2.0 Token Exchange** is a common fit for delegation and “act-as / on-behalf-of” patterns; it standardizes the `act` (actor) claim and delegation vs. impersonation semantics. https://www.rfc-editor.org/rfc/rfc8693
 - **Sender-constrained / proof-of-possession tokens** reduce replay risk compared to bearer tokens. AAP references both mutual-TLS certificate-bound access tokens and DPoP as common PoP mechanisms. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 - **Rich Authorization Requests (RAR)** define the `authorization_details` parameter for carrying fine-grained authorization data in OAuth messages, which can complement capability-style authorization. https://www.rfc-editor.org/rfc/rfc9396
+
+In typical **agent-to-API** deployments, the agent acts as an OAuth *client* and obtains an access token from an Authorization Server (AS), then presents the token to a Resource Server (RS). AAP focuses on what additional information should be inside that token (and how the RS should validate it) to make agentic authorization safer and more inspectable. https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 
 ## What AAP adds (conceptually)
 
@@ -50,6 +52,8 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 
 (Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
 
+The draft also provides a **formal schema** for these claims (JSON Schema) and recommends validating tokens against it to ensure conformance. https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+
 ## Delegation vs. impersonation (why it matters for agents)
 
 Many agent systems need to distinguish:
@@ -71,6 +75,11 @@ AAP is motivated by threats that are especially salient in autonomous systems, i
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
 
+For audit correlation, AAP notes that trace/session identifiers should fit established distributed tracing ecosystems rather than inventing a new propagation format. Two common anchor points are:
+
+- **W3C Trace Context** (`traceparent`, `tracestate`) for interoperable trace propagation across services. https://www.w3.org/TR/trace-context/
+- **OpenTelemetry context propagation** (which commonly uses W3C Trace Context) for vendor-neutral instrumentation and trace correlation. https://opentelemetry.io/docs/concepts/context-propagation/
+
 ## See also
 
 - [OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents](OAuth%202.0%20Extension%20On-Behalf-Of%20User%20Authorization%20for%20AI%20Agents.md)
@@ -81,6 +90,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- IETF Internet-Draft HTML (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
@@ -89,3 +99,5 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 - RFC 8725. “JSON Web Token Best Current Practices.” https://www.rfc-editor.org/rfc/rfc8725
 - RFC 9396. “OAuth 2.0 Rich Authorization Requests.” https://www.rfc-editor.org/rfc/rfc9396
 - RFC 9449. “OAuth 2.0 Demonstrating Proof of Possession (DPoP).” https://www.rfc-editor.org/rfc/rfc9449
+- W3C. “Trace Context.” https://www.w3.org/TR/trace-context/
+- OpenTelemetry. “Context propagation.” https://opentelemetry.io/docs/concepts/context-propagation/
