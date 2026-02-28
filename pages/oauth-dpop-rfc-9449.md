@@ -69,7 +69,21 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
+## Related standards and registries
+
+- **OAuth 2.0 Token Binding via mTLS**: DPoP is often positioned as an application-layer alternative to mutual-TLS sender-constrained access tokens (RFC 8705) when TLS-layer binding is not practical. https://www.rfc-editor.org/rfc/rfc9449 https://www.rfc-editor.org/rfc/rfc8705
+- **OAuth 2.0 Authorization Server Metadata**: RFC 9449 defines authorization server metadata for advertising DPoP support. https://www.rfc-editor.org/rfc/rfc9449 https://www.rfc-editor.org/rfc/rfc8414
+- **OAuth 2.0 Authorization Server Issuer Identification**: commonly used alongside metadata discovery in OAuth deployments. https://www.rfc-editor.org/rfc/rfc8414 https://www.rfc-editor.org/rfc/rfc9207
+
+## Security considerations (selected)
+
+RFC 9449 highlights several operational and protocol risks to consider, including proof replay (and the need for `jti` handling), clock skew and proof pre-generation, nonce downgrade considerations when using server-provided nonces, and ensuring correct binding between the access token and the DPoP public key. https://www.rfc-editor.org/rfc/rfc9449
+
 ## Sources
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- RFC 8705 (OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens): https://www.rfc-editor.org/rfc/rfc8705
+- RFC 8414 (OAuth 2.0 Authorization Server Metadata): https://www.rfc-editor.org/rfc/rfc8414
+- RFC 9207 (OAuth 2.0 Authorization Server Issuer Identification): https://www.rfc-editor.org/rfc/rfc9207
+- Auth0 documentation (DPoP overview and claim summaries): https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
