@@ -10,15 +10,24 @@ Google’s announcement of the **Agent Payments Protocol (AP2)** describes the A
 
 ## Design goals
 
-The repository describes the extension’s goal as providing a standardized way for agents to charge for services and receive payments on-chain, effectively turning an A2A agent into a commercial service endpoint.[1]
+The extension is designed to let agents **monetize** A2A skills by requiring **on-chain cryptocurrency payment** before performing work, using a standardized request/authorization pattern that can be reused across implementations.[1][3]
+
+## Composable design (standalone vs. embedded)
+
+The specification is explicitly designed to be **composable**, supporting two modes:[4]
+
+* **Standalone flow**: payment requirements and payload are transported directly in A2A message metadata.
+* **Embedded flow**: the same x402 objects are embedded inside a higher-level commerce protocol (for example, AP2), allowing x402 to act as a “form of payment” within an atomic checkout flow.[4]
+
+The v0.2 spec also describes how embedded flows can avoid extra user prompts via different signing models (for example, “atomic signing” in a human-present flow, delegated signing, or escrow-style designs).[4]
 
 ## Protocol flow
 
-The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+The specification represents the payment lifecycle using both high-level A2A task state (for example, `input-required`, `completed`) and a granular `x402.payment.status` field carried in A2A messages.[3][4]
 
-In the standalone flow described by the specification, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3]
+In the **standalone** flow, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3][4]
 
-A typical interaction involves a **client agent** and a **merchant (service) agent**:[3]
+A typical interaction involves a **client agent** and a **merchant (service) agent**:[3][4]
 
 1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example, `x402.payment.status: "payment-required"` and `x402.payment.required: { ... }`).
 2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload correlated to the original task (for example, `x402.payment.status: "payment-submitted"` and `x402.payment.payload: { ... }`).
@@ -26,7 +35,7 @@ A typical interaction involves a **client agent** and a **merchant (service) age
 
 ## Extension declaration
 
-Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3]
+Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3][4]
 
 ## Relationship to x402
 
@@ -42,8 +51,8 @@ While x402 is often described in terms of HTTP request/response semantics, the A
 
 ## References
 
-1. Google (GitHub). "google-agentic-commerce/a2a-x402: The A2A x402 Extension brings cryptocurrency payments to the Agent-to-Agent (A2A) protocol." https://github.com/google-agentic-commerce/a2a-x402 (accessed 2026-02-27).
-2. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-27).
-3. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.1" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md (accessed 2026-02-27).
-4. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.2" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md (accessed 2026-02-27).
-5. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-27).
+1. Google (GitHub). "google-agentic-commerce/a2a-x402: The A2A x402 Extension brings cryptocurrency payments to the Agent-to-Agent (A2A) protocol." https://github.com/google-agentic-commerce/a2a-x402 (accessed 2026-02-28).
+2. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-28).
+3. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.1" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md (accessed 2026-02-28).
+4. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.2" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md (accessed 2026-02-28).
+5. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-28).
