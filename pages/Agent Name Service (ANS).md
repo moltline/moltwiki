@@ -1,6 +1,11 @@
-# Agent Name Service (ANS)
+---
+title: "Agent Name Service (ANS)"
+description: "IETF Internet-Draft proposing a DNS-inspired, PKI-backed directory and resolution protocol for discovering AI agents and their endpoints/capabilities."
+---
 
-**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
+## What it is
+
+**Agent Name Service (ANS)** is a proposed, DNS-inspired directory and resolution system for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. It is specified as an IETF **Internet-Draft** (work in progress):
 
 - https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
@@ -15,25 +20,25 @@ Classic DNS primarily maps names to network locations (e.g., IP addresses). In a
 
 Background on DNS: https://datatracker.ietf.org/doc/html/rfc1035
 
-## Overview
+## Overview (draft)
 
-At a high level, ANS proposes:
+At a high level, the draft describes ANS as a protocol-agnostic registry mechanism that:
 
-- A **protocol-agnostic registry record** (described using JSON Schema) that can carry agent metadata and be extended for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft mentions A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Uses **PKI certificates** for verifiable agent identity and trust. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Defines **registration and renewal** mechanisms for lifecycle management. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Uses DNS-inspired naming conventions and discusses **capability-aware resolution**. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Specifies structured interactions using **JSON Schema**. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- Includes a modular **Protocol Adapter Layer** intended to support multiple agent communication standards (the draft mentions A2A, MCP, ACP, etc.). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
 ## Architecture and roles (draft)
 
-The draft describes a registry architecture with roles such as:
+The draft’s architecture includes:
 
-- **Requesting agent / operator**: submits registration and renewal requests.
-- **Agent registry**: stores records (identity, capabilities, endpoints, and related metadata).
-- **Registration authority (RA)**: validates registration/renewal requests and enforces registry policy; the draft positions the RA as interacting with a certificate authority as part of the PKI-based trust model. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- **Certificate authority (CA)**: issues and manages certificates used in the PKI trust model.
-
-Background on X.509 PKI profiles: https://datatracker.ietf.org/doc/html/rfc5280
+- **Requesting agent**: submits registration/renewal requests.
+- **Agent registry**: stores agent identity, capabilities, protocol-specific metadata, and lifecycle timestamps. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- **Registration authority (RA)**: verifies registration/renewal requests and enforces registry policy; the draft describes the RA as interacting with a certificate authority as part of the PKI model. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- **Certificate authority (CA)**: issues and manages X.509 certificates used in the PKI trust model. https://datatracker.ietf.org/doc/html/rfc5280
+- **Protocol Adapter Layer**: translates between the registry’s internal representation and protocol-specific formats. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
 ## Relationship to DNS and DNS-SD
 
@@ -41,6 +46,15 @@ ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 - **DNS-SD** defines how to use DNS record types and queries to discover named instances of a service type within a domain. https://datatracker.ietf.org/doc/html/rfc6763
 - **ANS** proposes a separate registry and resolution protocol oriented around agent discovery, where the resolved record can include identity and capability metadata and can be adapted to multiple agent communication protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+
+## Protocol Adapter Layer (what it’s for)
+
+A key design element in the draft is a **Protocol Adapter Layer** that maps between:
+
+- a **protocol-agnostic** registry record (the draft describes structured communication using JSON Schema), and
+- **protocol-specific** representations for different agent ecosystems.
+
+The draft gives an illustrative example where an MCP tool description could be stored as protocol-specific extension data, with elements of the agent name encoding protocol and capability (example shown in the draft). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
 ## Security considerations (draft)
 
