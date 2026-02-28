@@ -5,14 +5,16 @@ description: "IETF standard for sender-constraining OAuth 2.0 tokens using an ap
 
 ## What it is
 
-**DPoP (Demonstrating Proof-of-Possession)** is an application-layer mechanism for **sender-constraining OAuth 2.0 access and refresh tokens** to a public/private key pair. It works by having the client include a **DPoP proof** in an HTTP request; the proof is a signed **JWT** carried in the `DPoP` header. The authorization server can then bind issued tokens to the public key, and recipients can verify the binding when the token is presented. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+**DPoP (Demonstrating Proof-of-Possession)** is an OAuth 2.0 mechanism for **sender-constraining tokens to a key**.
 
 At a high level:
 
 - The client generates a public/private key pair.
-- For token requests and protected resource requests, the client sends a **DPoP proof JWT** in the HTTP `DPoP` header.
+- For token requests and API calls, the client sends a **DPoP proof JWT** in the HTTP `DPoP` header.
 - The authorization server can issue an access token that is **bound to the DPoP public key**.
-- The resource server verifies the DPoP proof and checks the token is bound to the same key. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+- The resource server verifies that the request includes a valid DPoP proof and that the access token is bound to the same key.
+
+The goal is to reduce the impact of **bearer token replay** after token leakage by requiring proof-of-possession when the token is used. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 ## Why it matters (especially for agents)
 
@@ -26,9 +28,7 @@ These patterns increase the chance that an access token is copied somewhere it s
 
 DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS certificate-bound access tokens) isn’t available or desirable. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
-
-For comparison, OAuth 2.0 also standardizes mutual-TLS client authentication and certificate-bound access tokens in RFC 8705. https://www.rfc-editor.org/rfc/rfc8705
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isn’t practical. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 ## How it works (high level)
 
@@ -45,8 +45,8 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 A **DPoP proof** is a JWT carried in the `DPoP` HTTP header.
 
-- The JWT header includes a public key (as a JWK) used to verify the signature. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
-- RFC 9449 registers a dedicated JWT `typ` value for these proofs: `dpop+jwt`. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+- The JWT header includes the public key (as a JWK) used to verify the signature. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+- RFC 9449 registers a dedicated JWT “typ” value for these proofs: `dpop+jwt`. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 Common proof claims include:
 
@@ -56,8 +56,6 @@ Common proof claims include:
 - `jti`: unique identifier for the proof (supports replay detection)
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
-
-Servers validate proofs by checking, among other things, signature validity, required claims, and that `htm`/`htu` match the presented HTTP request. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 ### Token binding: `cnf` / `jkt` (JWK thumbprint)
 
