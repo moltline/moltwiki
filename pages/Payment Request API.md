@@ -26,12 +26,12 @@ The Payment Request API is commonly discussed alongside related specifications i
 
 The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] The specification was later republished as a W3C Candidate Recommendation Snapshot in 2024.[^w3c-cr-2024] The W3C Web Payments Working Group has continued work on the specification in its GitHub-hosted drafts, including efforts to realign the text with interoperable implementations.[^w3c-ed]
 
-Earlier in the standardization process, the Working Group recorded that it removed API support for shipping address, billing address, and contact information in response to privacy and internationalization review feedback.[^w3c-transitions-346]
+Earlier in the standardization process, the W3C transition request for a Candidate Recommendation Snapshot update recorded that the Working Group removed API support for shipping address, billing address, and contact information as part of changes driven by privacy review, with additional internationalization-related improvements noted in the same request.[^w3c-transitions-346]
 
 - **User agent–mediated payment UI:** The browser mediates the user experience for selecting and authorizing payment, rather than the merchant building a bespoke checkout UI.[^mdn]
 - **Payment method identifiers:** The API uses payment method identifiers to indicate which payment methods a merchant supports and which method the user selected.[^w3c-payment-method-id]
 - **Extensibility via payment handlers:** Payment handlers allow payment apps (including web-based ones) to integrate with the Payment Request flow.[^w3c-payment-handler]
-- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform guidance points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface, and W3C discussions have considered deprecating `allowpaymentrequest`.[^mdn][^w3c-allowpaymentrequest-thread]
+- **Embedded contexts and permissions controls:** In cross-origin iframes, access to Payment Request has historically been controlled by explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform documentation points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface, and W3C public discussion has considered deprecating `allowpaymentrequest`.[^mdn][^mdn-permissions-policy-payment][^w3c-allowpaymentrequest-thread]
 
 ## Security and permissions
 
