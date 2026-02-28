@@ -65,6 +65,16 @@ The IANA “HTTP Signature Algorithms” registry lists initial algorithm identi
 
 https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
 
+## Implementations and related work
+
+### Libraries
+
+- **httpsig (Go)**: A Go library focused on signing and verifying HTTP messages in compliance with RFC 9421, including support for `Accept-Signature` negotiation and `Content-Digest` handling (RFC 9530). https://github.com/dadrus/httpsig
+
+### Related specs and proposals
+
+- **Signature-based Integrity (WICG proposal)**: A proposal to use HTTP Message Signatures (RFC 9421) to enable signature-based integrity checks for subresources (as an alternative/complement to hash-based Subresource Integrity). https://wicg.github.io/signature-based-sri/
+
 ## Practical guidance
 
 ### What HTTP Message Signatures do (and do not) provide
