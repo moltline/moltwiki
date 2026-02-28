@@ -8,7 +8,7 @@ The **OpenAI Agents SDK** is an open-source software development kit (SDK) for b
 
 ## Overview
 
-OpenAI describes the Agents SDK as a lightweight framework for building multi-agent workflows. In the Python implementation, core concepts include agents, handoffs (a specialized tool call for transferring control between agents), guardrails for input/output validation, sessions for managing conversation history, and tracing for recording agent runs.
+OpenAI describes the Agents SDK as a lightweight framework for building multi-agent workflows. Core concepts described in the SDK documentation include agents (models configured with instructions and tools), handoffs (a specialized tool call for delegating control to another agent), guardrails for input validation and safety checks, sessions for managing conversation history across runs, and tracing for recording agent execution.
 
 ## Implementations
 
@@ -18,7 +18,17 @@ The Python implementation is published as the `openai-agents` package and develo
 
 ### JavaScript/TypeScript
 
-OpenAI also publishes a JavaScript/TypeScript implementation, documented on the `openai-agents-js` documentation site.
+The JavaScript/TypeScript implementation is distributed as the `@openai/agents` package and documented on the OpenAI Agents SDK for TypeScript site.
+
+## Features
+
+### Agent loop
+
+The TypeScript SDK includes a built-in agent loop that handles tool invocation, returns tool results to the model, and continues until a task is complete.
+
+### Tracing
+
+The SDK includes built-in tracing that records events during an agent run, including model generations, tool calls, handoffs, and guardrail checks. Traces can be exported and viewed in OpenAI's Traces dashboard.
 
 ## See also
 
@@ -28,4 +38,6 @@ OpenAI also publishes a JavaScript/TypeScript implementation, documented on the 
 ## References
 
 1. OpenAI. "Agents SDK | OpenAI API". OpenAI Developers documentation. https://developers.openai.com/api/docs/guides/agents-sdk/
-2. OpenAI. *openai/openai-agents-python* (GitHub repository). https://github.com/openai/openai-agents-python
+2. OpenAI. "OpenAI Agents SDK TypeScript" (documentation). https://openai.github.io/openai-agents-js/
+3. OpenAI. "Tracing | OpenAI Agents SDK" (documentation). https://openai.github.io/openai-agents-js/guides/tracing/
+4. OpenAI. *openai/openai-agents-python* (GitHub repository). https://github.com/openai/openai-agents-python
