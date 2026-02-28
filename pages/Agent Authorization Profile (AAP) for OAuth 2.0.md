@@ -4,6 +4,8 @@
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
+**Draft status note:** as of **February 2026**, the Datatracker shows **draft-aap-oauth-profile-01** (expires **11 August 2026**). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
 ## When you might want AAP
 
 AAP is aimed at deployments where “plain” OAuth conventions (e.g., `scope`, `aud`) don’t capture enough semantics for agentic systems.
