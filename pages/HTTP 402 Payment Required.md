@@ -1,36 +1,51 @@
 # HTTP 402 Payment Required
 
-**HTTP 402 Payment Required** is an HTTP status code defined by the IETF as **reserved for future use**. In other words, core HTTP does not standardize *how* a client should pay or *how* a server should describe acceptable payment methods; systems that use `402` must define the payment interaction at the application layer. (RFC 9110, §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required)
+**HTTP 402 Payment Required** is an HTTP status code whose semantics are intentionally **underspecified**: HTTP defines the label (“Payment Required”) but reserves the code for future use and does not standardize any interoperable payment challenge/response mechanism.
 
-Because the semantics are intentionally underspecified, `402` is mostly used by APIs and custom protocols as a convenient signal for “you need to pay (or your payment failed) before you can access this resource”. MDN summarizes this as: “reserved but not defined; actual implementations vary”. https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
+- RFC 9110 (HTTP Semantics) defines 402 as “reserved for future use”: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
+- IANA’s HTTP Status Code Registry lists 402 with a reference to RFC 9110: https://www.iana.org/assignments/http-status-codes
+- MDN notes that 402 is reserved and that implementations vary: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
 
-## What the standard says
+As a result, any system that uses `402` must define the payment interaction **at the application layer** (headers, payload schema, token/proof format, verification rules, and retry behavior).
 
-- **Status meaning:** “Payment Required” (client error class).
-- **Standardization status:** reserved for future use; no interoperable challenge/response format is defined in HTTP itself. RFC 9110 §15.5.3: https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
-- **Registry entry:** IANA lists `402 Payment Required` with a reference to RFC 9110. https://www.iana.org/assignments/http-status-codes
+## What 402 means (and does not mean)
 
-## Practical use patterns
+### Standard meaning
 
-Since there is no standard “payment challenge” equivalent to `WWW-Authenticate` for `401`, implementations typically choose their own approach, for example:
+- **Class:** 4xx (client error)
+- **Reason phrase:** “Payment Required”
+- **Normative behavior:** none beyond “reserved for future use” (no standard headers or body format are defined by HTTP itself). https://www.rfc-editor.org/rfc/rfc9110.html#name-402-payment-required
 
-- **Paywall / payment required:** the response indicates the resource is available if the client pays, and the client retries the request with whatever proof/token the protocol defines.
-- **Payment attempt failed:** some payment APIs return `402` as a generic error for a failed payment (e.g., expired card), with details in a JSON body. (Example and compatibility notes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402)
+### What 402 does *not* provide
+
+Unlike `401 Unauthorized`, which has a standardized challenge mechanism via `WWW-Authenticate`, `402` has **no** standardized equivalent payment challenge header in HTTP. Therefore, generic HTTP clients cannot “just handle” 402 without protocol-specific knowledge.
+
+## Common application-layer patterns
+
+Because the wire format is not standardized, services that return `402` typically document a custom contract. Common patterns include:
+
+1) **Paywall / access requires payment**
+   - Server returns `402` plus a body describing what to pay for and how to pay.
+   - Client pays out-of-band or via a defined flow, then retries with a protocol-defined proof/token.
+
+2) **Payment attempt failed**
+   - Some APIs use `402` to indicate a payment method was declined/expired/etc., with details in a JSON body (provider-specific). https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
 
 ### Interoperability implications
 
-Because `402` does not define headers, payloads, or verification rules, clients generally need **protocol-specific support** (headers, token formats, signing rules, etc.) to interoperate with a given service.
+If you are designing a protocol on top of `402`, you need to specify at minimum:
+
+- **Discovery:** how the server conveys acceptable payment options (headers vs body, schema, versioning)
+- **Proof:** what the client sends on retry (token, signed receipt, payment pointer, etc.)
+- **Verification:** who verifies (origin server vs delegated verifier) and what constitutes success
+- **Idempotency / replay:** retry rules and how to avoid double-charging
 
 ## Example: x402 (application-layer protocol)
 
-One modern example is **x402**, which uses HTTP requests/responses and `402` to drive payment negotiation and retry:
+One modern example is **x402**, which uses HTTP requests/responses and `402` to drive a payment-required → pay → retry loop.
 
-- The server responds with `402 Payment Required` and includes protocol-defined metadata describing acceptable payment options.
-- The client selects an option, pays, and retries the request with protocol-defined payment information that the server (or a delegated component) can verify.
-
-Project overview and docs:
-- GitHub repository: https://github.com/coinbase/x402
-- Coinbase developer docs: https://docs.cdp.coinbase.com/x402/welcome
+- Project repository: https://github.com/coinbase/x402
+- Coinbase developer documentation: https://docs.cdp.coinbase.com/x402/welcome
 
 ## See also
 
