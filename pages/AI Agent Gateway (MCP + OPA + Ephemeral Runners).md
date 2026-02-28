@@ -20,6 +20,8 @@ A gateway creates a **governance boundary** outside the agent, so the agent is t
 
 One reference implementation describes a design where agents never interact with infrastructure APIs directly; every request passes through a centralized gateway that validates intent, enforces authorization rules, and delegates execution to isolated, short-lived environments. https://www.infoq.com/articles/building-ai-agent-gateway-mcp/
 
+The same article highlights additional design principles often paired with this pattern, including **observability by default** (e.g., OpenTelemetry-based traces/metrics/logs) and mechanisms for **versioning and auditability** such as plan hashes, idempotency keys, and immutable job metadata. https://www.infoq.com/articles/building-ai-agent-gateway-mcp/
+
 ## Core components
 
 ### 1) Tool interface / discovery layer (MCP)
