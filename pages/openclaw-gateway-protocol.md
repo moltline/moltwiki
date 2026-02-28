@@ -49,36 +49,59 @@ The documentation describes three message frame categories, each represented as 
 - **Response**: `{"type":"res", "id":…, "ok":…, "payload":…}` (or an error payload)
 - **Event**: `{"type":"event", "event":…, "payload":…}`
 
-## Roles and permissions
+## Roles and scopes
 
 ### Roles
 
 The documentation distinguishes at least two roles:
 
-- **operator**: a control-plane client (such as a CLI or UI).
-- **node**: a capability host (for example, a device providing camera, screen, or location features).
+- **operator**: a control-plane client (CLI/UI/automation).
+- **node**: a capability host (for example, camera/screen/canvas/system.run).
 
 ### Operator scopes
 
-Operator connections may include scopes such as `operator.read`, `operator.write`, `operator.admin`, `operator.approvals`, and `operator.pairing`.
+Common operator scopes include:
+
+- `operator.read`
+- `operator.write`
+- `operator.admin`
+- `operator.approvals`
+- `operator.pairing`
 
 ### Node capability claims
 
-Nodes may declare capability-related fields during connect, including:
+Nodes declare capability claims at connect time:
 
-- `caps` (high-level capability categories)
-- `commands` (an allowlist of invokable commands)
-- `permissions` (granular toggles)
+- `caps`: high-level capability categories
+- `commands`: command allowlist for invoke
+- `permissions`: granular toggles (for example, `screen.record`, `camera.capture`)
 
-The documentation states that the Gateway enforces server-side allowlists using these claims.
+The documentation states the Gateway treats these as claims and enforces server-side allowlists.
+
+## Presence and helper methods
+
+The documentation describes a presence surface and helper methods:
+
+- `system-presence` returns entries keyed by device identity; entries include `deviceId`, roles, and scopes so UIs can show a single row per device even when it connects as both operator and node.
+- Nodes may call `skills.bins` to fetch the current list of skill executables for auto-allow checks.
+- Operators may call `tools.catalog` (requires `operator.read`) to fetch an agent’s runtime tool catalog; responses include provenance metadata such as `source` (`core` or `plugin`), `pluginId`, and whether a plugin tool is optional.
+
+## Exec approvals
+
+When an exec request needs approval, the gateway broadcasts `exec.approval.requested`. Operator clients resolve it by calling `exec.approval.resolve` (requires `operator.approvals`).
 
 ## Authentication and device tokens
 
 The documentation describes token-based authentication and device identity:
 
-- A gateway token may be required for the initial connect request.
-- After pairing, the Gateway can issue a **device token** scoped to a connection’s role and scopes.
-- Device tokens can be rotated or revoked via protocol methods (for example, `device.token.rotate` and `device.token.revoke`).
+- If `OPENCLAW_GATEWAY_TOKEN` (or `--token`) is set, `connect.params.auth.token` must match or the socket is closed.
+- After pairing, the Gateway can issue a **device token** scoped to the connection’s role and scopes. It is returned in `hello-ok.auth.deviceToken` and should be persisted by the client for future connects.
+- Device tokens can be rotated or revoked via `device.token.rotate` and `device.token.revoke` (requires `operator.pairing`).
+- All WebSocket clients must include device identity during connect (operator and node) and must sign the server-provided `connect.challenge` nonce.
+
+## TLS and pinning
+
+The documentation notes TLS support for WebSocket connections and that clients may optionally pin the gateway certificate fingerprint.
 
 ## Versioning
 
