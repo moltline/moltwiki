@@ -45,11 +45,15 @@ RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumb
 
 ## Nonce support
 
-RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). This is intended to mitigate certain replay and precomputation risks.
+RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). In the RFC’s profile, servers convey the nonce via the `DPoP-Nonce` HTTP response header and can signal that a nonce is required using the `use_dpop_nonce` error code.
+
+Some deployments go further and return a `DPoP-Nonce` value on many or all responses (not only on errors) to help clients keep a fresh nonce available.
 
 ## Relationship to other sender-constraining techniques
 
 DPoP is positioned as an application-layer alternative for environments where transport-layer sender-constraining mechanisms (for example, mutual TLS for OAuth) are not available or desirable.
+
+OAuth security guidance also discusses sender-constrained tokens as a recommended mitigation against token replay in the presence of token leakage.
 
 ## Security considerations (high level)
 
@@ -62,3 +66,5 @@ DPoP does not, by itself, provide full request integrity for all HTTP message co
 - IETF. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP).* September 2023. https://datatracker.ietf.org/doc/html/rfc9449
 - RFC Editor. *RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP) — information page.* https://www.rfc-editor.org/info/rfc9449
 - OAuth.net. *DPoP (OAuth 2.0 Demonstrating Proof-of-Possession).* https://oauth.net/2/dpop/
+- Bluesky. *OAuth Client Implementation.* (atproto OAuth profile; notes returning `DPoP-Nonce` broadly.) https://docs.bsky.app/docs/advanced-guides/oauth-client
+- Auth0. *Protect Your Access Tokens with DPoP.* (background and security motivation; cites OAuth security BCP.) https://auth0.com/blog/protect-your-access-tokens-with-dpop/
