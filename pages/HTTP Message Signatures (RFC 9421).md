@@ -4,6 +4,8 @@
 
 Unlike transport security (e.g., TLS), HTTP Message Signatures operate at the **HTTP application layer**. This can be useful when an HTTP message is handled, terminated, or transformed by intermediaries (such as TLS-terminating reverse proxies) and you still want an end-to-end verifiable envelope. RFC 9421 explicitly targets situations where “the full HTTP message may not be known to the signer” and where the message “may be transformed (e.g., by intermediaries) before reaching the verifier.” https://www.rfc-editor.org/rfc/rfc9421
 
+In practice, you use HTTP Message Signatures to create a **verifiable commitment** to specific request/response properties (method, target URI, selected headers, etc.). Verification succeeds only if the verifier reconstructs the same signature base from the received message components. https://www.rfc-editor.org/rfc/rfc9421
+
 ## What RFC 9421 defines
 
 RFC 9421 standardizes:
@@ -18,6 +20,8 @@ RFC 9421 standardizes:
 
   (Both are specified in RFC 9421.) https://www.rfc-editor.org/rfc/rfc9421
 - **How to request signatures**: a mechanism for requesting that a signature be applied to a subsequent HTTP message in an exchange via the `Accept-Signature` field. https://www.rfc-editor.org/rfc/rfc9421
+
+RFC 9421 defines these fields using **Structured Field Values for HTTP** (i.e., they have a precise, machine-parsable syntax rather than free-form text). https://www.rfc-editor.org/rfc/rfc8941.html
 
 ## Core concepts
 
@@ -41,6 +45,8 @@ A signature covers a set of components drawn from an HTTP message. RFC 9421 dist
 
 Because the signer chooses what to cover, verifiers typically enforce **application-specific requirements** (for example, “requests MUST sign `@method` and `@target-uri` and MUST include a content digest field”). RFC 9421 calls out **insufficient coverage** as a security consideration: if you don’t sign the right components, an attacker may be able to alter meaningful parts of the message without breaking verification. https://www.rfc-editor.org/rfc/rfc9421
 
+Practical implication: treat “what must be signed” as part of your **protocol contract**. If you accept signatures that omit critical components (e.g., the target URI, authority, or a body digest), you may be authenticating something weaker than you think.
+
 ### Signature parameters
 
 Signatures carry metadata parameters (registered as “HTTP Signature Metadata Parameters”) including `created`, `expires`, `nonce`, `keyid`, `alg`, and `tag`. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
@@ -49,6 +55,8 @@ Common uses:
 
 - **Replay mitigation**: `created`/`expires` and/or `nonce` can help limit replay windows (RFC 9421 includes “Signature Replay” in its security considerations). https://www.rfc-editor.org/rfc/rfc9421
 - **Key identification**: `keyid` identifies the verification key, with `alg` optionally declaring the algorithm. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
+
+Note: `keyid` is an **application-defined identifier**. RFC 9421 does not define a universal key discovery mechanism; deployments need an agreed way to map `keyid` to a verification key (or to reject unknown keys). https://www.rfc-editor.org/rfc/rfc9421
 
 ### Algorithms and registries
 
@@ -72,6 +80,8 @@ https://www.iana.org/assignments/http-message-signature/http-message-signature.x
 - They provide **integrity and authentication** over the specific components you choose to cover. https://www.rfc-editor.org/rfc/rfc9421
 - They **do not provide confidentiality**; use TLS or another encryption layer for secrecy. RFC 9421 notes this under privacy considerations (“Signatures do not provide confidentiality”). https://www.rfc-editor.org/rfc/rfc9421
 
+They also do not, by themselves, provide **authorization** semantics (what the signer is allowed to do) or **non-repudiation** guarantees. Those properties depend on your overall security model, key management, and how you bind identities/permissions to keys.
+
 ### Signing message content
 
 HTTP Message Signatures can cover headers and derived components, but they do not magically “sign the body” unless you include a field that commits to the content.
@@ -80,15 +90,29 @@ A common pattern is to include an integrity digest field (e.g., `Content-Digest`
 
 (Exactly which digest field(s) you use and whether you sign trailers depends on your application and transfer mode.)
 
+If intermediaries can re-encode content (compression, chunking, content-coding changes), you need to ensure the digest is computed over the same representation that the verifier will see, or constrain intermediaries so the committed content stays stable end-to-end. https://www.rfc-editor.org/rfc/rfc9530.html
+
 ### Intermediaries and transformations
 
 RFC 9421 is designed to tolerate certain HTTP message transformations, but you still need to choose covered components that are stable across the intermediaries you expect. When a component is likely to be rewritten (e.g., some proxy-modified headers), either avoid covering it or ensure your deployment preserves it end-to-end.
+
+When in doubt, prefer signing **derived components** (like `@method`, `@target-uri`, `@authority`) over volatile headers, and explicitly document which headers are expected to be preserved by proxies. The derived component registry is maintained by IANA. https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
 
 ## Relationship to agent security and API protection
 
 In tool-using/agentic architectures, HTTP Message Signatures can authenticate and integrity-protect calls between components (e.g., agent gateway → downstream tool service) in environments where TLS termination or intermediaries complicate end-to-end guarantees.
 
 The key design step is a **coverage policy**: which derived components and fields must be signed for each API operation, and what replay protections are required.
+
+### Minimal “coverage policy” checklist
+
+For many request-signing schemes, a reasonable starting point is:
+
+- Always sign `@method` and `@target-uri` (or `@authority` + `@path` + `@query` depending on how you normalize targets). https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
+- Sign a timestamp (`created`) and enforce a short acceptance window; add `nonce` if you need stronger replay resistance. https://www.rfc-editor.org/rfc/rfc9421
+- If the request has a body, include `Content-Digest` and sign it. https://www.rfc-editor.org/rfc/rfc9530.html
+
+This is not universal, but it captures the common failure mode: authenticating a request without committing to where it goes, when it was made, and (if present) what content it carries.
 
 ## References
 
@@ -97,3 +121,4 @@ The key design step is a **coverage policy**: which derived components and field
 - IANA HTTP Message Signatures registries: https://www.iana.org/assignments/http-message-signature/http-message-signature.xhtml
 - IETF datatracker entry: https://datatracker.ietf.org/doc/rfc9421/
 - RFC 9530 (Digest Fields): https://www.rfc-editor.org/rfc/rfc9530
+- RFC 8941 (Structured Field Values for HTTP): https://www.rfc-editor.org/rfc/rfc8941.html
