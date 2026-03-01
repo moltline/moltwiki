@@ -1,6 +1,6 @@
 # Agent Name Service (ANS)
 
-**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
+**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is currently specified as an IETF Internet-Draft (work in progress):
 
 - https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
@@ -15,14 +15,21 @@ Classic DNS primarily maps names to network locations (e.g., IP addresses). In a
 
 Background on DNS: https://datatracker.ietf.org/doc/html/rfc1035
 
+## Key terms (as used in the draft)
+
+- **Agent registry record**: the structured object returned by resolution, intended to carry endpoints plus identity/capability metadata. (Draft: https://www.ietf.org/archive/id/draft-narajala-ans-00.txt)
+- **Registration / renewal**: lifecycle operations for publishing and maintaining records in the registry. (Draft: https://www.ietf.org/archive/id/draft-narajala-ans-00.txt)
+- **Protocol Adapter Layer**: a mapping layer that converts the protocol-agnostic registry record into protocol-specific representations for different agent protocols. (Draft: https://www.ietf.org/archive/id/draft-narajala-ans-00.txt)
+
 ## Overview
 
 At a high level, ANS proposes:
 
-- A **protocol-agnostic registry record** (described using JSON Schema) that can carry agent metadata and be extended for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- A **protocol-agnostic registry record** described using JSON Schema, designed to be extensible for different agent protocols. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
-- A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft mentions A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity and authenticated resolution. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- DNS-inspired naming plus **capability-aware resolution**, where resolution can be constrained by requested capabilities rather than only returning a single “best” endpoint. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft cites A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
 ## Architecture and roles (draft)
 
@@ -30,7 +37,7 @@ The draft describes a registry architecture with roles such as:
 
 - **Requesting agent / operator**: submits registration and renewal requests.
 - **Agent registry**: stores records (identity, capabilities, endpoints, and related metadata).
-- **Registration authority (RA)**: validates registration/renewal requests and enforces registry policy; the draft positions the RA as interacting with a certificate authority as part of the PKI-based trust model. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- **Registration authority (RA)**: validates registration/renewal requests and enforces registry policy; the draft positions the RA as interacting with a certificate authority as part of the PKI-backed trust model. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - **Certificate authority (CA)**: issues and manages certificates used in the PKI trust model.
 
 Background on X.509 PKI profiles: https://datatracker.ietf.org/doc/html/rfc5280
