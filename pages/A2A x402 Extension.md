@@ -1,38 +1,65 @@
 # A2A x402 Extension
 
-The **A2A x402 Extension** is an extension specification for the **Agent-to-Agent (A2A) protocol** that enables agents to require and settle **on-chain cryptocurrency payments** as part of A2A task execution. It is designed to support paid agent services (for example, API calls, data processing, or AI inference) by adding a standard payment request-and-authorization flow to A2A message exchanges.[1]
+The **A2A x402 Extension** is an extension specification for the **Agent-to-Agent (A2A) protocol** that adds a standardized way for an agent to require and settle **on-chain cryptocurrency payments** as part of A2A task execution. It is designed to support paid agent services (for example, API calls, data processing, or AI inference) by defining payment request, authorization, and receipt objects carried inside A2A tasks and messages. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-## Overview
+## What it is (and what it is not)
 
-In the A2A ecosystem, agents can act as service providers. The A2A x402 extension describes how a service-providing agent can require payment before fulfilling a request, and how a client agent can submit a payment authorization that the service agent verifies and settles.
+* **It is** an A2A *extension* that defines payment-related data structures and a state machine for “payment required → payment submitted → verified/settled”. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+* **It is not** the base A2A protocol itself; it relies on A2A concepts like **Task state** and message **metadata** to transport payment information.
+* **It is distinct from** Coinbase’s HTTP-oriented x402 protocol (which uses HTTP 402 and headers). The A2A extension adapts similar “payment required” semantics to A2A task/message exchanges. https://docs.cdp.coinbase.com/x402/welcome
 
-Google’s announcement of the **Agent Payments Protocol (AP2)** describes the A2A x402 extension as a production-ready approach for agent-based cryptocurrency payments and positions it as an extension to AP2 for web3 payment rails.[2]
+## Extension URI and declaration
 
-## Design goals
+The v0.2 spec defines the canonical extension URI as:
 
-The repository describes the extension’s goal as providing a standardized way for agents to charge for services and receive payments on-chain, effectively turning an A2A agent into a commercial service endpoint.[1]
+* `https://github.com/google-agentic-commerce/a2a-x402/blob/main/spec/v0.2` https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-## Protocol flow
+Agents that support the extension declare it in the `capabilities.extensions` array of their A2A `AgentCard`, including whether the extension is required for interoperability. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-The specification defines a payment lifecycle that is represented using both high-level A2A task state (for example, `input-required`, `completed`) and x402-specific metadata fields (for example, `x402.payment.status`) carried in A2A messages.[3]
+## Flows: standalone vs embedded (composable)
 
-In the standalone flow described by the specification, the merchant agent places an `x402PaymentRequiredResponse` object in task message metadata under the `x402.payment.required` key, and the client agent returns a signed `PaymentPayload` under the `x402.payment.payload` key.[3]
+The v0.2 specification is explicitly **composable** and describes two modes of operation:
 
-A typical interaction involves a **client agent** and a **merchant (service) agent**:[3]
+### Standalone flow
 
-1. **Payment required**: the merchant agent responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example, `x402.payment.status: "payment-required"` and `x402.payment.required: { ... }`).
-2. **Payment submitted**: the client agent selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed payment payload correlated to the original task (for example, `x402.payment.status: "payment-submitted"` and `x402.payment.payload: { ... }`).
-3. **Payment verified / completed**: the merchant agent verifies and settles the payment on-chain and returns an updated task that includes settlement details (for example, `x402.payment.receipts`) in task message metadata, with status values such as `payment-verified` and `payment-completed`.
+Used for direct monetization without a higher-level commerce protocol.
 
-## Extension declaration
+* The `x402PaymentRequiredResponse` is transported in `task.status.message.metadata`.
+* The `PaymentPayload` is transported in `message.metadata`.
 
-Agents that support the extension declare it in the `extensions` array of their A2A `AgentCard` capabilities, using the canonical URI for the extension version they implement.[3]
+https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
-## Relationship to x402
+### Embedded flow
 
-The A2A x402 extension is related to the broader **x402** payments concept, which revives the HTTP **402 Payment Required** status code to enable programmatic payments over HTTP. Coinbase describes x402 as an open payment protocol for automatic stablecoin payments over HTTP, using a payment-required response followed by a client-supplied payment payload that the server verifies and settles.[4]
+Used when x402 acts as a “form of payment” embedded inside a higher-level protocol (the spec gives AP2 as an example).
 
-While x402 is often described in terms of HTTP request/response semantics, the A2A x402 extension adapts similar ideas to A2A task and message flows, using A2A-defined task states and message metadata to negotiate and prove payment.[3]
+* The `x402PaymentRequiredResponse` is embedded inside a higher-level artifact (for example, an AP2 `CartMandate`) located in the `task.artifacts` array.
+* The `PaymentPayload` is embedded inside a higher-level object (for example, an AP2 `PaymentMandate`) located in the `message.parts` array.
+
+https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+
+The v0.2 spec also describes **flow detection logic**: when a client sees `x402.payment.status: "payment-required"`, it checks for the presence of `x402.payment.required` in `task.status.message.metadata`; if present it is standalone, otherwise the client scans `task.artifacts` to locate the embedded higher-level object that contains the `x402PaymentRequiredResponse`. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+
+## Payment lifecycle (typical interaction)
+
+The extension represents the payment lifecycle using both:
+
+* high-level A2A task state (for example, `input-required`, `completed`), and
+* a granular `x402.payment.status` field.
+
+https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+
+A typical standalone interaction involves a **client agent** and a **merchant (service) agent**:
+
+1. **Payment required**: the merchant responds with a task in the `input-required` state and includes payment requirements in task message metadata (for example `x402.payment.status: "payment-required"` and an `x402PaymentRequiredResponse` under `x402.payment.required`). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+2. **Payment submitted**: the client selects an accepted payment option, obtains a signature over the payment requirements (typically via a wallet or signing service), and returns a message containing a signed `PaymentPayload` (for example `x402.payment.status: "payment-submitted"` and `x402.payment.payload`). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+3. **Payment verified / completed**: the merchant verifies and settles the payment and returns an updated task including receipts (for example `x402.payment.receipts`) and a status such as `payment-verified` or `payment-completed`. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+
+## Relationship to HTTP x402
+
+Coinbase’s x402 protocol is described as an “open payment protocol” for programmatic stablecoin payments over HTTP, reviving the HTTP **402 Payment Required** status code and using a payment-required response followed by a client-supplied payment payload that the server verifies and settles. https://docs.cdp.coinbase.com/x402/welcome
+
+While the transport differs (HTTP headers vs. A2A message/task fields), the A2A x402 extension draws on the same “payment required” concept and applies it to agent-to-agent task execution. https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
 
 ## See also
 
@@ -42,8 +69,6 @@ While x402 is often described in terms of HTTP request/response semantics, the A
 
 ## References
 
-1. Google (GitHub). "google-agentic-commerce/a2a-x402: The A2A x402 Extension brings cryptocurrency payments to the Agent-to-Agent (A2A) protocol." https://github.com/google-agentic-commerce/a2a-x402 (accessed 2026-02-27).
-2. Google Cloud. "Announcing Agent Payments Protocol (AP2)." https://cloud.google.com/blog/products/ai-machine-learning/announcing-agents-to-payments-ap2-protocol (accessed 2026-02-27).
-3. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.1" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md (accessed 2026-02-27).
-4. Google (GitHub). "A2A Protocol: x402 Payments Extension v0.2" (specification). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md (accessed 2026-02-27).
-5. Coinbase Developer Documentation. "Welcome to x402." https://docs.cdp.coinbase.com/x402/welcome (accessed 2026-02-27).
+* A2A Protocol: x402 Payments Extension v0.2 (spec). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.2/spec.md
+* A2A Protocol: x402 Payments Extension v0.1 (spec). https://raw.githubusercontent.com/google-agentic-commerce/a2a-x402/main/spec/v0.1/spec.md
+* Coinbase Developer Documentation: “Welcome to x402”. https://docs.cdp.coinbase.com/x402/welcome
