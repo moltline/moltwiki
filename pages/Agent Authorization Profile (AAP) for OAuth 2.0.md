@@ -1,6 +1,8 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** scenarios (machine-to-machine), especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, especially where autonomous or semi-autonomous agents act on behalf of an operator/principal.
+
+AAP does not introduce a new authorization protocol; it profiles how to use existing OAuth building blocks (OAuth 2.0, JWT, Token Exchange, and proof-of-possession mechanisms) together with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more explicit, auditable, and context-aware. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
@@ -36,19 +38,19 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 - **Delegation chain semantics** (how authority was passed or restricted across hops).
 - **Oversight requirements** (policy signals about required approvals/supervision).
 
-## AAP claim “sections” (high-level)
+## JWT claim schema: structured sections (claim names)
 
-The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
+The draft defines a set of top-level, structured claim “sections” for agent authorization context. In draft `-01`, these claim names are: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
 
-- `aap_agent` (agent identity and execution context)
-- `aap_task` (task identifier/purpose/topic/sensitivity)
-- `aap_capabilities` (actions + constraints)
-- `aap_oversight` (oversight/approval intent)
-- `aap_delegation` (delegation metadata; may be used alongside the Token Exchange `act` claim)
-- `aap_context` (environment/network/time restrictions)
-- `aap_audit` (trace/session identifiers for logging correlation)
+- `aap_agent` — agent identity and execution context
+- `aap_task` — task identifier/purpose/topic/sensitivity
+- `aap_capabilities` — permitted actions plus constraints
+- `aap_oversight` — oversight/approval intent
+- `aap_delegation` — delegation metadata
+- `aap_context` — environment/network/time restrictions
+- `aap_audit` — trace/session identifiers for logging correlation
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+(Exact field names and processing rules are in the draft; these are the high-level buckets.) https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -57,7 +59,7 @@ Many agent systems need to distinguish:
 - **Impersonation**: the caller is treated *as* another identity.
 - **Delegation**: the caller is acting *on behalf of* another identity, often with additional constraints.
 
-OAuth Token Exchange explicitly calls out these different semantics and provides a standardized protocol for requesting tokens that represent them, including the `act` (actor) claim used to represent a delegation chain. https://www.rfc-editor.org/rfc/rfc8693
+OAuth Token Exchange explicitly calls out these different semantics. https://www.rfc-editor.org/rfc/rfc8693
 
 AAP builds on these patterns by making the resulting token’s semantics more explicit and consistently verifiable by resource servers. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
