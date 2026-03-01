@@ -24,14 +24,16 @@ The Payment Request API is commonly discussed alongside related specifications i
 
 ## Specification status
 
-The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] The specification was later republished as a W3C Candidate Recommendation Snapshot in 2024.[^w3c-cr-2024] The W3C Web Payments Working Group has continued work on the specification in its GitHub-hosted drafts, including efforts to realign the text with interoperable implementations.[^w3c-ed]
+The Payment Request API was published as a W3C Recommendation in 2022.[^w3c-rec-2022] In 2024, the W3C Web Payments Working Group republished it as a Candidate Recommendation Snapshot and stated that it intended to re-align the specification text with interoperable implementations and re-engage the community on associated issues.[^w3c-cr-2024][^w3c-ed]
 
-Earlier in the standardization process, the Working Group recorded that it removed API support for shipping address, billing address, and contact information in response to privacy and internationalization review feedback.[^w3c-transitions-346]
+In the Candidate Recommendation Snapshot, the Working Group noted that the 2022 Recommendation excluded capabilities related to billing and shipping addresses following privacy and internationalization reviews, while implementations continued to support those features interoperably. The Working Group indicated that a subsequent Candidate Recommendation Draft would add back address capabilities and other changes made since the Recommendation.[^w3c-ed]
+
+Earlier in the standardization process, the Working Group documented removing several features from Payment Request 1.0 due to lack of interoperable support, including merchant validation, `hasEnrolledInstrument` (moved to the Editor’s Draft), and the legacy `allowpaymentrequest` iframe attribute (deprecated in favor of the HTML `allow` attribute).[^w3c-transitions-287]
 
 - **User agent–mediated payment UI:** The browser mediates the user experience for selecting and authorizing payment, rather than the merchant building a bespoke checkout UI.[^mdn]
 - **Payment method identifiers:** The API uses payment method identifiers to indicate which payment methods a merchant supports and which method the user selected.[^w3c-payment-method-id]
 - **Extensibility via payment handlers:** Payment handlers allow payment apps (including web-based ones) to integrate with the Payment Request flow.[^w3c-payment-handler]
-- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform guidance points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface, and W3C discussions have considered deprecating `allowpaymentrequest`.[^mdn][^w3c-allowpaymentrequest-thread]
+- **Embedded contexts:** Historically, use in cross-origin iframes required explicit permission (e.g., the legacy `allowpaymentrequest` iframe attribute). Current platform guidance points to the Permissions Policy mechanism (`allow="payment"`) as the modern control surface.[^mdn][^w3c-allowpaymentrequest-thread]
 
 ## Security and permissions
 
@@ -53,7 +55,7 @@ Browser support has varied by vendor and payment method. For example, WebKit ann
 [^w3c-cr-2024]: W3C. “Payment Request API (Candidate Recommendation Snapshot).” https://www.w3.org/TR/payment-request/ (published 2024-08-06).
 [^w3c-ed]: W3C Web Payments Working Group (Editor’s Draft / GitHub). “Payment Request API.” https://w3c.github.io/payment-request/
 [^w3c-news-cr-2024]: W3C News. “W3C Invites Implementations of Payment Request API.” https://www.w3.org/news/2024/w3c-invites-implementations-of-payment-request-api/
-[^w3c-transitions-346]: W3C Transitions (GitHub). “CR Snapshot Update Request for Payment Request API #346.” https://github.com/w3c/transitions/issues/346
+[^w3c-transitions-287]: W3C Transitions (GitHub). “CR Snapshot Update Request for Payment Request API #287.” https://github.com/w3c/transitions/issues/287
 [^w3c-pr-info-faq]: W3C payment-request-info (GitHub wiki). “FAQ.” https://github.com/w3c/payment-request-info/wiki/FAQ
 [^w3c-allowpaymentrequest-thread]: W3C public-webpayments-specs mailing list. “Re: [w3c/payment-request] Deprecate allowpaymentrequest attribute (#928).” https://lists.w3.org/Archives/Public/public-webpayments-specs/2023Jun/0011.html
 [^w3c-payment-handler]: W3C. “Payment Handler API.” https://www.w3.org/TR/payment-handler/
