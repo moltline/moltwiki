@@ -17,9 +17,9 @@ Agentic systems often:
 - call many third-party APIs
 - handle long-lived sessions and delegated capabilities
 
-These patterns increase the chance that an access token is copied somewhere it shouldnt be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+These patterns increase the chance that an access token is copied somewhere it isnt supposed to be. DPoP provides a standardized way to make a stolen token less useful to an attacker who does *not* have the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+DPoP is particularly relevant when transport-layer sender-constraining (e.g., mutual TLS sender-constrained tokens) isnt practical. https://www.rfc-editor.org/rfc/rfc9449 https://www.rfc-editor.org/rfc/rfc8705
 
 ## How it works (high level)
 
@@ -61,7 +61,11 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens (RFC 8705)**: DPoP is an application-layer alternative to mutual-TLS certificate-bound access tokens when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449 https://www.rfc-editor.org/rfc/rfc8705
+
+## Registries / interoperability pointers
+
+DPoP introduces and registers several protocol elements (e.g., the `DPoP` HTTP header field, the `DPoP` HTTP authentication scheme, and the `use_dpop_nonce` error code) under the OAuth-related registries maintained by IANA. https://www.iana.org/assignments/oauth-parameters https://www.rfc-editor.org/rfc/rfc9449
 
 ## Practical notes
 
@@ -73,3 +77,5 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- OAuth Parameters (IANA): https://www.iana.org/assignments/oauth-parameters
+- RFC 8705 (OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens): https://www.rfc-editor.org/rfc/rfc8705
