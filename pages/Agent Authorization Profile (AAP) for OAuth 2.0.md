@@ -4,6 +4,10 @@
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
+## One-sentence summary
+
+AAP is a JWT access-token profile for OAuth 2.0 that adds structured, machine-checkable sections for **agent identity**, **task binding**, **capabilities/constraints**, **delegation**, **oversight intent**, **context restrictions**, and **audit correlation**. https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+
 ## When you might want AAP
 
 AAP is aimed at deployments where “plain” OAuth conventions (e.g., `scope`, `aud`) don’t capture enough semantics for agentic systems.
@@ -25,7 +29,17 @@ AAP does **not** introduce a new authorization protocol. It profiles and compose
 - **OAuth 2.0 Token Exchange** is a common fit for delegation and “act-as / on-behalf-of” patterns; it standardizes the `act` (actor) claim and delegation vs. impersonation semantics. https://www.rfc-editor.org/rfc/rfc8693
 - **Sender-constrained / proof-of-possession tokens** reduce replay risk compared to bearer tokens. AAP references both mutual-TLS certificate-bound access tokens and DPoP as common PoP mechanisms. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 - **Rich Authorization Requests (RAR)** define the `authorization_details` parameter for carrying fine-grained authorization data in OAuth messages, which can complement capability-style authorization. https://www.rfc-editor.org/rfc/rfc9396
-- **JWT Profile for OAuth 2.0 Access Tokens (RFC 9068)** is a common JWT access-token profile that AAP-style deployments may already use as a baseline. https://www.rfc-editor.org/rfc/rfc9068
+- **JWT Profile for OAuth 2.0 Access Tokens (RFC 9068)** is a common JWT access-token profile that AAP-style deployments may already use as a baseline for interoperable JWT access tokens. https://www.rfc-editor.org/rfc/rfc9068
+
+## Where AAP fits in an OAuth architecture
+
+AAP assumes the standard OAuth roles:
+
+- **Authorization Server (AS)** issues access tokens (often via Client Credentials for agent-to-API use cases). https://www.rfc-editor.org/rfc/rfc6749
+- **Resource Server (RS)** validates the token and enforces authorization decisions.
+- The **agent** is the OAuth client.
+
+The key AAP idea is: the RS doesn’t only validate signature/issuer/audience/expiry; it also evaluates the AAP structured claims and applies consistent validation rules. https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 
 ## What AAP adds (conceptually)
 
@@ -41,7 +55,7 @@ The draft also defines **resource-server validation rules** for these structured
 
 ## AAP claim “sections” (high-level)
 
-AAP extends standard JWT claims with **structured claim sections**. The normative claim names in the draft are:
+AAP extends standard JWT claims with **structured claim sections**. The draft defines the following **normative claim names** for these sections:
 
 - `aap_agent` (agent identity and execution context)
 - `aap_task` (task identifier/purpose/topic/sensitivity)
@@ -51,7 +65,7 @@ AAP extends standard JWT claims with **structured claim sections**. The normativ
 - `aap_context` (environment/network/time restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 
 (Claim namespace list: https://datatracker.ietf.org/doc/draft-aap-oauth-profile/)
 
@@ -76,6 +90,12 @@ AAP is motivated by threats that are especially salient in autonomous systems, i
 - **Replay risk** when bearer tokens are used in high-automation environments; PoP mechanisms like mTLS-bound access tokens or DPoP can help reduce replay. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
+
+## Implementation notes (practical)
+
+- **Treat AAP as a profile layered on top of your existing JWT access-token profile**: you still need the usual JWT validation (issuer, audience, expiry, signature/alg constraints), plus AAP-specific validation of the structured sections. https://www.rfc-editor.org/rfc/rfc8725 https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
+- **Prefer sender-constrained tokens** (DPoP or mTLS-bound) in high-automation settings to reduce replay risk relative to bearer tokens. https://www.rfc-editor.org/rfc/rfc9449 https://www.rfc-editor.org/rfc/rfc8705
+- **Use Token Exchange when you need to mint reduced-privilege tokens for tools/sub-agents** and to represent delegation vs. impersonation semantics. https://www.rfc-editor.org/rfc/rfc8693
 
 ## See also
 
