@@ -15,6 +15,8 @@ Classic DNS primarily maps names to network locations (e.g., IP addresses). In a
 
 Background on DNS: https://datatracker.ietf.org/doc/html/rfc1035
 
+The draft describes ANS as a **protocol-agnostic registry mechanism** that uses **PKI certificates** for verifiable identity and trust, includes **registration and renewal** for lifecycle management, supports **capability-aware resolution**, and defines a **Protocol Adapter Layer** to map the protocol-agnostic record to protocol-specific formats (e.g., A2A, MCP, ACP). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+
 ## Overview
 
 At a high level, ANS proposes:
@@ -23,6 +25,8 @@ At a high level, ANS proposes:
 - **Registration and renewal** mechanisms for lifecycle management of entries. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - A trust model that uses **Public Key Infrastructure (PKI)** and certificates for verifiable agent identity. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 - A modular **Protocol Adapter Layer** that maps the protocol-agnostic registry record into protocol-specific representations (the draft mentions A2A, MCP, ACP as examples). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+
+The Internet-Draft also positions ANS as complementary to emerging agent communication protocols rather than a replacement for them. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
 ## Architecture and roles (draft)
 
@@ -49,3 +53,9 @@ The draft includes a threat analysis and discusses risks such as impersonation, 
 ## Notes and cautions
 
 - ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+
+## Status and publication
+
+ANS is currently published as an **independent submission Internet-Draft** with intended status **Experimental** (not an IETF standard and subject to change). https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+
+The authors also published a corresponding paper describing ANS on arXiv. https://arxiv.org/abs/2505.10609
