@@ -4,11 +4,17 @@ The **OpenAI Responses API** is an OpenAI API surface for generating model outpu
 
 ## Overview
 
-OpenAI’s documentation describes a **response** as the primary unit of work returned by the API. Responses can be created synchronously or in **background mode**, and can be retrieved later by ID to poll status or obtain output.
+OpenAI’s documentation describes a **response** as the primary unit of work returned by the API. A response can include multiple **output items** (for example, messages and tool calls), and text output may include **annotations** (such as URL citations).<ref>https://developers.openai.com/api/reference/resources/responses/</ref>
+
+Responses can be created synchronously or in **background mode**, and can be retrieved later by ID to poll status or obtain output.<ref>https://developers.openai.com/api/docs/guides/background/</ref>
 
 ## Background mode
 
-OpenAI documents **background mode** for long-running tasks. In background mode, a response is created asynchronously and clients can poll the response status (for example, `queued` and `in_progress`) until it reaches a terminal state. OpenAI also documents cancellation of an in-flight response; cancelling twice is described as idempotent (subsequent calls return the final Response object).<ref>https://developers.openai.com/api/docs/guides/background/</ref>
+OpenAI documents **background mode** for long-running tasks. In background mode, a response is created asynchronously and clients can poll the response status (for example, `queued` and `in_progress`) until it reaches a terminal state.<ref>https://developers.openai.com/api/docs/guides/background/</ref>
+
+OpenAI also documents cancellation of an in-flight response; cancelling twice is described as idempotent (subsequent calls return the final Response object).<ref>https://developers.openai.com/api/docs/guides/background/</ref>
+
+OpenAI notes that background mode has a higher time-to-first-token than synchronous responses, and that latency improvements were planned.<ref>https://developers.openai.com/api/docs/guides/background/</ref>
 
 ### Streaming and resumability
 
@@ -18,11 +24,17 @@ In the API reference for retrieving a response, OpenAI describes a `starting_aft
 
 ### Storage and data retention
 
-OpenAI’s data controls documentation distinguishes between (a) abuse monitoring logs and (b) application state stored by some features. For `/v1/responses`, OpenAI states that the Responses API has a **30-day application state retention period by default**, or when the `store` parameter is set to `true` (with response data stored for at least 30 days).<ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
+OpenAI’s data controls documentation distinguishes between (a) **abuse monitoring logs** and (b) **application state** stored by some features. By default, abuse monitoring logs are retained for up to 30 days (unless legally required otherwise).<ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
+
+For `/v1/responses`, OpenAI states that the Responses API has a **30-day application state retention period by default**, or when the `store` parameter is set to `true` (with response data stored for at least 30 days).<ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
 
 OpenAI also states that **background mode stores response data for roughly 10 minutes to enable polling**, and therefore is **not compatible with Zero Data Retention (ZDR)**, even though requests from ZDR projects may still be accepted for legacy reasons; OpenAI notes that projects using Modified Abuse Monitoring (MAM) can rely on background mode.<ref>https://developers.openai.com/api/docs/guides/background/</ref><ref>https://developers.openai.com/api/docs/guides/your-data/</ref>
 
 Finally, OpenAI documents that **background sampling requires `store=true`** and that stateless requests are rejected in this mode.<ref>https://developers.openai.com/api/docs/guides/background/</ref>
+
+## Tool calling and structured outputs
+
+OpenAI’s documentation positions the Responses API as a surface that can return tool calls as part of a response, enabling multi-step flows where an application executes tools and then sends tool outputs back to the model. OpenAI notes that when using reasoning models, any reasoning items returned alongside tool calls must also be passed back with tool call outputs in subsequent turns.<ref>https://developers.openai.com/api/docs/guides/function-calling/</ref>
 
 ## Relationship to agent frameworks
 
