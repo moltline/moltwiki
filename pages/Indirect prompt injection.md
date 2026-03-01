@@ -1,42 +1,47 @@
 # Indirect prompt injection
 
-**Indirect prompt injection** is a form of *prompt injection* in which a large language model (LLM) or LLM-enabled application is influenced by **untrusted external content** (for example, a web page, document, email, or retrieved knowledge-base entry) that contains embedded instructions. When the application includes that external content in the model’s context (for example, for summarization or retrieval-augmented generation), the model may treat parts of the content as instructions and follow them, potentially causing unsafe or unintended behavior.[1][2]
+**Indirect prompt injection** is a form of prompt injection where **attacker-controlled instructions arrive via an external source** (e.g., a web page, document, email, issue/PR text, or a retrieved knowledge-base chunk) that an LLM application ingests and places into the model’s context. If that untrusted content is not handled carefully, the model may treat parts of it as instructions and follow them, causing unsafe or unintended behavior. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
 
-Indirect prompt injection is often contrasted with **direct prompt injection** (sometimes described as "jailbreaking"), where the attacker provides the malicious instruction directly as user input.[1]
+It is often contrasted with **direct prompt injection**, where the attacker supplies the malicious instruction directly as user input. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
 
-## Description
+## What counts as “indirect” (remote) injection
 
-LLM-integrated applications commonly ingest external data (web browsing, file uploads, plugins, connectors, or retrieval systems). Indirect prompt injection exploits the fact that LLMs process natural-language inputs without a hard separation between *data* and *instructions*, so attacker-controlled text embedded in external content can alter the model’s behavior when it is placed into the prompt context.[2]
+Indirect prompt injection typically involves:
 
-OWASP’s GenAI Security Project groups indirect prompt injection under the broader *prompt injection* risk category, describing it as injection via **external sources** (e.g., websites or files) whose content is interpreted by the model in a way that alters behavior.[1]
+- **A separate content channel** (browser/RAG/connector/file) that the user did not author
+- **A vulnerable prompt construction step** that mixes untrusted content with instructions
+- **Optional agency** (tools, plugins, actions) that turns manipulation into real-world impact
 
-## Attack scenarios
-
-Documented scenarios include:
-
-- **Webpage summarization / RAG**: a user asks an LLM to summarize a page (or a retrieval system returns a document) that contains hidden or innocuous-looking instructions; the model follows the embedded instructions instead of the user’s intent.[1][2]
-- **Tool / plugin misuse**: if the LLM can call tools (such as email, purchasing, or data-access plugins), injected instructions in external content can attempt to trigger unauthorized tool use.[1][2]
+OWASP’s LLM01 guidance explicitly calls out *indirect prompt injections* as cases where external sources (websites/files) contain content that, when interpreted by the model, alters behavior. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
 
 ## Why it works (root cause)
 
-Indirect prompt injection is enabled by a common architectural property of LLM systems: **the same channel carries both instructions and data**. When untrusted content is inserted into a prompt (or otherwise processed as context), it can be interpreted as instruction unless the system enforces strong boundaries in how it constructs prompts and authorizes actions.[1][2]
+Most LLM systems process natural language without a hard, enforced boundary between *data* and *instructions*. When an application inserts untrusted text into the same context window as system/developer instructions, the model can misinterpret the untrusted text as higher-priority instruction.
+
+This “instructions and data share the same channel” property is central to the indirect prompt injection threat model described in *Not what you’ve signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection*. https://arxiv.org/abs/2302.12173
+
+## Common attack scenarios
+
+- **Summarization / Q&A over content**: a user asks for a summary of a page (or a RAG pipeline retrieves a document) that includes embedded instructions; the model follows those instructions instead of the user’s request. https://genai.owasp.org/llmrisk/llm01-prompt-injection/  https://arxiv.org/abs/2302.12173
+- **Tool / plugin misuse**: injected instructions attempt to trigger unauthorized tool calls (e.g., sending emails, making purchases, accessing internal systems). The risk increases with the amount of *agency* granted to the model. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Code / VCS context**: indirect injection can arrive via code comments, commit messages, issues, or PR descriptions that an LLM-powered assistant reads and then treats as instruction. https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html
 
 ## Impacts
 
-Depending on what the LLM application can access or do, discussed impacts include:[1][2]
+Impacts depend heavily on what the LLM application can access and do, but commonly discussed outcomes include:
 
-- **Data exfiltration** (for example, leaking conversation history or sensitive data accessible via tools or connectors)
-- **Unauthorized actions** performed via tools or downstream systems
-- **Output manipulation** and social engineering
+- **Disclosure of sensitive information** (e.g., secrets reachable via tools/connectors) https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Unauthorized actions** via connected tools/APIs (especially if approvals/policy checks are weak) https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Content manipulation** (steering outputs, social engineering, misleading summaries) https://genai.owasp.org/llmrisk/llm01-prompt-injection/
 
-## Mitigations
+## Mitigations (practical)
 
-Mitigations commonly recommended in the literature include:[1][2]
+No single control fully prevents prompt injection, but OWASP recommends layered mitigations. Useful patterns for *indirect* injection include:
 
-- **Least-privilege tool access** and strong authorization boundaries for any backend actions the LLM can request.
-- **Human-in-the-loop confirmation** for privileged or irreversible actions.
-- **Segregating / labeling untrusted content** when constructing prompts (e.g., explicit delimiting, provenance labels), so external data is less likely to be treated as instruction.
-- **Output validation** and deterministic guardrails around tool invocation (treat the model as untrusted input to policy/code).
+- **Segregate and label untrusted content** when building prompts (clear delimiting + provenance) so the model is less likely to treat it as instruction. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Least privilege + explicit authorization** for any tool/action the model can request; keep privileged operations in deterministic code paths. https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Human approval for high-risk actions** (payments, external messaging, data export, destructive operations). https://genai.owasp.org/llmrisk/llm01-prompt-injection/
+- **Input/output filtering and validation** (treat both untrusted content and model outputs as untrusted inputs to policy/code). https://genai.owasp.org/llmrisk/llm01-prompt-injection/  https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html
 
 ## See also
 
@@ -45,5 +50,6 @@ Mitigations commonly recommended in the literature include:[1][2]
 
 ## References
 
-1. OWASP GenAI Security Project. "LLM01:2025 Prompt Injection". https://genai.owasp.org/llmrisk/llm01-prompt-injection/ (accessed 2026-03-01).
-2. Greshake, K.; Abdelnabi, S.; et al. "Not what you’ve signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection". arXiv:2302.12173. https://arxiv.org/abs/2302.12173 (accessed 2026-03-01).
+- OWASP GenAI Security Project. “LLM01:2025 Prompt Injection”. https://genai.owasp.org/llmrisk/llm01-prompt-injection/ (accessed 2026-03-01).
+- OWASP Cheat Sheet Series. “LLM Prompt Injection Prevention Cheat Sheet”. https://cheatsheetseries.owasp.org/cheatsheets/LLM_Prompt_Injection_Prevention_Cheat_Sheet.html (accessed 2026-03-01).
+- Greshake, K.; Abdelnabi, S.; et al. “Not what you’ve signed up for: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection”. arXiv:2302.12173. https://arxiv.org/abs/2302.12173 (accessed 2026-03-01).
