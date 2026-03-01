@@ -25,6 +25,7 @@ AAP does **not** introduce a new authorization protocol. It profiles and compose
 - **OAuth 2.0 Token Exchange** is a common fit for delegation and “act-as / on-behalf-of” patterns; it standardizes the `act` (actor) claim and delegation vs. impersonation semantics. https://www.rfc-editor.org/rfc/rfc8693
 - **Sender-constrained / proof-of-possession tokens** reduce replay risk compared to bearer tokens. AAP references both mutual-TLS certificate-bound access tokens and DPoP as common PoP mechanisms. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 - **Rich Authorization Requests (RAR)** define the `authorization_details` parameter for carrying fine-grained authorization data in OAuth messages, which can complement capability-style authorization. https://www.rfc-editor.org/rfc/rfc9396
+- **JWT Profile for OAuth 2.0 Access Tokens (RFC 9068)** is a common JWT access-token profile that AAP-style deployments may already use as a baseline. https://www.rfc-editor.org/rfc/rfc9068
 
 ## What AAP adds (conceptually)
 
@@ -36,9 +37,11 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 - **Delegation chain semantics** (how authority was passed or restricted across hops).
 - **Oversight requirements** (policy signals about required approvals/supervision).
 
+The draft also defines **resource-server validation rules** for these structured claims (beyond standard JWT validation) so that enforcement is consistent across implementations. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
 ## AAP claim “sections” (high-level)
 
-The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
+AAP extends standard JWT claims with **structured claim sections**. The normative claim names in the draft are:
 
 - `aap_agent` (agent identity and execution context)
 - `aap_task` (task identifier/purpose/topic/sensitivity)
@@ -48,7 +51,9 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 - `aap_context` (environment/network/time restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
+(Claim namespace list: https://datatracker.ietf.org/doc/draft-aap-oauth-profile/)
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -65,8 +70,9 @@ AAP builds on these patterns by making the resulting token’s semantics more ex
 
 AAP is motivated by threats that are especially salient in autonomous systems, including:
 
-- **Purpose drift / permission drift** (using a token beyond its declared task/purpose). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Purpose drift** (using a token beyond its declared task/purpose). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 - **Confused deputy** failures in multi-hop delegation chains. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Prompt / data injection** risks where untrusted inputs influence an agent to misuse its privileges. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 - **Replay risk** when bearer tokens are used in high-automation environments; PoP mechanisms like mTLS-bound access tokens or DPoP can help reduce replay. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
@@ -81,11 +87,12 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft HTML (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-00.html
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
 - RFC 8705. “OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access Tokens.” https://www.rfc-editor.org/rfc/rfc8705
 - RFC 8725. “JSON Web Token Best Current Practices.” https://www.rfc-editor.org/rfc/rfc8725
+- RFC 9068. “JSON Web Token (JWT) Profile for OAuth 2.0 Access Tokens.” https://www.rfc-editor.org/rfc/rfc9068
 - RFC 9396. “OAuth 2.0 Rich Authorization Requests.” https://www.rfc-editor.org/rfc/rfc9396
 - RFC 9449. “OAuth 2.0 Demonstrating Proof of Possession (DPoP).” https://www.rfc-editor.org/rfc/rfc9449
