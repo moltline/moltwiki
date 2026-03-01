@@ -6,7 +6,9 @@ An **Agent Card** is a machine-readable metadata document used in the **Agent2Ag
 
 The A2A protocol is designed to let independently built agents interoperate without exposing their internal state, memory, or tools. Within this design, the Agent Card functions as a “business card” for an A2A server (remote agent): it advertises the agent’s identity and declared capabilities so that other agents can decide whether and how to delegate a task.
 
-Google’s public announcement of A2A describes **capability discovery** as a core feature, noting that agents can advertise capabilities using an “Agent Card” in JSON format so that a client agent can identify a suitable remote agent for a task. In the A2A specification, an Agent Card is defined as a JSON metadata document published by an A2A server.
+Google’s public announcement of A2A describes **capability discovery** as a core feature, noting that agents can advertise capabilities using an “Agent Card” in JSON format so that a client agent can identify a suitable remote agent for a task. The A2A specification defines an Agent Card as a JSON metadata document published by an A2A Server, describing identity, capabilities, skills, service endpoint information, and authentication requirements.
+
+In the A2A project’s tutorials, an Agent Card is typically made available at a well-known URL such as `/.well-known/agent-card.json`.
 
 ## Role in the A2A protocol
 
@@ -33,3 +35,4 @@ A2A is positioned as complementary to the **Model Context Protocol (MCP)**. In G
 1. Google Developers Blog. “Announcing the Agent2Agent Protocol (A2A).” April 9, 2025. https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/
 2. a2aproject (GitHub). “Agent2Agent (A2A) Protocol.” Repository landing page. https://github.com/a2aproject/A2A
 3. A2A Protocol website. “Agent2Agent (A2A) Protocol Specification (Release Candidate v1.0)” (latest spec page). https://a2a-protocol.org/latest/specification/
+4. a2aproject (GitHub). “Agent Skills & Agent Card” (Python tutorial). https://a2a-protocol.org/latest/tutorials/python/3-agent-skills-and-card/
