@@ -36,6 +36,8 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 - **Delegation chain semantics** (how authority was passed or restricted across hops).
 - **Oversight requirements** (policy signals about required approvals/supervision).
 
+The draft’s abstract summarizes this scope as: “agent identity, task context, operational constraints, delegation chains, and human oversight requirements.” https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
+
 ## AAP claim “sections” (high-level)
 
 The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
@@ -48,7 +50,7 @@ The draft defines a set of structured claim namespaces/sections (and schemas) to
 - `aap_context` (environment/network/time restrictions)
 - `aap_audit` (trace/session identifiers for logging correlation)
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+The current Internet-Draft text lists these structured sections under “Structured Sections (Claim Names)”. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -65,8 +67,8 @@ AAP builds on these patterns by making the resulting token’s semantics more ex
 
 AAP is motivated by threats that are especially salient in autonomous systems, including:
 
-- **Purpose drift / permission drift** (using a token beyond its declared task/purpose). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- **Confused deputy** failures in multi-hop delegation chains. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+- **Purpose drift / permission drift** (using a token beyond its declared task/purpose). The draft includes “Purpose Drift” in its threat model summary. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
+- **Confused deputy**-style failures in delegation chains. The draft’s threat model includes “Malicious or Excessive Delegation” and defines “Delegation Chain Semantics” and related validation rules. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
 - **Replay risk** when bearer tokens are used in high-automation environments; PoP mechanisms like mTLS-bound access tokens or DPoP can help reduce replay. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
