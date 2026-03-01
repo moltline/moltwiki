@@ -12,14 +12,28 @@ Because the semantics are intentionally underspecified, `402` is mostly used by 
 
 ## Practical use patterns
 
-Since there is no standard “payment challenge” equivalent to `WWW-Authenticate` for `401`, implementations typically choose their own approach, for example:
+Since there is no standard “payment challenge” equivalent to `WWW-Authenticate` for `401`, implementations typically choose their own approach.
+
+Common patterns include:
 
 - **Paywall / payment required:** the response indicates the resource is available if the client pays, and the client retries the request with whatever proof/token the protocol defines.
-- **Payment attempt failed:** some payment APIs return `402` as a generic error for a failed payment (e.g., expired card), with details in a JSON body. (Example and compatibility notes: https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402)
+- **Payment attempt failed:** some payment APIs use `402` as a generic catch-all for failed payment requests, with details in a response body (e.g., an error code indicating an expired card). MDN includes an illustrative example of this pattern. https://developer.mozilla.org/en-US/docs/Web/HTTP/Reference/Status/402
 
 ### Interoperability implications
 
 Because `402` does not define headers, payloads, or verification rules, clients generally need **protocol-specific support** (headers, token formats, signing rules, etc.) to interoperate with a given service.
+
+### Relationship to other client-error status codes
+
+In practice, services sometimes choose between `401`, `402`, and `403` when access depends on payment state:
+
+- `401 Unauthorized` is defined around authentication challenges (e.g., `WWW-Authenticate`).
+- `402 Payment Required` is reserved for future use and intentionally does not define a payment challenge format.
+- `403 Forbidden` is used when the server understands the request but refuses to authorize it.
+
+Because `402` is underspecified, many paywalls instead use `401`/`403` plus application-specific payloads.
+
+(HTTP semantics: RFC 9110, §15.5.3 for `402` and §15.5.4 for `403`: https://www.rfc-editor.org/rfc/rfc9110.html)
 
 ## Example: x402 (application-layer protocol)
 
@@ -30,7 +44,8 @@ One modern example is **x402**, which uses HTTP requests/responses and `402` to 
 
 Project overview and docs:
 - GitHub repository: https://github.com/coinbase/x402
-- Coinbase developer docs: https://docs.cdp.coinbase.com/x402/welcome
+
+The x402 repository describes x402 as an open standard for “internet native payments” that is built on HTTP, with reference SDKs for multiple languages and web frameworks. https://github.com/coinbase/x402
 
 ## See also
 
