@@ -34,9 +34,13 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 defines the syntax and validation rules for these proofs, including required claims and replay-mitigation considerations. https://www.rfc-editor.org/rfc/rfc9449
 
-Common proof claims include:
+**Media type / header type**
+
+- IANA registers the media type `application/dpop+jwt` for DPoP proof JWTs (published specification: RFC 9449). https://www.iana.org/assignments/media-types/application/dpop+jwt
+
+**Common proof claims** (see RFC 9449 for precise requirements and processing)
 
 - `htm`: the HTTP method of the request being proven
 - `htu`: the HTTP URI of the request being proven
@@ -44,6 +48,8 @@ Common proof claims include:
 - `jti`: unique identifier for the proof (supports replay detection)
 
 For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
+
+For some deployments, servers may require a `nonce` claim to provide proof freshness (see “Nonce support” below). https://www.rfc-editor.org/rfc/rfc9449
 
 (Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
@@ -73,3 +79,5 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- IANA media type registration: `application/dpop+jwt` (published specification: RFC 9449): https://www.iana.org/assignments/media-types/application/dpop+jwt
+- OAuth.net overview (DPoP): https://oauth.net/2/dpop/
