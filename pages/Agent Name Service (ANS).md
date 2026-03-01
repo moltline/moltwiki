@@ -1,7 +1,8 @@
 # Agent Name Service (ANS)
 
-**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
+**Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified in an IETF Internet-Draft (work in progress):
 
+- https://datatracker.ietf.org/doc/draft-narajala-ans/
 - https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
 ## What problem ANS is trying to solve
@@ -46,6 +47,14 @@ ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
+## Implementations and related work
+
+In addition to the Internet-Draft, there are early implementation efforts that reference ANS concepts.
+
+- GoDaddy maintains an open-source **ANS registry** implementation (`ans-registry`) and publishes an associated OpenAPI description. https://github.com/godaddy/ans-registry/
+- GoDaddy also hosts public-facing **ANS API** documentation that links to a Swagger/OpenAPI JSON specification. https://developer.godaddy.com/doc/endpoint/ans
+
 ## Notes and cautions
 
-- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/draft-narajala-ans/
+- The current Datatracker history for the draft shows the `-00` revision was uploaded in May 2025 and later marked expired (November 2025). https://datatracker.ietf.org/doc/draft-narajala-ans/history/
