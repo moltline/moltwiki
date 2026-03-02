@@ -4,7 +4,9 @@ The **Agent Communication Protocol (ACP)** is an open protocol for interoperabil
 
 ACP is developed in the open and is associated with the BeeAI ecosystem. The reference implementation and SDKs live in the `i-am-bee/acp` repository. https://github.com/i-am-bee/acp
 
-IBM notes that ACP has **merged with A2A under the Linux Foundation umbrella**, and that the ACP team is winding down active development while contributing to A2A. https://www.ibm.com/think/topics/agent-communication-protocol
+The Linux Foundation’s LF AI & Data Foundation describes ACP as **merging with A2A under the Linux Foundation umbrella**, with the ACP team **winding down active development** while contributing technology and expertise to A2A. https://lfaidata.foundation/communityblog/2025/08/29/acp-joins-forces-with-a2a-under-the-linux-foundations-lf-ai-data/
+
+IBM also notes that ACP is merging with A2A and that ACP’s active development is winding down in favor of contributions to A2A. https://www.ibm.com/think/topics/agent-communication-protocol
 
 ## What ACP standardizes
 
