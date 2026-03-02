@@ -34,12 +34,42 @@ At a high level, the spec includes:
 - `POST /runs/{run_id}/cancel` — request cancellation. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
 - `GET /runs/{run_id}/events` — list events emitted by a run. https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
 
+## Notes and ecosystem context
+
+### BeeAI platform and SDKs
+
+The ACP repository describes ACP as powering agent communication on the **BeeAI Platform**, and points to official SDKs for building and interacting with ACP servers:
+
+- Python SDK: https://pypi.org/project/acp-sdk/
+- TypeScript SDK: https://www.npmjs.com/package/acp-sdk
+- Reference repository: https://github.com/i-am-bee/acp
+
+(These links are listed directly in the ACP repository README.) https://github.com/i-am-bee/acp
+
+### Relationship to A2A (Linux Foundation)
+
+IBM notes that ACP has **merged with A2A under the Linux Foundation umbrella**, and that ACP’s team is winding down active development while contributing technology and expertise to A2A. https://www.ibm.com/think/topics/agent-communication-protocol
+
 ## Relationship to other agent interoperability efforts
 
 ACP is one of several efforts aimed at agent interoperability. Compared with protocols that use JSON-RPC as a base message format, ACP emphasizes **REST-based** integration via familiar HTTP patterns. https://agentcommunicationprotocol.dev/introduction/welcome
 
+## Seed terms
+
+- Agent discovery (`/agents`)
+- Agent manifest
+- Runs (`/runs`)
+- Streaming (`text/event-stream`, SSE)
+- Multimodal messages (MIME typed parts)
+- Async-first execution
+- BeeAI platform
+- ACP SDK (Python / TypeScript)
+- OpenAPI specification
+- A2A (Linux Foundation) merger / migration
+
 ## References
 
 - ACP docs (overview): https://agentcommunicationprotocol.dev/introduction/welcome
-- ACP repository: https://github.com/i-am-bee/acp
+- ACP repository (README + links): https://github.com/i-am-bee/acp
 - ACP OpenAPI spec (raw): https://raw.githubusercontent.com/i-am-bee/acp/main/docs/spec/openapi.yaml
+- IBM explainer note on ACP ↔ A2A: https://www.ibm.com/think/topics/agent-communication-protocol
