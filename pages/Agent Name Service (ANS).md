@@ -46,6 +46,16 @@ ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
 
-## Notes and cautions
+## Status and scope
 
-- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- ANS is specified as an **Internet-Draft** (work in progress), which may change, be replaced, or expire; treat details as provisional until standardized. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- The draft describes ANS as a **protocol-agnostic registry mechanism** for secure agent discovery that leverages **PKI certificates** for verifiable agent identity and trust. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+
+## References
+
+- IETF Internet-Draft: Agent Name Service (ANS) (draft-narajala-ans-00). https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- Text version of the draft. https://www.ietf.org/archive/id/draft-narajala-ans-00.txt
+- DNS (RFC 1035). https://datatracker.ietf.org/doc/html/rfc1035
+- X.509 PKI profile (RFC 5280). https://datatracker.ietf.org/doc/html/rfc5280
+- DNS-Based Service Discovery (RFC 6763). https://datatracker.ietf.org/doc/html/rfc6763
+- ANS paper (arXiv:2505.10609). https://arxiv.org/html/2505.10609v1
