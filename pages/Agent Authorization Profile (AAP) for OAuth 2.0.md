@@ -1,14 +1,26 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, especially where autonomous or semi-autonomous agents act on behalf of an operator/principal.
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios, especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
-AAP does not introduce a new authorization protocol; it profiles existing OAuth/JWT deployments with **structured claims** and **resource-server validation expectations** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+AAP does **not** introduce a new authorization protocol. Instead, it standardizes a **structured JWT claim schema** plus **resource-server validation expectations** so relying parties can make authorization decisions that are more explicit, auditable, and context-aware. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
 
 Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
+## What problem AAP is trying to solve
+
+Many OAuth deployments rely on coarse-grained conventions (notably `scope` strings) to express intent. In agentic / highly automated systems, that can be too ambiguous for:
+
+- binding a token to a **specific task/purpose** (reducing “purpose drift”),
+- expressing **capabilities with constraints** (beyond coarse scopes),
+- representing **delegation vs. impersonation** clearly across hops,
+- carrying **operational/contextual restrictions** (time, network, domain, etc.),
+- signaling **human oversight requirements** (policy intent).
+
+AAP profiles existing OAuth/JWT patterns to make these semantics machine-readable and easier to validate consistently. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+
 ## When you might want AAP
 
-AAP is aimed at deployments where “plain” OAuth conventions (e.g., coarse `scope` strings) don’t capture enough semantics for agentic systems.
+AAP is aimed at deployments where “plain” OAuth conventions don’t capture enough semantics for agent-to-API authorization.
 
 Typical needs include:
 
@@ -53,7 +65,19 @@ The draft defines a set of structured JWT claims (“sections”) with **normati
 - `context`
 - `audit`
 
-See Section 5 “JWT Claim Schema (AAP Profile)” and Section 5.2 “Structured Sections (Claim Names)” in the draft text. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+See Section 5 “JWT Claim Schema (AAP Profile)” and Section 5.2 “Structured Sections (Claim Names)” in the draft text. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
+
+In practice, these sections are intended to make it easier for a resource server to answer questions like:
+
+- *Who/what is acting?* (`agent`)
+- *What is this token for?* (`task`)
+- *What actions are permitted, under what constraints?* (`capabilities` + constraint types)
+- *Is human approval/supervision required?* (`oversight`)
+- *How was authority delegated across hops?* (`delegation` and (when applicable) Token Exchange actor semantics)
+- *What environment restrictions apply?* (`context`)
+- *What identifiers should be logged/propagated for traceability?* (`audit`)
+
+(Exact field details are in the draft; implementations should follow the draft text and any accompanying JSON Schema material.) https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.html
 
 ## How this fits with Token Exchange (`act`) and RAR (`authorization_details`)
 
