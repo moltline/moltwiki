@@ -5,9 +5,9 @@ description: "IETF standard for sender-constraining OAuth 2.0 tokens using appli
 
 ## What it is
 
-**DPoP (Demonstrating Proof-of-Possession)** is an OAuth 2.0 mechanism for **sender-constraining tokens to a key**: the client includes a signed **DPoP proof JWT** in an HTTP `DPoP` header to prove possession of a private key corresponding to a public key, and the authorization server can bind issued tokens to that public key. Recipients can then verify that the presenter of the token also possesses the corresponding private key. https://www.rfc-editor.org/rfc/rfc9449
+**DPoP (Demonstrating Proof-of-Possession)** is an application-layer mechanism for **sender-constraining OAuth 2.0 access and refresh tokens** to a public/private key pair. A client includes a signed **DPoP proof JWT** in the HTTP `DPoP` header; the authorization server can then bind issued tokens to the public key, and a resource server can verify that the presenter of the token also possesses the corresponding private key. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
-DPoP’s objective is to reduce the impact of **bearer token replay** after token leakage by requiring proof-of-possession when the token is used. https://www.rfc-editor.org/rfc/rfc9449
+The primary aim of DPoP is to reduce the impact of **leaked or stolen bearer tokens** by requiring proof-of-possession when the token is used. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 ## Why it matters (especially for agents)
 
@@ -24,9 +24,9 @@ DPoP is particularly relevant when transport-layer sender-constraining (e.g., mu
 ## How it works (high level)
 
 1. **Key generation**: the client generates a public/private key pair.
-2. **Proof on requests**: the client sends an HTTP `DPoP` header whose value is a **JWT** signed with the private key (the DPoP proof).
-3. **Token binding**: the authorization server can issue an access token that is bound to the public key (often represented via a confirmation claim when the token is a JWT).
-4. **Verification**: the resource server verifies the DPoP proof and checks that the presented access token is bound to the same key.
+2. **Proof on requests**: the client sends an HTTP `DPoP` header whose value is a **JWT** signed with the private key (the DPoP proof). (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+3. **Token binding**: the authorization server can issue an access token (and optionally refresh token) that is bound to the public key. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+4. **Verification**: the resource server verifies the DPoP proof and checks that the presented access token is bound to the same key. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 Normative details and processing requirements are in RFC 9449. https://www.rfc-editor.org/rfc/rfc9449
 
@@ -34,18 +34,18 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated JWT “typ” value for these proofs: `dpop+jwt`. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
-Common proof claims include:
+The proof JWT includes claims that bind the proof to a specific HTTP request, including:
 
-- `htm`: the HTTP method of the request being proven
-- `htu`: the HTTP URI of the request being proven
+- `htm`: the HTTP method
+- `htu`: the HTTP URI
 - `iat`: issued-at time
-- `jti`: unique identifier for the proof (supports replay detection)
+- `jti`: unique identifier (supports replay detection)
 
-For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
+For requests that include an access token, RFC 9449 defines an `ath` claim: a **base64url-encoded SHA-256 hash of the access token**. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+Many implementation guides summarize these fields and checks; for example, Auth0’s documentation describes `htm`, `htu`, `jti`, and `ath` in the proof payload. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
 
 ### Public key confirmation (`cnf` / `jkt`)
 
@@ -65,9 +65,9 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 ## Practical notes
 
-- DPoP is not itself a client authentication method; it is used to **constrain tokens**. https://www.rfc-editor.org/rfc/rfc9449
-- DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
-- Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
+- DPoP is not a client authentication method; it is used to **sender-constrain tokens**. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+- DPoP is designed for cases where transport-layer sender-constraining mechanisms (e.g., mutual TLS sender-constrained tokens) are not available or desirable. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
+- Implementations need operational plans for **key management** (generation, secure storage, rotation) and for server-side checks like **clock skew**, **proof replay detection** (e.g., `jti` handling), and optional **nonce** retry behavior. (RFC 9449) https://www.rfc-editor.org/rfc/rfc9449
 
 ## Sources
 
