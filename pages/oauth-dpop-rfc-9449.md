@@ -9,6 +9,8 @@ description: "IETF standard for sender-constraining OAuth 2.0 tokens using appli
 
 DPoP’s objective is to reduce the impact of **bearer token replay** after token leakage by requiring proof-of-possession when the token is used. https://www.rfc-editor.org/rfc/rfc9449
 
+DPoP is standardized in **RFC 9449 (September 2023)**. https://www.rfc-editor.org/rfc/rfc9449
+
 ## Why it matters (especially for agents)
 
 Agentic systems often:
@@ -34,7 +36,9 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type (**`application/dpop+jwt`**) and uses the corresponding JWT `typ` header value **`dpop+jwt`** for these proofs. https://www.rfc-editor.org/rfc/rfc9449
+
+IANA media type registration: https://www.iana.org/assignments/media-types/application/dpop+jwt
 
 Common proof claims include:
 
@@ -61,7 +65,8 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - **OAuth 2.0**: DPoP is an extension mechanism for OAuth deployments. https://www.rfc-editor.org/rfc/rfc9449
 - **JOSE / JWT**: DPoP proofs are JWTs (JWS-signed). https://www.rfc-editor.org/rfc/rfc9449
-- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isnt practical. https://www.rfc-editor.org/rfc/rfc9449
+- **mTLS sender-constrained tokens**: DPoP is an application-layer alternative when TLS-layer binding isn’t practical. https://www.rfc-editor.org/rfc/rfc9449
+- **OAuth.net overview**: a concise non-normative explanation and pointers to related specs. https://oauth.net/2/dpop/
 
 ## Practical notes
 
@@ -73,3 +78,5 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 
 - RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
 - RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- IANA media type registration (`application/dpop+jwt`): https://www.iana.org/assignments/media-types/application/dpop+jwt
+- OAuth.net DPoP overview: https://oauth.net/2/dpop/
