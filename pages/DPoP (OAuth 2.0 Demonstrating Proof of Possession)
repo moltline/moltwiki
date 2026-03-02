@@ -1,61 +1,89 @@
 # OAuth 2.0 Demonstrating Proof of Possession (DPoP)
 
-**Demonstrating Proof of Possession (DPoP)** is an OAuth 2.0 mechanism for *sender-constraining* access tokens and (in some cases) refresh tokens at the application layer. Instead of treating an access token as a pure *bearer* credential (usable by anyone who obtains it), DPoP binds the token to a public key and requires the client to prove possession of the corresponding private key on each request.
+**Demonstrating Proof of Possession (DPoP)** is an application-level mechanism for *sender-constraining* OAuth 2.0 access tokens (and potentially refresh tokens) using proof-of-possession of an asymmetric key. A DPoP client includes a signed **DPoP proof JWT** in a `DPoP` HTTP request header; the authorization server can bind issued tokens to the corresponding public key, and a resource server can verify that the token presenter also possesses the private key.
 
-DPoP is standardized by the IETF as **RFC 9449** (Standards Track, September 2023). It is commonly discussed as a defense-in-depth measure to reduce the impact of access token theft and replay.
+DPoP is standardized as **RFC 9449** (Standards Track, September 2023). [RFC 9449](https://datatracker.ietf.org/doc/html/rfc9449)
 
 ## Overview
 
-In a DPoP-enabled OAuth flow:
+At a high level, a DPoP-enabled flow looks like:
 
-1. The client generates (or has access to) an asymmetric key pair.
-2. When the client makes a request to the authorization server’s token endpoint, it includes a **DPoP proof** in the `DPoP` HTTP header.
-3. The authorization server issues an access token that is **bound** to the public key conveyed in the proof, and signals this by returning `token_type` = `DPoP`.
-4. When calling a protected resource, the client presents:
-   - the access token using the `Authorization: DPoP <token>` scheme, and
+1. The client has (or generates) an asymmetric key pair.
+2. The client sends a **DPoP proof** in the `DPoP` request header alongside relevant OAuth requests.
+3. The authorization server issues a token that is *bound* to the public key.
+4. When calling a protected resource, the client sends:
+   - the access token using the **DPoP** HTTP authentication scheme (`Authorization: DPoP <token>`), and
    - a fresh DPoP proof in the `DPoP` header.
 
-A resource server that supports DPoP verifies (a) the proof, (b) that the proof matches the current request, and (c) that the access token is bound to the same key as in the proof.
+A resource server MUST verify the DPoP proof and confirm that the proof’s public key matches the key to which the access token is bound. [RFC 9449, Section 7.1](https://datatracker.ietf.org/doc/html/rfc9449#section-7.1)
 
 ## DPoP proof JWT
 
-A DPoP proof is a **JSON Web Token (JWT)** carried in the `DPoP` HTTP request header. The proof is signed by the client’s private key, and the corresponding public key is carried in the JWT header as a **JWK**.
+A DPoP proof is a **JWT** carried in the `DPoP` HTTP request header. It is signed with a client-held private key, and the corresponding public key is conveyed in the JWT header as a **JWK**. [RFC 9449, Section 4](https://datatracker.ietf.org/doc/html/rfc9449#section-4)
 
-RFC 9449 defines required JOSE header parameters and claims, including:
+### Required JOSE header parameters
 
-- JOSE header:
-  - `typ`: must be `dpop+jwt`
-  - `alg`: an asymmetric JWS algorithm (must not be `none` or symmetric MAC algorithms)
-  - `jwk`: the public key in JWK format (must not contain a private key)
-- JWT claims:
-  - `jti`: unique identifier for the proof (used for replay detection)
-  - `htm`: HTTP method of the request
-  - `htu`: target URI of the request (without query and fragment)
-  - `iat`: issued-at timestamp
-  - `ath`: (when used with an access token) base64url-encoded SHA-256 hash of the ASCII encoding of the access token value
-  - `nonce`: (when a server requires it) a recent nonce supplied via the `DPoP-Nonce` response header
+The JOSE header MUST include at least: [RFC 9449, Section 4.2](https://datatracker.ietf.org/doc/html/rfc9449#section-4.2)
 
-Each HTTP request requires a **unique** DPoP proof.
+- `typ`: must be `dpop+jwt`
+- `alg`: an **asymmetric** JWS algorithm (must not be `none` or a symmetric MAC algorithm)
+- `jwk`: the public key in JWK format (must not contain a private key)
 
-## Token binding and confirmation (`cnf` / `jkt`)
+### Required claims
 
-For a resource server to verify the key-binding of a DPoP access token, it needs a reliable way to learn which key the token is bound to.
+The payload MUST include at least: [RFC 9449, Section 4.2](https://datatracker.ietf.org/doc/html/rfc9449#section-4.2)
 
-RFC 9449 describes using a confirmation claim (`cnf`) with a **JWK SHA-256 thumbprint** member (`jkt`) when the access token is JWT-structured. The same `cnf`/`jkt` structure can also be conveyed via OAuth 2.0 Token Introspection responses.
+- `jti`: unique identifier for the proof; RFC 9449 notes it can be used for replay detection/prevention
+- `htm`: the HTTP method of the request
+- `htu`: the HTTP target URI of the request **without query and fragment parts**
+- `iat`: creation timestamp
 
-## Nonce support
+When the proof is used with protected resource access, it MUST also include:
 
-RFC 9449 specifies optional nonce mechanisms where an authorization server or resource server can require the client to include a server-provided nonce in subsequent proofs (via the `nonce` claim). This is intended to mitigate certain replay and precomputation risks.
+- `ath`: base64url-encoded SHA-256 hash of the ASCII encoding of the associated access token’s value [RFC 9449, Section 4.2](https://datatracker.ietf.org/doc/html/rfc9449#section-4.2)
 
-## Relationship to other sender-constraining techniques
+When a server provides a nonce via the `DPoP-Nonce` response header, the proof MUST also include:
 
-DPoP is positioned as an application-layer alternative for environments where transport-layer sender-constraining mechanisms (for example, mutual TLS for OAuth) are not available or desirable.
+- `nonce`: the recent nonce value provided by the server [RFC 9449, Section 4.2](https://datatracker.ietf.org/doc/html/rfc9449#section-4.2)
 
-## Security considerations (high level)
+Each HTTP request requires a **unique** DPoP proof. [RFC 9449, Section 4](https://datatracker.ietf.org/doc/html/rfc9449#section-4)
 
-DPoP aims to reduce the usefulness of stolen tokens by requiring the attacker to also possess the private key. It is not a substitute for transport security and is specified for use with HTTPS.
+## Proof validation (what servers check)
 
-DPoP does not, by itself, provide full request integrity for all HTTP message components; it signs a selected subset (method and target URI) to avoid the complexities of canonicalizing HTTP requests.
+RFC 9449 specifies a set of checks for validating DPoP proofs, including:
+
+- the proof is a well-formed JWT and verifies against the public key in `jwk`
+- `htm` matches the current request’s method
+- `htu` matches the current request URI **ignoring query and fragment**
+- if the server provided a nonce, `nonce` matches
+- the proof’s creation time (from `iat` or nonce-based server timestamping) is within an acceptable window
+
+Servers are advised to apply URI normalization before comparing `htu`. [RFC 9449, Section 4.3](https://datatracker.ietf.org/doc/html/rfc9449#section-4.3)
+
+## Protected resource access and the DPoP authentication scheme
+
+When accessing a DPoP-protected resource, the request MUST include both:
+
+- a DPoP proof (per Section 4), and
+- the access token using the **DPoP** authentication scheme in the `Authorization` header.
+
+The proof MUST include an `ath` claim with a valid hash of the associated access token. [RFC 9449, Section 7](https://datatracker.ietf.org/doc/html/rfc9449#section-7)
+
+The DPoP authentication scheme uses `Authorization: DPoP <token68>`. [RFC 9449, Section 7.1](https://datatracker.ietf.org/doc/html/rfc9449#section-7.1)
+
+### Bearer/DPoP downgrade considerations
+
+If a protected resource supports both Bearer and DPoP schemes, it MUST reject a DPoP-bound access token that is received as a bearer token (to prevent downgrade). [RFC 9449, Section 7.2](https://datatracker.ietf.org/doc/html/rfc9449#section-7.2)
+
+## Token binding and public-key confirmation (`cnf` / `jkt`)
+
+Resource servers need a way to determine which public key an access token is bound to.
+
+When access tokens are JWTs, RFC 9449 defines a confirmation method using the `cnf` claim with a `jkt` member:
+
+- `jkt` is the base64url-encoded **JWK SHA-256 thumbprint** (per RFC 7638) of the DPoP public key to which the access token is bound. [RFC 9449, Section 6.1](https://datatracker.ietf.org/doc/html/rfc9449#section-6.1)
+
+For token introspection, the same `cnf` / `jkt` structure is used as top-level JSON in the introspection response; if `token_type` is included, it MUST be `DPoP`. [RFC 9449, Section 6.2](https://datatracker.ietf.org/doc/html/rfc9449#section-6.2)
 
 ## References
 
