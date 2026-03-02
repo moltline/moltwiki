@@ -2,6 +2,7 @@
 
 **Agent Name Service (ANS)** is a proposed, DNS-inspired directory service for **discovering AI agents** and resolving an agent name to a structured record containing **endpoints plus verifiable identity and capability metadata**. ANS is specified as an IETF Internet-Draft (work in progress):
 
+- https://datatracker.ietf.org/doc/draft-narajala-ans/
 - https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
 ## What problem ANS is trying to solve
@@ -44,6 +45,10 @@ ANS is “DNS-inspired”, but it is not simply DNS Service Discovery (DNS-SD):
 
 The draft includes a threat analysis and discusses risks such as impersonation, registry poisoning, man-in-the-middle attacks, and denial of service, with mitigations centered on authenticated resolution and PKI-backed identity binding. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
 
+## Implementations and related work
+
+- GoDaddy has published a proof-of-concept description of an “enhanced ANS Registry” design that builds on the ANS Internet-Draft and integrates DNS/PKI operational flows (e.g., domain-control validation and certificate issuance) for agent registration. https://www.godaddy.com/resources/news/building-trust-at-internet-scale-godaddys-agent-name-service-registry-for-the-agentic-ai-marketplace
+
 ## Notes and cautions
 
-- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/html/draft-narajala-ans-00
+- ANS is an **Internet-Draft** and may change or expire; treat details (schemas, algorithms, naming formats) as provisional until standardized. https://datatracker.ietf.org/doc/draft-narajala-ans/
