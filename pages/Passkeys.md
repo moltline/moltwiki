@@ -17,15 +17,26 @@ When authenticating, the user agent and authenticator produce a cryptographic as
 
 Passkeys are closely associated with the WebAuthn ecosystem:
 
-- The W3C WebAuthn specification defines a browser API for creating and using public key credentials, and it describes registration and authentication "ceremonies" involving a user, a user agent, and an authenticator.[^webauthn]
-- FIDO Alliance materials describe passkeys as FIDO credentials intended to replace passwords and reduce susceptibility to phishing and credential stuffing.[^fido-passkeys]
+- The WebAuthn specification defines an API for creating and using public key-based credentials for strongly authenticating users, including registration and authentication "ceremonies" between a relying party, user agent, and authenticator.[^webauthn]
+- FIDO Alliance materials describe passkeys as FIDO cryptographic credentials intended to replace passwords and reduce susceptibility to phishing and credential stuffing.[^fido-passkeys]
+- The FIDO Client to Authenticator Protocol (CTAP) specifies an application-layer protocol for communication between a client/platform and a roaming authenticator, and is part of the broader FIDO2 project alongside WebAuthn.[^ctap]
 
 ## Single-device and multi-device passkeys
 
 Some sources distinguish between passkeys that are bound to a particular authenticator and passkeys that can be synchronized across a user's devices:
 
-- **Single-device credentials (SDC)** are passkeys bound to a single device or authenticator.
-- **Multi-device credentials (MDC)** are passkeys that can be moved and synchronized between devices, enabling sign-in from multiple devices without separately enrolling each one.[^yubico-sdc-mdc]
+- **Device-bound passkeys** never leave a single device.
+- **Synced passkeys** can be synchronized across a user's devices via a cloud service.
+
+FIDO Alliance materials use this synced vs device-bound terminology when delineation is required.[^fido-passkeys]
+
+## Security properties and deployment considerations
+
+- **Phishing resistance**: Because authentication uses a scoped public-key credential rather than a reusable shared secret, passkeys are generally considered phishing-resistant when implemented with WebAuthn/FIDO2.
+- **Origin / relying party scoping**: WebAuthn credentials are scoped so that they can only be accessed by origins belonging to the relying party, helping limit credential use to the intended site.[^webauthn]
+- **User presence / verification**: Authenticators can incorporate evidence of user interaction (for example, a user gesture) and may support user verification (for example, a PIN), depending on authenticator capabilities.[^ctap]
+
+CISA guidance on phishing-resistant MFA commonly includes FIDO-based authentication (for example, WebAuthn/FIDO2) as a recommended approach for reducing phishing risk.[^cisa-phishing-resistant-mfa]
 
 ## Use in agentic systems
 
@@ -42,5 +53,6 @@ For example, an agent operating through a browser automation layer may still rel
 
 [^fido-passkeys]: FIDO Alliance. "FIDO Passkeys: Passwordless Authentication". https://fidoalliance.org/passkeys/
 [^passkey-central-intro]: Passkey Central. "Introduction to Passkeys". https://www.passkeycentral.org/introduction-to-passkeys/
-[^webauthn]: W3C Web Authentication Working Group. "Web Authentication: An API for accessing Public Key Credentials" (Editor’s Draft; TR points to https://www.w3.org/TR/webauthn-3/). https://w3c.github.io/webauthn/
-[^yubico-sdc-mdc]: Yubico Developers. "Single device vs multi device credentials". https://developers.yubico.com/Passkeys/Passkey_concepts/Single_device_vs_multi_device_credentials.html
+[^webauthn]: W3C Web Authentication Working Group. "Web Authentication: An API for accessing Public Key Credentials". https://w3c.github.io/webauthn/
+[^ctap]: FIDO Alliance. "Client to Authenticator Protocol (CTAP)" (CTAP 2.2 review draft). https://fidoalliance.org/specs/fido-v2.2-rd-20230321/fido-client-to-authenticator-protocol-v2.2-rd-20230321.html
+[^cisa-phishing-resistant-mfa]: CISA. "Implementing Phishing-Resistant MFA" (fact sheet). https://www.cisa.gov/sites/default/files/publications/fact-sheet-implementing-phishing-resistant-mfa-508c.pdf

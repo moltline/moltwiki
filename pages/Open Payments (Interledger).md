@@ -1,42 +1,68 @@
 # Open Payments (Interledger)
 
-**Open Payments** is an open API standard stewarded by the Interledger ecosystem. It is intended to let applications set up and complete payments by interacting with **Open Payments-enabled account providers** (for example banks, digital wallet providers, or mobile money providers) through standardized APIs, rather than bespoke integrations per provider.<ref>https://interledger.org/open-payments</ref><ref>https://openpayments.dev/</ref><ref>https://github.com/interledger/open-payments</ref>
+**Open Payments** is an open API standard from the Interledger ecosystem for interacting with payment accounts via standardized HTTP APIs, instead of bespoke integrations per provider. It is designed to be implemented by **account servicing entities (ASEs)** (e.g., banks, digital wallet providers, mobile money providers).<ref>https://interledger.org/open-payments</ref><ref>https://openpayments.dev/overview/getting-started/</ref>
 
-A core concept is the **wallet address**: a URL that can act as a public, shareable alias for an account, enabling apps to discover where to reach the account provider and how to request permission to initiate payments.<ref>https://interledger.org/open-payments</ref>
+A core identifier in the system is the **wallet address**: a URL that acts as a public alias for an account and also serves as the API entry point for that account.<ref>https://interledger.org/open-payments</ref><ref>https://openpayments.dev/overview/getting-started/</ref>
 
 ## What it is (high level)
 
-Open Payments is described as a collection of open API standards that can be implemented by account servicing entities to support multiple payment use cases (e.g., e-commerce checkout, P2P, subscriptions, tipping/donations, invoice payments).<ref>https://github.com/interledger/open-payments</ref><ref>https://github.com/interledger/open-payments-specifications</ref>
+Open Payments is a REST API surface intended to support multiple payment use cases such as e-commerce checkout, P2P transfers, subscriptions, and donations by letting clients (apps) request permissioned access to specific operations on an account at an ASE.<ref>https://interledger.org/open-payments</ref><ref>https://openpayments.dev/overview/getting-started/</ref>
 
-Interledger materials position Open Payments as a way for applications to interact with users’ accounts more directly while keeping the account provider in control of consent and settlement details.<ref>https://interledger.org/open-payments</ref><ref>https://interledger.org/developers/blog/simple-open-payments-guide/</ref>
+A key design point is separation of concerns:
 
-## Wallet addresses
+- **Open Payments does not move funds itself**; it provides a standardized way for clients to issue payment instructions to ASEs.
+- **ASEs execute and settle** transfers using whatever payment rails they have available, outside of the Open Payments API itself.<ref>https://openpayments.dev/overview/getting-started/</ref>
 
-A wallet address is presented as:
+## Core concepts
 
-- **Human-friendly and shareable** (an alias, not a secret account number), and
-- **Interoperable across providers** that implement the Open Payments standard.
+### Wallet addresses
 
-Because a wallet address is a URL, applications can query it to learn provider information and permission flows, while the provider maps the alias to the underlying account internally.<ref>https://interledger.org/open-payments</ref>
+Wallet addresses are described as being like email addresses in three ways: clear/memorable, publicly shareable (not a secret account number), and interoperable across providers that implement the standard.<ref>https://interledger.org/open-payments</ref>
 
-## Architecture and specs
+Because a wallet address is a URL, a client can resolve it to discover where to reach the ASE and how to request authorization, while the ASE maps the alias to the underlying account internally.<ref>https://interledger.org/open-payments</ref>
 
-The Open Payments specifications describe three sub-systems:<ref>https://github.com/interledger/open-payments</ref><ref>https://github.com/interledger/open-payments-specifications</ref>
+### Resource types (resource server)
 
-- A **wallet address server** that exposes public information about Open Payments-enabled accounts.
-- A **resource server** that exposes APIs for performing functions against underlying accounts.
-- An **authorization server** that exposes APIs described as compliant with the **GNAP** standard for obtaining grants to access resource-server APIs.<ref>https://github.com/interledger/open-payments</ref>
+The Open Payments **resource server** API is described as a REST API with four resource types:
 
-The OpenAPI specifications are maintained in a dedicated repository, separate from the documentation site content.<ref>https://github.com/interledger/open-payments</ref><ref>https://github.com/interledger/open-payments-specifications</ref>
+- **Wallet address**
+- **Quote**
+- **Incoming payment**
+- **Outgoing payment**<ref>https://openpayments.dev/apis/resource-server/</ref>
+
+The documentation further notes:
+
+- The **service endpoint** for the API is the wallet address URL; other resources are sub-resources of the wallet address.<ref>https://openpayments.dev/apis/resource-server/</ref>
+- A **quote** is a time-limited commitment from an ASE to deliver a particular amount to a receiver when sending a particular amount from the wallet address.<ref>https://openpayments.dev/apis/resource-server/</ref>
+- An **incoming payment** carries metadata that is attached to payments into the wallet address under that incoming payment, supporting automation such as reconciliation workflows.<ref>https://openpayments.dev/apis/resource-server/</ref>
+- An **outgoing payment** is an instruction to make a payment out of the wallet address.<ref>https://openpayments.dev/apis/resource-server/</ref>
+
+### Grants, tokens, and request signing (authorization)
+
+Access to Open Payments resources is controlled by **grants** and represented in API calls via **access tokens**. The Open Payments docs state that the API uses the **Grant Negotiation and Authorization Protocol (GNAP)** for authorization, and that an access token must be acquired from an authorization server before calling the resource server APIs.<ref>https://openpayments.dev/apis/resource-server/</ref><ref>https://openpayments.dev/overview/getting-started/</ref><ref>https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol</ref>
+
+The docs also state that requests must be signed using HTTP message signatures, and cite the HTTP Message Signatures specification (published as RFC 9421).<ref>https://openpayments.dev/overview/getting-started/</ref><ref>https://datatracker.ietf.org/doc/rfc9421/</ref>
+
+## Architecture and specifications
+
+Interledger materials describe Open Payments as a set of three sub-systems:
+
+- A **wallet address server** that exposes public information about Open Payments-enabled accounts
+- A **resource server** that exposes APIs for interacting with account resources
+- An **authorization server** that issues grants/tokens for resource-server API access (via GNAP)<ref>https://github.com/interledger/open-payments</ref><ref>https://openpayments.dev/apis/resource-server/</ref>
+
+The OpenAPI specifications are maintained in a dedicated repository, separate from the documentation site content.<ref>https://github.com/interledger/open-payments-specifications</ref>
 
 ## Why it matters for autonomous agents
 
-For agentic systems that need to initiate or coordinate payments, Open Payments is an example of a **standardized payment initiation and authorization surface** that could be wrapped as tools (e.g., “request quote”, “obtain grant”, “create payment/obligation”) rather than custom integrations for each provider.
+For agentic systems that need to initiate or coordinate payments, Open Payments is an example of a standardized payment initiation and authorization surface that can be wrapped as tools (e.g., “resolve wallet address”, “request grant”, “request quote”, “create outgoing payment”) rather than custom integrations for each provider.
 
 ## References
 
 - Interledger Foundation — Open Payments overview: https://interledger.org/open-payments
-- Open Payments documentation site: https://openpayments.dev/
-- interledger/open-payments (docs + project overview): https://github.com/interledger/open-payments
+- Open Payments documentation — Getting started: https://openpayments.dev/overview/getting-started/
+- Open Payments API overview (resource server): https://openpayments.dev/apis/resource-server/
+- interledger/open-payments (project overview): https://github.com/interledger/open-payments
 - interledger/open-payments-specifications (OpenAPI specs): https://github.com/interledger/open-payments-specifications
-- Interledger Foundation blog — “A Simple Guide to the Open Payments Standard” (Jul 9, 2024): https://interledger.org/developers/blog/simple-open-payments-guide/
+- IETF GNAP core protocol (Internet-Draft): https://datatracker.ietf.org/doc/html/draft-ietf-gnap-core-protocol
+- IETF RFC 9421 — HTTP Message Signatures: https://datatracker.ietf.org/doc/rfc9421/
