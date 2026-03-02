@@ -1,8 +1,8 @@
 # Agent Authorization Profile (AAP) for OAuth 2.0
 
-**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF Internet-Draft that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** scenarios (machine-to-machine), especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. AAP extends existing OAuth/JWT deployments with **structured claims** and **resource-server validation rules** so relying parties can make authorization decisions that are more **explicit**, **auditable**, and **context-aware**. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+**Agent Authorization Profile (AAP) for OAuth 2.0** is an IETF **Internet-Draft** that defines an authorization *profile* for using **OAuth 2.0** and **JSON Web Tokens (JWTs)** in **agent-to-API** (machine-to-machine) scenarios—especially where autonomous or semi-autonomous agents act on behalf of an operator/principal. It extends common OAuth/JWT deployments with **structured, agent-specific claims** and **resource-server validation expectations** so authorization decisions can be more explicit, auditable, and context-aware. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/ ; https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-00
 
-Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards and should be treated as “work in progress”. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
+Because AAP is an **Internet-Draft**, it is a work in progress and may change or be replaced; Internet-Drafts are not standards. https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
 
 ## When you might want AAP
 
@@ -38,17 +38,19 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 
 ## AAP claim “sections” (high-level)
 
-The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
+AAP tokens use JWTs with **standard JWT claims** (e.g., `iss`, `sub`, `aud`, `exp`, `iat`, `jti`) plus additional **structured AAP claim sections**. The draft states the *normative* claim names as:
 
-- `aap_agent` (agent identity and execution context)
-- `aap_task` (task identifier/purpose/topic/sensitivity)
-- `aap_capabilities` (actions + constraints)
-- `aap_oversight` (oversight/approval intent)
-- `aap_delegation` (delegation metadata; may be used alongside the Token Exchange `act` claim)
-- `aap_context` (environment/network/time restrictions)
-- `aap_audit` (trace/session identifiers for logging correlation)
+- `aap_agent`
+- `aap_task`
+- `aap_capabilities`
+- `aap_oversight`
+- `aap_delegation`
+- `aap_context`
+- `aap_audit`
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+These sections are intended to carry agent identity/execution context, task binding, capability constraints, oversight intent, delegation metadata, environmental constraints, and audit/trace identifiers. https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-00#section-1.5
+
+Note: the draft also mentions publishing JSON Schemas for these claims (Appendix A / reference implementation), and recommends schema validation for conformance. https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-00#section-1.5
 
 ## Delegation vs. impersonation (why it matters for agents)
 
@@ -71,6 +73,8 @@ AAP is motivated by threats that are especially salient in autonomous systems, i
 
 For JWT handling in general (validation, algorithm choices, and deployment pitfalls), JWT Best Current Practices is a useful baseline reference. https://www.rfc-editor.org/rfc/rfc8725
 
+Also, AAP explicitly positions **proof-of-possession / sender-constrained** tokens (e.g., mTLS-bound access tokens or DPoP) as a way to reduce replay risk relative to bearer tokens—particularly relevant when agents automate high-volume calls. https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-00#section-1.4 ; https://www.rfc-editor.org/rfc/rfc8705 ; https://www.rfc-editor.org/rfc/rfc9449
+
 ## See also
 
 - [OAuth 2.0 Extension: On-Behalf-Of User Authorization for AI Agents](OAuth%202.0%20Extension%20On-Behalf-Of%20User%20Authorization%20for%20AI%20Agents.md)
@@ -81,7 +85,7 @@ For JWT handling in general (validation, algorithm choices, and deployment pitfa
 ## References
 
 - IETF Datatracker. “Agent Authorization Profile (AAP) for OAuth 2.0” (Internet-Draft). https://datatracker.ietf.org/doc/draft-aap-oauth-profile/
-- IETF Internet-Draft text (example version). https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+- IETF Internet-Draft text (example version). https://datatracker.ietf.org/doc/html/draft-aap-oauth-profile-00
 - RFC 6749. “The OAuth 2.0 Authorization Framework.” https://www.rfc-editor.org/rfc/rfc6749
 - RFC 7519. “JSON Web Token (JWT).” https://www.rfc-editor.org/rfc/rfc7519
 - RFC 8693. “OAuth 2.0 Token Exchange.” https://www.rfc-editor.org/rfc/rfc8693
