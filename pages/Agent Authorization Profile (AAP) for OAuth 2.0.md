@@ -26,6 +26,8 @@ AAP does **not** introduce a new authorization protocol. It profiles and compose
 - **Sender-constrained / proof-of-possession tokens** reduce replay risk compared to bearer tokens. AAP references both mutual-TLS certificate-bound access tokens and DPoP as common PoP mechanisms. https://www.rfc-editor.org/rfc/rfc8705 https://www.rfc-editor.org/rfc/rfc9449
 - **Rich Authorization Requests (RAR)** define the `authorization_details` parameter for carrying fine-grained authorization data in OAuth messages, which can complement capability-style authorization. https://www.rfc-editor.org/rfc/rfc9396
 
+The draft also notes that AAP is typically used in OAuth **client credentials** (agent-to-API / M2M) deployments. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt
+
 ## What AAP adds (conceptually)
 
 At a high level, AAP standardizes a JWT claim schema and validation expectations so resource servers can reason about:
@@ -36,19 +38,19 @@ At a high level, AAP standardizes a JWT claim schema and validation expectations
 - **Delegation chain semantics** (how authority was passed or restricted across hops).
 - **Oversight requirements** (policy signals about required approvals/supervision).
 
-## AAP claim “sections” (high-level)
+## AAP structured claims (normative names)
 
-The draft defines a set of structured claim namespaces/sections (and schemas) to carry agent-specific authorization context. The exact field names and processing rules are in the draft, but the high-level buckets include:
+The draft defines a set of structured JWT claims ("sections") with **normative claim names**:
 
-- `aap_agent` (agent identity and execution context)
-- `aap_task` (task identifier/purpose/topic/sensitivity)
-- `aap_capabilities` (actions + constraints)
-- `aap_oversight` (oversight/approval intent)
-- `aap_delegation` (delegation metadata; may be used alongside the Token Exchange `act` claim)
-- `aap_context` (environment/network/time restrictions)
-- `aap_audit` (trace/session identifiers for logging correlation)
+- `agent`
+- `task`
+- `capabilities`
+- `oversight`
+- `delegation` (and/or the Token Exchange `act` (actor) claim)
+- `context`
+- `audit`
 
-(Claim namespace list: https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
+(See Section 5 "JWT Claim Schema (AAP Profile)" and Section 5.2 "Structured Sections (Claim Names)" in draft-aap-oauth-profile-01. https://www.ietf.org/archive/id/draft-aap-oauth-profile-01.txt)
 
 ## Delegation vs. impersonation (why it matters for agents)
 
