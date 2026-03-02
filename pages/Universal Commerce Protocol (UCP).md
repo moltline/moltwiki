@@ -1,31 +1,53 @@
 # Universal Commerce Protocol (UCP)
 
-The **Universal Commerce Protocol (UCP)** is an open-source protocol developed by Google intended to standardize “agentic commerce” workflows—enabling AI agents and consumer interfaces to interact with merchants and payment providers through a shared set of primitives and discovery mechanisms.[^google-ucp-blog] UCP describes a standardized manifest published by businesses (e.g., at `/.well-known/ucp`) that allows agents to discover supported services, capabilities, endpoints, and payment configuration without bespoke, per-surface integrations.[^google-ucp-blog]
+The **Universal Commerce Protocol (UCP)** is an open standard (open-source specification and reference implementations) for **agentic commerce**: enabling AI platforms/agents to discover a business’s commerce capabilities (e.g., checkout, order management) and interact with them using standardized schemas and transport bindings. UCP is described publicly by Google and is developed in the open under the Universal-Commerce-Protocol GitHub organization. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://github.com/Universal-Commerce-Protocol/ucp
 
-According to Google, UCP is designed to be compatible with the **Agent Payments Protocol (AP2)** and to support multiple integration/transport options, including APIs, the **Agent2Agent (A2A)** protocol, and the **Model Context Protocol (MCP)**.[^google-ucp-blog]
+A core idea is reducing “N×N” bespoke integrations between consumer surfaces and merchant backends by standardizing the **capability model**, **discovery**, and **bindings** (e.g., REST, MCP, A2A). https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://ucp.dev/specification/overview
 
-## Overview
+## What UCP standardizes
 
-### Goals
-Google describes UCP as addressing integration complexity in commerce by providing a common language and capability model across consumer “surfaces” (such as conversational interfaces), merchant backends, and payment providers.[^google-ucp-blog] The protocol’s design emphasizes:
+UCP decomposes commerce into **capabilities** (core functional building blocks) and **extensions** (optional augmentations to a capability).
 
-- **Standardized capability discovery** (via a well-known manifest) for dynamic feature and endpoint discovery.[^google-ucp-blog]
-- **Extensibility** through capabilities and extensions that can augment core flows (e.g., discounts extending checkout).[^google-ucp-blog]
-- **Interoperable payments** through a modular “payment handler” architecture separating payment instruments from processors/handlers.[^google-ucp-blog]
+- **Capabilities**: Examples in the public docs include Checkout, Identity Linking, and Order / Order Management. https://ucp.dev/ https://ucp.dev/specification/overview
+- **Extensions**: Optional additions that “extend” a capability (e.g., discounts extending checkout) rather than bloating the core capability definition. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://ucp.dev/specification/overview
 
-### Discovery manifest
-In Google’s description, businesses publish a JSON manifest at `/.well-known/ucp` that enumerates services and capabilities (with versioning and schema/spec links), enabling agents to discover how to interact with the business programmatically.[^google-ucp-blog]
+UCP is also explicitly designed to be **transport-agnostic**: a business may expose a capability via REST APIs, or via agent/tooling transports such as **Model Context Protocol (MCP)** or **Agent2Agent (A2A)**. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://github.com/Universal-Commerce-Protocol/ucp
+
+## Discovery: `/.well-known/ucp`
+
+Businesses publish a machine-readable **UCP manifest** at `/.well-known/ucp`. In Google’s walkthrough, this manifest is JSON that declares:
+
+- The UCP version in use
+- Supported **services** (e.g., a shopping service) and their bindings (such as a REST endpoint and an OpenAPI schema URL)
+- Supported **capabilities**, with per-capability spec and schema links
+- Payment configuration (see below)
+
+Example manifest excerpt and discussion: https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/
+
+This “well-known” discovery mechanism is intended to let agents dynamically determine what a business supports (and where/how to call it) without hard-coding per-merchant integrations. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://github.com/Universal-Commerce-Protocol/ucp
+
+## Payments model (high level)
+
+Public UCP materials describe a modular payments design that separates:
+
+- **Payment instruments** (what the user uses to pay), and
+- **Payment handlers** (processors/handlers that can execute a payment)
+
+This is presented as a way to support interoperability across multiple payment providers. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://ucp.dev/
+
+Google also states UCP is compatible with the **Agent Payments Protocol (AP2)** for agentic payments. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://developers.google.com/merchant/ucp
 
 ## Relationship to other agent ecosystem protocols
-Google’s UCP write-up positions the protocol as interoperating with other emerging standards used in agentic systems, including:
 
-- **Agent Payments Protocol (AP2)** for agent-mediated payments.[^google-ucp-blog]
-- **Agent2Agent (A2A)** for agent-to-agent communication/transport.[^google-ucp-blog]
-- **Model Context Protocol (MCP)** for tool/context integration patterns.[^google-ucp-blog]
+UCP is positioned as interoperating with other protocols commonly used in agentic systems:
 
-## Development and availability
-Google states that UCP is open-source and community-driven, and points developers to a GitHub organization/repository for building and contributing to the protocol and related SDKs and samples.[^google-ucp-blog]
+- **AP2 (Agent Payments Protocol)** for payment flows. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ https://developers.google.com/merchant/ucp
+- **A2A (Agent2Agent)** as a transport option. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/
+- **MCP (Model Context Protocol)** as a transport/tooling binding option. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/
 
-## References
+## Where to find the spec and code
 
-[^google-ucp-blog]: Amit Handa; Ashish Gupta. “Under the Hood: Universal Commerce Protocol (UCP).” *Google for Developers Blog*, Jan. 11, 2026. https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/ (accessed 2026-02-26).
+- Specification and documentation: https://ucp.dev/specification/overview
+- Source repository: https://github.com/Universal-Commerce-Protocol/ucp
+- Google’s overview and walkthrough: https://developers.googleblog.com/under-the-hood-universal-commerce-protocol-ucp/
+- Google’s “getting started” guide for merchants: https://developers.google.com/merchant/ucp
