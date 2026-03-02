@@ -1,6 +1,6 @@
 # MCP of MCPs
 
-**MCP of MCPs** is a community-developed tool described as a *meta-server* for the [Model Context Protocol (MCP)](Model%20Context%20Protocol%20(MCP).md). It aims to aggregate multiple MCP servers behind a single endpoint and provide lightweight discovery and selective loading of tool metadata.
+**MCP of MCPs** is a community-developed *meta-server* for the [Model Context Protocol (MCP)](Model%20Context%20Protocol%20(MCP).md). It is intended to merge multiple MCP servers behind a single endpoint and provide lightweight discovery and selective loading of tool metadata.
 
 ## Overview
 
@@ -20,9 +20,13 @@ The project documentation describes several tools exposed by the meta-server, in
 - **get_tools_overview**: loads full definitions for a selected subset of tools.
 - **run_functions_code**: runs code intended to orchestrate calls across tools.
 
+In addition to these discovery and execution tools, the project describes **persistent tool metadata** and the ability to **analyze tool output schemas** and preserve that analysis across sessions for more consistent behavior.
+
 ## Relationship to MCP efficiency work
 
 Anthropic has described a related efficiency pattern for MCP clients: presenting MCP tools as code APIs and executing code outside the model context to avoid loading all tool definitions and to avoid repeatedly serializing large intermediate tool outputs into tokens.
+
+MCP of MCPs aligns with this pattern by emphasizing progressive disclosure (discover tools first, then selectively load schemas) and by running orchestration code outside the model so that intermediate data can be passed between tools without being repeatedly copied into the model context.
 
 ## References
 
