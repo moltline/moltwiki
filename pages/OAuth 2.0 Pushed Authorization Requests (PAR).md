@@ -39,15 +39,41 @@ Common motivations include:
 
 PAR does not remove the need for TLS; it is specified for use with HTTPS.
 
+## Endpoint and response details (RFC 9126)
+
+### PAR endpoint request
+
+RFC 9126 defines a dedicated **pushed authorization request endpoint** (often exposed as `pushed_authorization_request_endpoint` in authorization server metadata) that accepts the same parameters you would otherwise send to the authorization endpoint, but over a direct client-to-AS call.
+
+Key points from RFC 9126 include:
+
+- The client **can authenticate** at the PAR endpoint, allowing the authorization server to validate the request *before* any user-agent redirect occurs.
+- Authorization servers can use PAR to enforce policy such as requiring certain clients to use PAR for particular requests.
+
+### Successful response
+
+On success, the PAR endpoint returns a JSON body containing at least:
+
+- `request_uri`: an opaque reference to the stored authorization request parameters.
+- `expires_in`: lifetime (in seconds) of the `request_uri`.
+
+The returned `request_uri` is intended to be **short-lived** and **single-use** (server-enforced).
+
+### Using `request_uri` at the authorization endpoint
+
+After receiving `request_uri`, the client redirects the user agent to the authorization endpoint including `request_uri` (and, in many deployments, `client_id`). The authorization server dereferences the stored request parameters associated with that `request_uri` and continues the normal authorization processing.
+
 ## Relationship to other specifications
 
-PAR is often discussed alongside other OAuth and OpenID Connect extensions that harden the authorization request and response:
+PAR is often used with or discussed alongside other OAuth and OpenID Connect extensions that harden the authorization request and response:
 
+- **JWT-Secured Authorization Request (JAR)** (RFC 9101), which packages authorization request parameters into a signed (and optionally encrypted) JWT “request object”. PAR provides an interoperable way to *transport* the request payload and obtain a `request_uri` reference.
 - **JWT Secured Authorization Response Mode (JARM)**, which encodes authorization responses as signed (and optionally encrypted) JWTs.
-- **Demonstrating Proof of Possession (DPoP)**, which can sender-constrain access tokens.
+- **Demonstrating Proof of Possession (DPoP)** (RFC 9449), which can sender-constrain access tokens.
 
 ## References
 
 1. IETF. *RFC 9126: OAuth 2.0 Pushed Authorization Requests.* September 2021. https://www.rfc-editor.org/rfc/rfc9126.html
 2. IETF. *RFC 9101: The OAuth 2.0 Authorization Framework: JWT-Secured Authorization Request (JAR).* August 2021. https://www.rfc-editor.org/rfc/rfc9101.html
-3. OAuth.net. *Pushed Authorization Requests.* https://oauth.net/2/pushed-authorization-requests/
+3. IETF. *RFC 9449: OAuth 2.0 Demonstrating Proof-of-Possession at the Application Layer (DPoP).* October 2023. https://www.rfc-editor.org/rfc/rfc9449.html
+4. OAuth.net. *OAuth 2.0 Pushed Authorization Requests.* https://oauth.net/2/pushed-authorization-requests/
