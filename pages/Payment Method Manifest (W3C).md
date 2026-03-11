@@ -1,17 +1,31 @@
 # Payment Method Manifest (W3C)
 
-The **Payment Method Manifest** is a W3C specification in the Web Payments family that defines a machine-readable **payment method manifest** file. A payment method manifest is used by user agents as part of the Web Payments architecture to determine which origins are authorized to distribute payment apps for a given payment method, and to discover payment app manifests associated with that payment method.[^w3c-tr]
+The **Payment Method Manifest** is a W3C specification in the Web Payments family that defines a machine-readable JSON **payment method manifest**. User agents use the manifest to (1) discover **default payment applications** for a payment method and (2) determine which **origins are permitted** to provide payment apps for that method.[^pmm-ed]
 
-Payment method manifests are closely associated with the [Payment Handler API](https://www.w3.org/TR/payment-handler/) and are often discussed alongside the [Payment Request API](Payment%20Request%20API.md), which is the merchant-facing API used to invoke browser-mediated payment flows.[^w3c-tr][^w3c-payment-request]
+Payment method manifests are used in the payment app discovery flow defined by the [Payment Handler API](https://www.w3.org/TR/payment-handler/), and are commonly discussed alongside the merchant-facing [Payment Request API](Payment%20Request%20API.md).[^mdn-pha]
 
-## What the manifest is for
+## What the manifest contains
 
-At a high level, the payment method manifest mechanism helps a user agent answer questions such as:
+A payment method manifest has (at most) two top-level members:[^pmm-ed]
 
-- **Who is allowed to provide payment apps** for a particular payment method?
-- **Where can the user agent find payment app manifests** related to that payment method?
+- `default_applications`: a list of URLs to **web app manifests** for default payment apps associated with the payment method.
+- `supported_origins`: a list of HTTPS origins that are **authorized** to provide payment apps for the payment method.
 
-The specification defines how the manifest is fetched and processed, and the information it can contain for these purposes.[^w3c-tr]
+The spec includes an example manifest of the form:[^pmm-ed]
+
+```json
+{
+  "default_applications": ["app/webappmanifest.json"],
+  "supported_origins": [
+    "https://bobbucks.dev",
+    "https://alicepay.friendsofalice.example"
+  ]
+}
+```
+
+## How user agents find the manifest
+
+For URL-based payment method identifiers, the manifest can be discovered by following an HTTP `Link` header (per RFC 8288) on the payment method identifier URL with `rel="payment-method-manifest"`.[^pmm-ed][^mdn-pha]
 
 ## Relationship to other Web Payments specs
 
@@ -26,7 +40,8 @@ The specification defines how the manifest is fetched and processed, and the inf
 
 ## References
 
-[^w3c-tr]: W3C. “Payment Method Manifest.” https://www.w3.org/TR/payment-method-manifest/
+[^pmm-ed]: W3C (Editor’s Draft). “Payment Method Manifest.” https://w3c.github.io/payment-method-manifest/
+[^mdn-pha]: MDN Web Docs. “Payment Handler API.” https://developer.mozilla.org/en-US/docs/Web/API/Payment_Handler_API
 [^w3c-payment-handler]: W3C. “Payment Handler API.” https://www.w3.org/TR/payment-handler/
 [^w3c-payment-request]: W3C. “Payment Request API.” https://www.w3.org/TR/payment-request/
 [^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/
