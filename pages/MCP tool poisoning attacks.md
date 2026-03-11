@@ -22,27 +22,29 @@ A malicious server places instructions in a tool’s description (sometimes usin
 - conceal the behavior from the user
 - smuggle data out via tool arguments
 
-Invariant Labs coined this as a **Tool Poisoning Attack (TPA)** in the MCP context and demonstrated practical data exfiltration risks against popular MCP clients.
+Invariant Labs describes this as a **Tool Poisoning Attack (TPA)** in the MCP context and provides examples where hidden instructions in tool descriptions influence an MCP client’s model behavior in ways that are not obvious to the user interface.
 
 ### Full-schema poisoning
-Follow-on research argues the injection surface is broader than the description field: any part of the JSON schema that is presented to the model (parameter names, defaults, required fields, extra/unknown fields, etc.) can potentially carry adversarial instructions.
+Follow-on research argues the injection surface is broader than the description field: any part of the JSON schema that is presented to the model (for example, parameter names, required fields, defaults, or additional fields) can potentially carry adversarial instructions.
 
-CyberArk describes this broader class as **Full-Schema Poisoning** and also discusses more advanced variants that attempt to evade static analysis by manipulating tool outputs.
+CyberArk uses the term **Full-Schema Poisoning (FSP)** for this broader class and reports experiments where injected content in non-description parts of the schema influenced the model, even when client-side validation later rejected the resulting tool call.
 
 ### MCP “rug pulls”
-A server can change tool metadata over time. A user might review and approve a tool during installation, but later receive modified tool schemas that include malicious instructions.
+A server can change tool metadata over time. Invariant Labs and others discuss “rug pull” scenarios where a user reviews a benign tool during onboarding, but later receives modified tool metadata that includes malicious instructions.
 
 ## Mitigations (practical checklist)
 
 Client and platform implementers commonly consider controls such as:
 
-- **Treat tool metadata as untrusted input** (like web content): sanitize, escape, and constrain what is shown to the model.
-- **Show full tool schemas and arguments to users** before execution (not just a short label).
-- **Pin and verify tool versions** (hashes/signatures) to reduce “rug pull” risk.
-- **Allowlist tools and servers**; apply per-tool least privilege and scoping.
-- **Strict schema validation** and rejection of unknown fields.
-- **Output filtering and policy checks** on tool results before returning them to the model.
-- **Logging and diffing** of tool schemas over time, with alerts on changes.
+- **Treat tool metadata as untrusted input** (similar to untrusted web content): sanitize, escape, and constrain what is shown to the model.
+- **Make tool metadata user-reviewable**: show full tool schemas and arguments before execution, not only a short label.
+- **Pin and verify tool definitions** (for example via versioning, hashes, or signatures) to reduce “rug pull” risk.
+- **Allowlist tools and servers** and apply per-tool least privilege/scoping.
+- **Strict schema validation** and rejection of unknown or nonconforming fields.
+- **Constrain and inspect tool outputs** before returning them to the model (e.g., filtering, policy checks).
+- **Monitor for schema drift**: log and diff tool schemas over time and alert on changes.
+
+Mitigation guidance is discussed in the Invariant Labs security notice and in subsequent write-ups that broaden the injection surface to the full schema.
 
 ## See also
 
@@ -53,4 +55,5 @@ Client and platform implementers commonly consider controls such as:
 
 1. Invariant Labs. “MCP Security Notification: Tool Poisoning Attacks.” https://invariantlabs.ai/blog/mcp-security-notification-tool-poisoning-attacks
 2. CyberArk. “Poison everywhere: No output from your MCP server is safe.” https://www.cyberark.com/resources/threat-research-blog/poison-everywhere-no-output-from-your-mcp-server-is-safe
-3. Anthropic. “Introducing the Model Context Protocol.” https://www.anthropic.com/news/model-context-protocol
+3. Model Context Protocol. “What is the Model Context Protocol (MCP)?” https://modelcontextprotocol.io/docs/getting-started/intro
+4. Anthropic. “Introducing the Model Context Protocol.” https://www.anthropic.com/news/model-context-protocol
