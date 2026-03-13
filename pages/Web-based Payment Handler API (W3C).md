@@ -2,6 +2,8 @@
 
 The **Web-based Payment Handler API** is a W3C specification that defines how a **web application** can register as a **payment handler** and be invoked by the browser to respond to a merchant’s payment request initiated via the [Payment Request API](Payment%20Request%20API.md). It is part of the W3C **Web Payments** architecture and is designed around a **service worker** event model.[^w3c-web-based-payment-handler]
 
+The specification is developed in the open on GitHub, where issues and pull requests are tracked for the editor’s draft.[^gh-web-based-payment-handler]
+
 In this architecture, the merchant site calls `PaymentRequest.show()` (and optionally `canMakePayment()`), the user agent presents a chooser UI, and then the selected payment handler’s service worker receives a `paymentrequest` event and returns a response back to the merchant.[^w3c-web-based-payment-handler][^w3c-payment-request]
 
 ## Overview
@@ -58,6 +60,7 @@ The handler responds via `CanMakePaymentEvent.respondWith(Promise<boolean>)` to 
 ## References
 
 [^w3c-web-based-payment-handler]: W3C. “Web-based Payment Handler API.” https://www.w3.org/TR/web-based-payment-handler/
+[^gh-web-based-payment-handler]: GitHub (W3C). “web-based-payment-handler.” https://github.com/w3c/web-based-payment-handler
 [^w3c-payment-request]: W3C. “Payment Request API.” https://www.w3.org/TR/payment-request/
 [^w3c-payment-method-id]: W3C. “Payment Method Identifiers.” https://www.w3.org/TR/payment-method-id/
 [^w3c-payment-method-manifest]: W3C. “Payment Method Manifest.” https://www.w3.org/TR/payment-method-manifest/
