@@ -34,28 +34,30 @@ Normative details and processing requirements are in RFC 9449. https://www.rfc-e
 
 ### DPoP proof JWT
 
-A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers a dedicated media type / JWT “typ” value for these proofs: `dpop+jwt`. https://www.rfc-editor.org/rfc/rfc9449
+A **DPoP proof** is a JWT carried in the `DPoP` HTTP header. RFC 9449 registers the `typ` value `dpop+jwt` for these proofs. https://www.rfc-editor.org/rfc/rfc9449
 
-Common proof claims include:
+A proof JWT includes a **public key** in the JOSE header (`jwk`) and a payload that ties the proof to a specific HTTP request. RFC 9449 defines (among others) the following claims: https://www.rfc-editor.org/rfc/rfc9449
 
-- `htm`: the HTTP method of the request being proven
-- `htu`: the HTTP URI of the request being proven
+- `htm`: the HTTP method
+- `htu`: the target URI
 - `iat`: issued-at time
-- `jti`: unique identifier for the proof (supports replay detection)
+- `jti`: unique identifier (for replay detection)
 
-For requests that include an access token, RFC 9449 also defines an `ath` claim: a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
+When presenting an access token, the proof can also include `ath`, a base64url-encoded SHA-256 hash of the access token. https://www.rfc-editor.org/rfc/rfc9449
 
-(Implementation guides often summarize these checks; see, e.g., Auth0’s DPoP documentation.) https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+Resource servers are expected to validate the proof (signature and claim checks) and ensure it matches the presented token’s key binding. https://www.rfc-editor.org/rfc/rfc9449
 
 ### Public key confirmation (`cnf` / `jkt`)
 
-DPoP-bound tokens are bound to a public key. When the access token is a JWT, RFC 9449 describes expressing the binding using a confirmation claim (`cnf`) with a JWK thumbprint (`jkt`) of the DPoP public key. https://www.rfc-editor.org/rfc/rfc9449
+DPoP-bound tokens are bound to a public key. RFC 9449 specifies using the JWT confirmation claim `cnf` with a JWK thumbprint member `jkt` to represent that binding (e.g., when the access token is a JWT, and in token introspection responses). https://www.rfc-editor.org/rfc/rfc9449
 
 ### Nonce support (`DPoP-Nonce` / `use_dpop_nonce`)
 
-RFC 9449 defines an optional nonce mechanism (via a `nonce` claim in the proof JWT) that servers can use to require the client to prove freshness. Servers can return a nonce in a `DPoP-Nonce` HTTP response header and indicate the client should retry with that nonce (e.g., via the `use_dpop_nonce` error). https://www.rfc-editor.org/rfc/rfc9449
+RFC 9449 defines an optional nonce mechanism to improve freshness. A server can provide a nonce in a `DPoP-Nonce` HTTP response header; the client then retries with a new proof containing a `nonce` claim. The OAuth error code `use_dpop_nonce` indicates that a nonce is required. https://www.rfc-editor.org/rfc/rfc9449
 
-Some deployments enable this behavior for public clients (e.g., SPAs / mobile apps); vendor documentation may describe the operational details. https://auth0.com/docs/secure/sender-constraining/demonstrating-proof-of-possession-dpop
+### DPoP authentication scheme (`DPoP`)
+
+For protected resource access, RFC 9449 defines a dedicated HTTP authentication scheme named `DPoP`, used in the `Authorization` header alongside the `DPoP` proof header. https://www.rfc-editor.org/rfc/rfc9449
 
 ## Relationship to adjacent standards
 
@@ -69,7 +71,8 @@ Some deployments enable this behavior for public clients (e.g., SPAs / mobile ap
 - DPoP is often discussed as an alternative when TLS-layer sender-constraining (e.g., mutual TLS) is not available or desirable (notably for browser-based clients). https://www.rfc-editor.org/rfc/rfc9449
 - Plan operationally for **key management** (generation, storage, rotation), and for how you will handle **clock skew**, **proof replay detection** (e.g., `jti` handling), and **nonce retry** behavior if you enable nonces. https://www.rfc-editor.org/rfc/rfc9449
 
-## Sources
+## References
 
-- RFC 9449 (RFC Editor): https://www.rfc-editor.org/rfc/rfc9449
-- RFC 9449 (IETF Datatracker): https://datatracker.ietf.org/doc/html/rfc9449
+- Fett, D., et al. **RFC 9449: OAuth 2.0 Demonstrating Proof of Possession (DPoP)**. RFC Editor, September 2023. https://www.rfc-editor.org/rfc/rfc9449
+- IETF Datatracker: **RFC 9449**. https://datatracker.ietf.org/doc/html/rfc9449
+- OAuth.net: **OAuth 2.0 DPoP (RFC 9449)** (overview). https://oauth.net/2/dpop/
