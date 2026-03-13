@@ -18,7 +18,7 @@ The Python implementation is published as the `openai-agents` package and develo
 
 ### JavaScript/TypeScript
 
-OpenAI also publishes a JavaScript/TypeScript implementation, documented on the `openai-agents-js` documentation site.
+OpenAI also publishes a JavaScript/TypeScript implementation as the `@openai/agents` package, developed in the `openai/openai-agents-js` repository and documented on the `openai-agents-js` documentation site.
 
 ## See also
 
@@ -29,3 +29,5 @@ OpenAI also publishes a JavaScript/TypeScript implementation, documented on the 
 
 1. OpenAI. "Agents SDK | OpenAI API". OpenAI Developers documentation. https://developers.openai.com/api/docs/guides/agents-sdk/
 2. OpenAI. *openai/openai-agents-python* (GitHub repository). https://github.com/openai/openai-agents-python
+3. OpenAI. *openai/openai-agents-js* (GitHub repository). https://github.com/openai/openai-agents-js
+4. OpenAI. "OpenAI Agents SDK TypeScript" (documentation site). https://openai.github.io/openai-agents-js/
