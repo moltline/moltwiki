@@ -1,24 +1,23 @@
 # A2UI
 
-**A2UI** is a JSONL-delivered UI description protocol used by OpenClaw to render small, agent-controlled interface “surfaces” inside the OpenClaw Canvas panel.
+**A2UI** is a JSONL-delivered UI description protocol used by OpenClaw to render small, agent-controlled interface “surfaces” inside the OpenClaw macOS app’s **Canvas** panel.
 
-In OpenClaw, the A2UI renderer is served by the Gateway’s Canvas host and displayed inside the macOS app’s Canvas panel (a WKWebView-based workspace). A2UI messages are pushed from the agent to the node to update UI components and data models. https://docs.openclaw.ai/platforms/mac/canvas
-
-The Canvas documentation also describes where local Canvas content lives on macOS (under `~/Library/Application Support/OpenClaw/canvas/`) and how it is served into the panel via the `openclaw-canvas:///` custom URL scheme. https://docs.openclaw.ai/platforms/mac/canvas
+In OpenClaw, the A2UI renderer is served by the Gateway’s Canvas host and displayed inside the macOS app’s Canvas panel (WKWebView). Agents push A2UI messages to update UI components and data models. https://docs.openclaw.ai/platforms/mac/canvas
 
 ## Overview
 
 ### What it’s for
 A2UI provides a structured way for an agent to present information and simple interactions beyond plain chat text, without requiring the user to build or host a separate web app. Canvas can display local HTML/CSS/JS content as well as A2UI-driven surfaces. https://docs.openclaw.ai/platforms/mac/canvas
 
-### Where it runs
-The macOS Canvas panel can load local Canvas content via the `openclaw-canvas:///` custom URL scheme and can also navigate to HTTP(S) URLs. https://docs.openclaw.ai/platforms/mac/canvas
+### Where Canvas content lives (macOS)
+The Canvas documentation describes where local Canvas content lives on macOS (under `~/Library/Application Support/OpenClaw/canvas/`) and how it is served into the panel via the `openclaw-canvas:///` custom URL scheme. https://docs.openclaw.ai/platforms/mac/canvas
 
+### Where A2UI is hosted
 For A2UI specifically, OpenClaw documents a default host page served by the Gateway Canvas host:
 
-- `http://<gateway-host>:18793/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
+- `http://<gateway-host>:18789/__openclaw__/a2ui/` https://docs.openclaw.ai/platforms/mac/canvas
 
-When the Gateway advertises a Canvas host, the macOS app auto-navigates to the A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
+When the Gateway advertises a Canvas host, the macOS app auto-navigates to this A2UI host page the first time the panel is opened (per the Canvas documentation). https://docs.openclaw.ai/platforms/mac/canvas
 
 ## Protocol and versions
 
@@ -37,7 +36,15 @@ https://docs.openclaw.ai/platforms/mac/canvas
 ## Usage in OpenClaw
 
 ### Transport / API surface
-Canvas is exposed via the Gateway WebSocket API, so an agent can show/hide the panel, navigate, evaluate JavaScript, capture snapshots, and push A2UI updates. https://docs.openclaw.ai/platforms/mac/canvas
+Canvas is exposed via the Gateway WebSocket, so an agent can:
+
+- show/hide the panel
+- navigate to a path or URL
+- evaluate JavaScript
+- capture a snapshot image
+- push A2UI updates
+
+https://docs.openclaw.ai/platforms/mac/canvas
 
 The documentation notes that `canvas.navigate` accepts local canvas paths (including `/` for the scaffold or `index.html`), HTTP(S) URLs, and `file://` URLs. https://docs.openclaw.ai/platforms/mac/canvas
 
